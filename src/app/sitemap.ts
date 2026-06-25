@@ -1,6 +1,10 @@
 import type { MetadataRoute } from 'next'
 import { getServices, getServiceAreas } from '@/lib/payload'
 
+// Generate on-demand (not at build time) so the production build never depends
+// on the database being reachable during `next build`.
+export const dynamic = 'force-dynamic'
+
 const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
