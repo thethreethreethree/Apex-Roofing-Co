@@ -88,7 +88,10 @@ export default buildConfig({
       ? [
           vercelBlobStorage({
             enabled: true,
-            collections: { media: true },
+            // Serve media as direct public Blob CDN URLs (not proxied through the
+            // /api/media/file route) so production images don't depend on the
+            // serverless route or a runtime token for reads.
+            collections: { media: { disablePayloadAccessControl: true } },
             token: process.env.BLOB_READ_WRITE_TOKEN,
           }),
         ]
