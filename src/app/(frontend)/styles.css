@@ -1,0 +1,113 @@
+@import 'tailwindcss';
+
+/*
+ * Design tokens. Defaults live in :root as CSS variables so the Branding global
+ * (admin-editable) can override the key brand/accent colors at runtime by
+ * injecting a <style>:root{...}</style> in the layout. `@theme inline` makes the
+ * Tailwind utilities (bg-brand, text-accent, ...) resolve to those vars directly.
+ */
+@theme inline {
+  --color-brand: var(--brand);
+  --color-brand-dark: var(--brand-dark);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --font-sans: var(--font-sans);
+}
+
+:root {
+  --brand: #102a43; /* deep slate navy */
+  --brand-dark: #0a1c2e;
+  --accent: #f97316; /* high-contrast orange CTA */
+  --accent-hover: #ea6a0c;
+  --ink: #0f172a; /* primary text */
+  --muted: #5b6b7f; /* secondary text */
+  --line: #e2e8f0; /* hairline borders */
+  --surface: #ffffff;
+  --surface-2: #f8fafc; /* alternating section bg */
+  --font-sans:
+    var(--font-inter), ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    background: var(--surface);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+    text-wrap: balance;
+  }
+
+  a {
+    color: inherit;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+}
+
+/* Rich-text (Lexical) output styling */
+.richtext {
+  color: var(--ink);
+  line-height: 1.7;
+}
+.richtext > * + * {
+  margin-top: 1rem;
+}
+.richtext h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-top: 1.75rem;
+}
+.richtext h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-top: 1.5rem;
+}
+.richtext ul {
+  list-style: disc;
+  padding-left: 1.25rem;
+}
+.richtext ol {
+  list-style: decimal;
+  padding-left: 1.25rem;
+}
+.richtext a {
+  color: var(--accent);
+  text-decoration: underline;
+}
+.richtext strong {
+  font-weight: 700;
+}
