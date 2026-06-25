@@ -94,6 +94,58 @@ const createImage = async (payload: Payload, name: string, alt: string, svg: str
   return doc.id
 }
 
+/** Download a real, themed photo (license-free). Falls back across sources, then null. */
+const fetchPhoto = async (keywords: string, seed: number, w: number, h: number): Promise<Buffer | null> => {
+  const urls = [
+    `https://loremflickr.com/${w}/${h}/${encodeURIComponent(keywords)}?lock=${seed}`,
+    `https://picsum.photos/seed/apex${seed}/${w}/${h}`,
+  ]
+  for (const url of urls) {
+    try {
+      const res = await fetch(url, { signal: AbortSignal.timeout(25000), redirect: 'follow' })
+      if (res.ok) {
+        const buf = Buffer.from(await res.arrayBuffer())
+        if (buf.length > 3000) return buf
+      }
+    } catch {
+      /* try next source */
+    }
+  }
+  return null
+}
+
+/** Create a media doc from a real photo (keywords/seed), falling back to a generated SVG. */
+const createPhoto = async (
+  payload: Payload,
+  name: string,
+  alt: string,
+  keywords: string,
+  seed: number,
+  fallbackSvg: string,
+  w = 1200,
+  h = 800,
+) => {
+  const photo = await fetchPhoto(keywords, seed, w, h)
+  let data: Buffer
+  let ext: string
+  let mime: string
+  if (photo) {
+    data = await sharp(photo).resize(w, h, { fit: 'cover' }).jpeg({ quality: 78 }).toBuffer()
+    ext = 'jpg'
+    mime = 'image/jpeg'
+  } else {
+    data = await sharp(Buffer.from(fallbackSvg)).png().toBuffer()
+    ext = 'png'
+    mime = 'image/png'
+  }
+  const doc = await payload.create({
+    collection: 'media',
+    data: { alt },
+    file: { data, mimetype: mime, name: `${name}.${ext}`, size: data.length },
+  })
+  return doc.id
+}
+
 const wipe = async (payload: Payload, collections: string[]) => {
   for (const collection of collections) {
     await payload.delete({ collection: collection as 'media', where: { id: { exists: true } } })
@@ -150,11 +202,15 @@ const seed = async () => {
   // 3) Images
   const logo = await createImage(payload, 'logo', 'Apex Roofing Co logo', logoSvg('#102a43'))
   const logoLight = await createImage(payload, 'logo-light', 'Apex Roofing Co logo', logoSvg('#ffffff'))
-  const hero = await createImage(
+  const hero = await createPhoto(
     payload,
     'hero',
-    'New asphalt shingle roof on a suburban home',
+    'New roof on a suburban home',
+    'house,roof',
+    1,
     photoSvg('Apex Roofing Co', 'Quality roofing, done right', { w: 1600, h: 1000 }),
+    1600,
+    1000,
   )
   console.log('[seed] ✓ Brand images generated.')
 
@@ -228,10 +284,12 @@ const seed = async () => {
 
   const serviceIds: Record<string, number | string> = {}
   for (const s of serviceDefs) {
-    const img = await createImage(
+    const img = await createPhoto(
       payload,
       `service-${s.icon}`,
       `${s.title} service`,
+      'roof,house',
+      10 + s.order,
       photoSvg(s.title, 'Apex Roofing Co', { c1: '#0b2440', c2: '#27567a' }),
     )
     const doc = await payload.create({
@@ -292,9 +350,10 @@ const seed = async () => {
     { title: 'Commercial TPO Re-Roof', city: 'Round Rock, TX', service: 'commercial', review: 'Alicia Fontaine', featured: false, desc: 'Low-slope commercial building re-roofed with energy-efficient white TPO membrane.' },
   ]
 
-  for (const p of projectDefs) {
-    const before = await createImage(payload, `before-${p.service}-${p.city}`, `${p.title} — before`, photoSvg('BEFORE', p.title, { c1: '#3a3f47', c2: '#5b6470' }))
-    const after = await createImage(payload, `after-${p.service}-${p.city}`, `${p.title} — after`, photoSvg('AFTER', p.title, { c1: '#0b2440', c2: '#27567a' }))
+  for (let pi = 0; pi < projectDefs.length; pi++) {
+    const p = projectDefs[pi]
+    const before = await createPhoto(payload, `before-${pi}`, `${p.title} — before`, 'old,roof', 200 + pi, photoSvg('BEFORE', p.title, { c1: '#3a3f47', c2: '#5b6470' }), 1200, 900)
+    const after = await createPhoto(payload, `after-${pi}`, `${p.title} — after`, 'house,roof', 100 + pi, photoSvg('AFTER', p.title, { c1: '#0b2440', c2: '#27567a' }), 1200, 900)
     await payload.create({
       collection: 'projects',
       data: {
