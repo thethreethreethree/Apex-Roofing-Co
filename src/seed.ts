@@ -1,5 +1,6 @@
 import 'dotenv/config'
 import { getPayload, type Payload } from 'payload'
+import { list, del } from '@vercel/blob'
 import sharp from 'sharp'
 import config from './payload.config'
 
@@ -128,6 +129,23 @@ const seed = async () => {
     'media',
   ])
   console.log('[seed] Cleared previous content.')
+
+  // 2b) Clear the Blob store too, so re-seeding can't collide with existing files.
+  const blobToken = process.env.BLOB_READ_WRITE_TOKEN
+  if (blobToken) {
+    try {
+      const { blobs } = await list({ token: blobToken, limit: 1000 })
+      if (blobs.length > 0) {
+        await del(
+          blobs.map((b) => b.url),
+          { token: blobToken },
+        )
+      }
+      console.log(`[seed] Cleared ${blobs.length} files from Blob storage.`)
+    } catch (e) {
+      console.warn('[seed] Blob clear skipped:', e instanceof Error ? e.message : e)
+    }
+  }
 
   // 3) Images
   const logo = await createImage(payload, 'logo', 'Apex Roofing Co logo', logoSvg('#102a43'))
