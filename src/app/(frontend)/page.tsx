@@ -6,7 +6,6 @@ import {
   getServices,
   getProjects,
   getReviews,
-  getServiceAreas,
   getCertifications,
   getFinancingOptions,
   getFinancingInfo,
@@ -18,20 +17,18 @@ import { WhyUs } from '@/components/sections/WhyUs'
 import { CertsStrip } from '@/components/sections/CertsStrip'
 import { GalleryPreview } from '@/components/sections/GalleryPreview'
 import { ReviewsSection } from '@/components/sections/ReviewsSection'
-import { ServiceAreasSection } from '@/components/sections/ServiceAreasSection'
 import { FinancingSection } from '@/components/sections/FinancingSection'
 import { ProcessSection } from '@/components/sections/ProcessSection'
 import { FinalCta } from '@/components/sections/FinalCta'
 
 export default async function HomePage() {
-  const [home, settings, services, projects, reviews, areas, certs, financing, finInfo] =
+  const [home, settings, services, projects, reviews, certs, financing, finInfo] =
     await Promise.all([
       getHomePage(),
       getSiteSettings(),
       getServices(),
       getProjects(),
       getReviews(),
-      getServiceAreas(),
       getCertifications(),
       getFinancingOptions(),
       getFinancingInfo(),
@@ -48,7 +45,6 @@ export default async function HomePage() {
       <CertsStrip certs={certs} />
       {show.showProjects !== false && <GalleryPreview projects={projects} />}
       {show.showReviews !== false && <ReviewsSection reviews={reviews} settings={settings} />}
-      {show.showServiceAreas !== false && <ServiceAreasSection areas={areas} />}
       {show.showFinancing !== false && <FinancingSection options={financing} info={finInfo} />}
       <ProcessSection />
       <FinalCta home={home} settings={settings} />

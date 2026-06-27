@@ -13,12 +13,12 @@ import { Media } from './collections/Media'
 import { Services } from './collections/Services'
 import { Projects } from './collections/Projects'
 import { Reviews } from './collections/Reviews'
-import { ServiceAreas } from './collections/ServiceAreas'
 import { Certifications } from './collections/Certifications'
 import { Financing } from './collections/Financing'
 import { Leads } from './collections/Leads'
 import { Bookings } from './collections/Bookings'
 import { Blackouts } from './collections/Blackouts'
+// ServiceAreas collection removed — site is region-neutral (no service-area pages).
 
 import { SiteSettings } from './globals/SiteSettings'
 import { Branding } from './globals/Branding'
@@ -55,7 +55,6 @@ export default buildConfig({
     Services,
     Projects,
     Reviews,
-    ServiceAreas,
     Certifications,
     Financing,
     Leads,

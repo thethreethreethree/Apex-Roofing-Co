@@ -14,8 +14,6 @@ export const metadata: Metadata = {
 
 export default async function ContactPage() {
   const [settings, services] = await Promise.all([getSiteSettings(), getServices()])
-  const a = settings.address
-  const mapQuery = a ? encodeURIComponent(`${a.street}, ${a.city}, ${a.state} ${a.zip}`) : ''
 
   return (
     <>
@@ -57,16 +55,6 @@ export default async function ContactPage() {
                 </dd>
               </div>
             )}
-            {a && (
-              <div>
-                <dt className="font-semibold text-muted">Address</dt>
-                <dd className="text-ink">
-                  {a.street}
-                  <br />
-                  {a.city}, {a.state} {a.zip}
-                </dd>
-              </div>
-            )}
             {settings.hours && settings.hours.length > 0 && (
               <div>
                 <dt className="font-semibold text-muted">Hours</dt>
@@ -83,17 +71,6 @@ export default async function ContactPage() {
               </div>
             )}
           </dl>
-
-          {mapQuery && (
-            <div className="mt-8 overflow-hidden rounded-2xl border border-line">
-              <iframe
-                title="Map"
-                src={`https://maps.google.com/maps?q=${mapQuery}&output=embed`}
-                className="h-64 w-full"
-                loading="lazy"
-              />
-            </div>
-          )}
         </div>
 
         <div>

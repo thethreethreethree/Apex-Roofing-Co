@@ -72,7 +72,6 @@ export interface Config {
     services: Service;
     projects: Project;
     reviews: Review;
-    'service-areas': ServiceArea;
     certifications: Certification;
     'financing-options': FinancingOption;
     leads: Lead;
@@ -90,7 +89,6 @@ export interface Config {
     services: ServicesSelect<false> | ServicesSelect<true>;
     projects: ProjectsSelect<false> | ProjectsSelect<true>;
     reviews: ReviewsSelect<false> | ReviewsSelect<true>;
-    'service-areas': ServiceAreasSelect<false> | ServiceAreasSelect<true>;
     certifications: CertificationsSelect<false> | CertificationsSelect<true>;
     'financing-options': FinancingOptionsSelect<false> | FinancingOptionsSelect<true>;
     leads: LeadsSelect<false> | LeadsSelect<true>;
@@ -311,51 +309,6 @@ export interface Review {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "service-areas".
- */
-export interface ServiceArea {
-  id: number;
-  city: string;
-  state?: string | null;
-  /**
-   * URL path segment. Leave blank to auto-generate from the title.
-   */
-  slug?: string | null;
-  /**
-   * Short local intro shown on cards and at the top of the area page.
-   */
-  intro?: string | null;
-  /**
-   * Localized body copy for SEO.
-   */
-  content?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  /**
-   * Google Maps embed URL for this area (optional).
-   */
-  mapEmbedUrl?: string | null;
-  /**
-   * Highlight in the service-area section.
-   */
-  featured?: boolean | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "certifications".
  */
 export interface Certification {
@@ -500,10 +453,6 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'reviews';
         value: number | Review;
-      } | null)
-    | ({
-        relationTo: 'service-areas';
-        value: number | ServiceArea;
       } | null)
     | ({
         relationTo: 'certifications';
@@ -661,21 +610,6 @@ export interface ReviewsSelect<T extends boolean = true> {
   location?: T;
   source?: T;
   service?: T;
-  featured?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "service-areas_select".
- */
-export interface ServiceAreasSelect<T extends boolean = true> {
-  city?: T;
-  state?: T;
-  slug?: T;
-  intro?: T;
-  content?: T;
-  mapEmbedUrl?: T;
   featured?: T;
   updatedAt?: T;
   createdAt?: T;

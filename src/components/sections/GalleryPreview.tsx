@@ -34,7 +34,6 @@ export const GalleryPreview = ({ projects }: { projects: Project[] }) => {
             </div>
             <div className="bg-surface p-4">
               <h3 className="font-bold text-ink">{p.title}</h3>
-              {p.city && <p className="text-sm text-muted">{p.city}</p>}
             </div>
           </article>
         ))}

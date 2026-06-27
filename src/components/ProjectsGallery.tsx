@@ -60,10 +60,7 @@ export const ProjectsGallery = ({
                 </span>
               </div>
               <div className="p-5">
-                <div className="flex items-center justify-between text-xs text-muted">
-                  <span>{p.city}</span>
-                  <span>{fmtDate(p.completedDate)}</span>
-                </div>
+                <div className="text-xs text-muted">{fmtDate(p.completedDate)}</div>
                 <h2 className="mt-1 font-bold text-ink">{p.title}</h2>
                 {p.description && <p className="mt-2 text-sm text-muted">{p.description}</p>}
                 {review && (

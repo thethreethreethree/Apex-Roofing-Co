@@ -35,7 +35,6 @@ export default async function ReviewsPage() {
               </blockquote>
               <figcaption className="mt-4 text-sm">
                 <span className="font-semibold text-ink">{r.author}</span>
-                {r.location && <span className="text-muted"> · {r.location}</span>}
                 <span className="block text-xs text-muted">via {r.source}</span>
               </figcaption>
             </figure>

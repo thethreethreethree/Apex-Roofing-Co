@@ -76,28 +76,6 @@ export const getReviews = cache(async (limit = 50) => {
   return docs
 })
 
-export const getServiceAreas = cache(async () => {
-  const payload = await getPayloadClient()
-  const { docs } = await payload.find({
-    collection: 'service-areas',
-    sort: 'city',
-    limit: 100,
-    depth: 1,
-  })
-  return docs
-})
-
-export const getServiceAreaBySlug = cache(async (slug: string) => {
-  const payload = await getPayloadClient()
-  const { docs } = await payload.find({
-    collection: 'service-areas',
-    where: { slug: { equals: slug } },
-    limit: 1,
-    depth: 1,
-  })
-  return docs[0] ?? null
-})
-
 export const getCertifications = cache(async () => {
   const payload = await getPayloadClient()
   const { docs } = await payload.find({

@@ -13,7 +13,6 @@ export const Footer = async () => {
   ])
 
   const company = settings.companyName ?? 'Apex Roofing Co'
-  const a = settings.address
   const year = 2026
 
   return (
@@ -30,7 +29,7 @@ export const Footer = async () => {
             {settings.tagline ?? 'Roofing You Can Trust'}.{' '}
             {settings.insuranceStatement ?? 'Licensed & insured.'}
           </p>
-          {settings.license && <p className="mt-3 text-xs opacity-70">License {settings.license}</p>}
+          {settings.license && <p className="mt-3 text-xs opacity-70">{settings.license}</p>}
           <div className="mt-4 flex gap-3">
             {settings.social?.google && (
               <a href={settings.social.google} className="hover:text-accent" aria-label="Google">
@@ -71,7 +70,6 @@ export const Footer = async () => {
             <li><Link href="/about" className="hover:text-accent">About Us</Link></li>
             <li><Link href="/projects" className="hover:text-accent">Project Gallery</Link></li>
             <li><Link href="/reviews" className="hover:text-accent">Reviews</Link></li>
-            <li><Link href="/service-areas" className="hover:text-accent">Service Areas</Link></li>
             <li><Link href="/financing" className="hover:text-accent">Financing</Link></li>
             <li><Link href="/book" className="hover:text-accent">Book an Inspection</Link></li>
           </ul>
@@ -81,13 +79,6 @@ export const Footer = async () => {
         <div className="col-span-2 md:col-span-1">
           <h3 className="mb-4 text-sm font-bold uppercase tracking-wide text-white">Contact</h3>
           <address className="space-y-2 text-sm not-italic">
-            {a && (
-              <p>
-                {a.street}
-                <br />
-                {a.city}, {a.state} {a.zip}
-              </p>
-            )}
             {settings.phone && (
               <p>
                 <a href={telHref(settings.phone)} className="font-semibold text-white hover:text-accent">

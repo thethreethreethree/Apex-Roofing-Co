@@ -94,43 +94,70 @@ const createImage = async (payload: Payload, name: string, alt: string, svg: str
   return doc.id
 }
 
-/** Download a real, themed photo (license-free). Falls back across sources, then null. */
-const fetchPhoto = async (keywords: string, seed: number, w: number, h: number): Promise<Buffer | null> => {
-  const urls = [
-    `https://loremflickr.com/${w}/${h}/${encodeURIComponent(keywords)}?lock=${seed}`,
-    `https://picsum.photos/seed/apex${seed}/${w}/${h}`,
-  ]
-  for (const url of urls) {
-    try {
-      const res = await fetch(url, { signal: AbortSignal.timeout(25000), redirect: 'follow' })
-      if (res.ok) {
-        const buf = Buffer.from(await res.arrayBuffer())
-        if (buf.length > 3000) return buf
-      }
-    } catch {
-      /* try next source */
+/**
+ * Curated, license-free RESIDENTIAL home photos (Unsplash). Each ID was visually
+ * confirmed to be a single-family home (no industrial/commercial buildings) and
+ * verified to load. Every image is replaceable later via the admin Media library.
+ */
+const U = (id: string, w: number, h: number) =>
+  `https://images.unsplash.com/photo-${id}?w=${w}&h=${h}&q=80&fm=jpg&fit=crop`
+
+const PHOTOS = {
+  hero: '1570129477492-45c003edd2be',
+  roof: '1605276374104-dee2a0ed3cd6',
+  repair: '1572120360610-d971b9d7767c',
+  inspection: '1583608205776-bfd35f0d9f83',
+  gutters: '1605146769289-440113cc3d00',
+  storm: '1564013799919-ab600027ffc6',
+  commercial: '1600596542815-ffad4c1539a9',
+  projAfter: [
+    '1568605114967-8130f3a36994',
+    '1600585154340-be6161a56a0c',
+    '1576941089067-2de3c901e126',
+    '1564013799919-ab600027ffc6',
+    '1512917774080-9991f1c4c750',
+    '1580587771525-78b9dba3b914',
+  ],
+  projBefore: [
+    '1583608205776-bfd35f0d9f83',
+    '1518780664697-55e3ad937233',
+    '1572120360610-d971b9d7767c',
+    '1605146769289-440113cc3d00',
+    '1605276374104-dee2a0ed3cd6',
+    '1600596542815-ffad4c1539a9',
+  ],
+} as const
+
+/** Download a specific photo URL (license-free). Returns buffer or null on failure. */
+const fetchUrl = async (url: string): Promise<Buffer | null> => {
+  try {
+    const res = await fetch(url, { signal: AbortSignal.timeout(25000), redirect: 'follow' })
+    if (res.ok) {
+      const buf = Buffer.from(await res.arrayBuffer())
+      if (buf.length > 3000) return buf
     }
+  } catch {
+    /* fall through to fallback */
   }
   return null
 }
 
-/** Create a media doc from a real photo (keywords/seed), falling back to a generated SVG. */
+/** Create a media doc from a specific photo URL, falling back to a generated SVG. */
 const createPhoto = async (
   payload: Payload,
   name: string,
   alt: string,
-  keywords: string,
-  seed: number,
+  url: string,
   fallbackSvg: string,
   w = 1200,
   h = 800,
 ) => {
-  const photo = await fetchPhoto(keywords, seed, w, h)
+  const photo = await fetchUrl(url)
   let data: Buffer
   let ext: string
   let mime: string
   if (photo) {
-    data = await sharp(photo).resize(w, h, { fit: 'cover' }).jpeg({ quality: 78 }).toBuffer()
+    data = await sharp(photo).resize(w, h, { fit: 'cover' }).jpeg({ quality: 80 }).toBuffer()
     ext = 'jpg'
     mime = 'image/jpeg'
   } else {
@@ -175,7 +202,6 @@ const seed = async () => {
     'projects',
     'reviews',
     'services',
-    'service-areas',
     'certifications',
     'financing-options',
     'media',
@@ -205,9 +231,8 @@ const seed = async () => {
   const hero = await createPhoto(
     payload,
     'hero',
-    'New roof on a suburban home',
-    'house,roof',
-    1,
+    'Beautiful residential home with a new roof',
+    U(PHOTOS.hero, 1600, 1000),
     photoSvg('Apex Roofing Co', 'Quality roofing, done right', { w: 1600, h: 1000 }),
     1600,
     1000,
@@ -287,9 +312,8 @@ const seed = async () => {
     const img = await createPhoto(
       payload,
       `service-${s.icon}`,
-      `${s.title} service`,
-      'roof,house',
-      10 + s.order,
+      `${s.title}`,
+      U((PHOTOS as Record<string, string>)[s.icon], 1200, 800),
       photoSvg(s.title, 'Apex Roofing Co', { c1: '#0b2440', c2: '#27567a' }),
     )
     const doc = await payload.create({
@@ -311,14 +335,14 @@ const seed = async () => {
 
   // 5) Reviews
   const reviewDefs = [
-    { author: 'Marcus Bellamy', rating: 5, location: 'Cedar Park, TX', service: 'roof', featured: true, text: 'Apex replaced our roof after a hailstorm and handled the entire insurance claim. The crew was on time, spotless, and done in two days. Best contractor experience we have had.' },
-    { author: 'Janelle Ortiz', rating: 5, location: 'Round Rock, TX', service: 'storm', featured: true, text: 'They found hail damage three other companies missed, documented everything, and our claim was approved. Honest and genuinely helpful from start to finish.' },
-    { author: 'David Cho', rating: 5, location: 'Leander, TX', service: 'repair', featured: true, text: 'Had a stubborn leak two other roofers could not solve. Apex found the real source in fifteen minutes and fixed it for a fair price. Highly recommend.' },
-    { author: 'Priya Raman', rating: 5, location: 'Georgetown, TX', service: 'roof', featured: true, text: 'Beautiful new roof and the cleanup was immaculate — you would never know a crew had been here. The warranty paperwork was clear and complete.' },
-    { author: 'Tom Whitaker', rating: 4, location: 'Austin, TX', service: 'gutters', featured: false, text: 'Great seamless gutters, fairly priced. Scheduling took a little back-and-forth but the install was excellent.' },
-    { author: 'Sandra Lee', rating: 5, location: 'Cedar Park, TX', service: 'inspection', featured: false, text: 'The free inspection was genuinely free and genuinely thorough. No scare tactics, just honest photos and advice. We will use them when we are ready to replace.' },
-    { author: 'Greg Mathers', rating: 5, location: 'Pflugerville, TX', service: 'roof', featured: false, text: 'Second roof Apex has done for me across two homes. Same quality and professionalism both times. That consistency is why I keep calling them.' },
-    { author: 'Alicia Fontaine', rating: 5, location: 'Round Rock, TX', service: 'commercial', featured: false, text: 'Re-roofed our office with TPO over a long weekend so we never lost a business day. Clean, communicative, and on budget.' },
+    { author: 'Marcus Bellamy', rating: 5, service: 'roof', featured: true, text: 'Apex replaced our roof after a hailstorm and handled the entire insurance claim. The crew was on time, spotless, and done in two days. Best contractor experience we have had.' },
+    { author: 'Janelle Ortiz', rating: 5, service: 'storm', featured: true, text: 'They found hail damage three other companies missed, documented everything, and our claim was approved. Honest and genuinely helpful from start to finish.' },
+    { author: 'David Cho', rating: 5, service: 'repair', featured: true, text: 'Had a stubborn leak two other roofers could not solve. Apex found the real source in fifteen minutes and fixed it for a fair price. Highly recommend.' },
+    { author: 'Priya Raman', rating: 5, service: 'roof', featured: true, text: 'Beautiful new roof and the cleanup was immaculate — you would never know a crew had been here. The warranty paperwork was clear and complete.' },
+    { author: 'Tom Whitaker', rating: 4, service: 'gutters', featured: false, text: 'Great seamless gutters, fairly priced. Scheduling took a little back-and-forth but the install was excellent.' },
+    { author: 'Sandra Lee', rating: 5, service: 'inspection', featured: false, text: 'The free inspection was genuinely free and genuinely thorough. No scare tactics, just honest photos and advice. We will use them when we are ready to replace.' },
+    { author: 'Greg Mathers', rating: 5, service: 'roof', featured: false, text: 'Second roof Apex has done for me across two homes. Same quality and professionalism both times. That consistency is why I keep calling them.' },
+    { author: 'Alicia Fontaine', rating: 5, service: 'commercial', featured: false, text: 'Re-roofed our building over a long weekend so we never lost a business day. Clean, communicative, and on budget.' },
   ]
 
   const reviewIds: Record<string, number | string> = {}
@@ -329,7 +353,6 @@ const seed = async () => {
         author: r.author,
         rating: r.rating,
         text: r.text,
-        location: r.location,
         source: 'Google',
         service: serviceIds[r.service],
         featured: r.featured,
@@ -342,24 +365,23 @@ const seed = async () => {
 
   // 6) Projects (before / after)
   const projectDefs = [
-    { title: 'Full Architectural Shingle Replacement', city: 'Cedar Park, TX', service: 'roof', review: 'Marcus Bellamy', featured: true, desc: 'Complete tear-off and replacement with weathered-wood architectural shingles after hail damage.' },
-    { title: 'Storm Damage Restoration', city: 'Round Rock, TX', service: 'storm', review: 'Janelle Ortiz', featured: true, desc: 'Insurance-approved full restoration following a severe spring hailstorm.' },
-    { title: 'Standing-Seam Metal Roof', city: 'Georgetown, TX', service: 'roof', review: 'Priya Raman', featured: true, desc: 'Charcoal standing-seam metal roof installed for durability and modern curb appeal.' },
-    { title: 'Leak Repair & Flashing Rebuild', city: 'Leander, TX', service: 'repair', review: 'David Cho', featured: false, desc: 'Chimney flashing rebuilt and valley re-shingled to stop a long-standing leak.' },
-    { title: 'Seamless Gutter Installation', city: 'Austin, TX', service: 'gutters', review: null, featured: false, desc: 'New seamless aluminum gutters and leaf guards around the full perimeter.' },
-    { title: 'Commercial TPO Re-Roof', city: 'Round Rock, TX', service: 'commercial', review: 'Alicia Fontaine', featured: false, desc: 'Low-slope commercial building re-roofed with energy-efficient white TPO membrane.' },
+    { title: 'Full Architectural Shingle Replacement', service: 'roof', review: 'Marcus Bellamy', featured: true, desc: 'Complete tear-off and replacement with premium architectural shingles after hail damage.' },
+    { title: 'Storm Damage Restoration', service: 'storm', review: 'Janelle Ortiz', featured: true, desc: 'Insurance-approved full restoration following a severe spring hailstorm.' },
+    { title: 'Standing-Seam Metal Roof', service: 'roof', review: 'Priya Raman', featured: true, desc: 'Charcoal standing-seam metal roof installed for durability and modern curb appeal.' },
+    { title: 'Leak Repair & Flashing Rebuild', service: 'repair', review: 'David Cho', featured: false, desc: 'Chimney flashing rebuilt and valley re-shingled to stop a long-standing leak.' },
+    { title: 'Seamless Gutter Installation', service: 'gutters', review: null, featured: false, desc: 'New seamless aluminum gutters and leaf guards around the full perimeter.' },
+    { title: 'Full Roof Replacement — Modern Home', service: 'roof', review: null, featured: false, desc: 'Complete re-roof of a modern two-story home with energy-efficient architectural shingles.' },
   ]
 
   for (let pi = 0; pi < projectDefs.length; pi++) {
     const p = projectDefs[pi]
-    const before = await createPhoto(payload, `before-${pi}`, `${p.title} — before`, 'old,roof', 200 + pi, photoSvg('BEFORE', p.title, { c1: '#3a3f47', c2: '#5b6470' }), 1200, 900)
-    const after = await createPhoto(payload, `after-${pi}`, `${p.title} — after`, 'house,roof', 100 + pi, photoSvg('AFTER', p.title, { c1: '#0b2440', c2: '#27567a' }), 1200, 900)
+    const before = await createPhoto(payload, `before-${pi}`, `${p.title} — before`, U(PHOTOS.projBefore[pi], 1200, 900), photoSvg('BEFORE', p.title, { c1: '#3a3f47', c2: '#5b6470' }), 1200, 900)
+    const after = await createPhoto(payload, `after-${pi}`, `${p.title} — after`, U(PHOTOS.projAfter[pi], 1200, 900), photoSvg('AFTER', p.title, { c1: '#0b2440', c2: '#27567a' }), 1200, 900)
     await payload.create({
       collection: 'projects',
       data: {
         title: p.title,
         service: serviceIds[p.service],
-        city: p.city,
         completedDate: new Date(2025, 9, 15).toISOString(),
         beforeImage: before,
         afterImage: after,
@@ -371,31 +393,7 @@ const seed = async () => {
   }
   console.log('[seed] ✓ Projects created.')
 
-  // 7) Service areas
-  const areaDefs = [
-    { city: 'Cedar Park', featured: true, intro: 'Our home base. Fast response and same-week inspections across Cedar Park.' },
-    { city: 'Round Rock', featured: true, intro: 'Trusted roof replacement, repair, and storm restoration throughout Round Rock.' },
-    { city: 'Leander', featured: true, intro: 'Local crews serving Leander with honest inspections and quality workmanship.' },
-    { city: 'Georgetown', featured: false, intro: 'Premium roofing and metal roof installation across the Georgetown area.' },
-    { city: 'Austin', featured: false, intro: 'Residential and commercial roofing services across the greater Austin area.' },
-  ]
-  for (const a of areaDefs) {
-    await payload.create({
-      collection: 'service-areas',
-      data: {
-        city: a.city,
-        state: 'TX',
-        intro: a.intro,
-        featured: a.featured,
-        content: lexical([
-          `${a.city} homeowners trust Apex Roofing Co for roof replacement, repair, and storm-damage restoration. As a local, licensed, and insured contractor, we know the weather and the building codes in ${a.city} — and we stand behind every roof we install with a written workmanship warranty.`,
-        ]),
-      },
-    })
-  }
-  console.log('[seed] ✓ Service areas created.')
-
-  // 8) Certifications
+  // 7) Certifications
   const certDefs = [
     { name: 'GAF Master Elite®', initials: 'GAF', description: 'Only the top 2% of roofers earn this — it lets us offer GAF\'s strongest warranties.' },
     { name: 'Owens Corning Preferred', initials: 'OC', description: 'Factory-trained installation that protects your manufacturer warranty.' },
@@ -432,6 +430,10 @@ const seed = async () => {
   await payload.updateGlobal({
     slug: 'site-settings',
     data: {
+      // Region-neutral: no city/state and a generic license so the demo reads
+      // generically for any prospect (no Texas-specific references).
+      address: { street: '', city: '', state: '', zip: '' },
+      license: 'Lic. #0098124',
       hours: [
         { days: 'Mon – Fri', time: '7:00 AM – 6:00 PM' },
         { days: 'Saturday', time: '8:00 AM – 2:00 PM' },

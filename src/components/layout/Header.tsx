@@ -11,7 +11,6 @@ import { isMedia } from '@/lib/format'
 const NAV = [
   { label: 'Services', href: '/services' },
   { label: 'Projects', href: '/projects' },
-  { label: 'Service Areas', href: '/service-areas' },
   { label: 'Reviews', href: '/reviews' },
   { label: 'Financing', href: '/financing' },
   { label: 'About', href: '/about' },

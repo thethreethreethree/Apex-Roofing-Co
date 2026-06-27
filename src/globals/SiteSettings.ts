@@ -56,13 +56,13 @@ export const SiteSettings: GlobalConfig = {
       name: 'address',
       type: 'group',
       fields: [
-        { name: 'street', type: 'text', defaultValue: '1420 Summit Ridge Rd' },
+        { name: 'street', type: 'text' },
         {
           type: 'row',
           fields: [
-            { name: 'city', type: 'text', defaultValue: 'Cedar Park', admin: { width: '40%' } },
-            { name: 'state', type: 'text', defaultValue: 'TX', admin: { width: '30%' } },
-            { name: 'zip', type: 'text', defaultValue: '78613', admin: { width: '30%' } },
+            { name: 'city', type: 'text', admin: { width: '40%' } },
+            { name: 'state', type: 'text', admin: { width: '30%' } },
+            { name: 'zip', type: 'text', admin: { width: '30%' } },
           ],
         },
       ],
@@ -113,7 +113,7 @@ export const SiteSettings: GlobalConfig = {
             {
               name: 'license',
               type: 'text',
-              defaultValue: 'TX-RCAT #0098124',
+              defaultValue: 'Lic. #0098124',
               admin: { width: '50%', description: 'License number.' },
             },
             {

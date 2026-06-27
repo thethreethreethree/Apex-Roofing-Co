@@ -1,9 +1,11 @@
-import { getSiteSettings, getServiceAreas } from '@/lib/payload'
+import { getSiteSettings } from '@/lib/payload'
 
-/** LocalBusiness / RoofingContractor JSON-LD for local SEO. Rendered once in the layout. */
+/**
+ * RoofingContractor JSON-LD. Region-neutral by design — no address or areaServed,
+ * so the demo doesn't tie the business to any specific location.
+ */
 export const Schema = async () => {
-  const [settings, areas] = await Promise.all([getSiteSettings(), getServiceAreas()])
-  const a = settings.address
+  const settings = await getSiteSettings()
 
   const data: Record<string, unknown> = {
     '@context': 'https://schema.org',
@@ -12,16 +14,6 @@ export const Schema = async () => {
     description: settings.tagline,
     telephone: settings.phone,
     email: settings.email,
-    ...(a && {
-      address: {
-        '@type': 'PostalAddress',
-        streetAddress: a.street,
-        addressLocality: a.city,
-        addressRegion: a.state,
-        postalCode: a.zip,
-        addressCountry: 'US',
-      },
-    }),
     ...(settings.googleRating && {
       aggregateRating: {
         '@type': 'AggregateRating',
@@ -29,7 +21,6 @@ export const Schema = async () => {
         reviewCount: settings.googleReviewCount ?? undefined,
       },
     }),
-    areaServed: areas.map((ar) => `${ar.city}, ${ar.state}`),
   }
 
   return (
