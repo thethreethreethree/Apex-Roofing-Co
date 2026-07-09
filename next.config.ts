@@ -7,6 +7,21 @@ const __filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(__filename)
 
 const nextConfig: NextConfig = {
+  async headers() {
+    // Safe baseline security headers for every route. Deliberately no strict CSP
+    // here — the Payload admin needs inline scripts — so these won't break /admin.
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
+          { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
+          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+          { key: 'X-DNS-Prefetch-Control', value: 'on' },
+        ],
+      },
+    ]
+  },
   images: {
     // Media is served from the app's own /api/media/file/* route (local disk).
     localPatterns: [

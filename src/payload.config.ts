@@ -30,6 +30,16 @@ const dirname = path.dirname(filename)
 // runs self-hosted on one server with zero cloud dependencies.
 const databaseUrl = process.env.DATABASE_URI || 'file:./shaggy.db'
 
+// Fail fast in production if the auth secret is missing — an empty secret would
+// sign forgeable admin sessions. In dev, fall back to a fixed placeholder so the
+// app still runs locally with zero setup.
+const payloadSecret = process.env.PAYLOAD_SECRET
+if (!payloadSecret && process.env.NODE_ENV === 'production') {
+  throw new Error(
+    'PAYLOAD_SECRET is required in production. Set it in .env, e.g. `openssl rand -hex 32`.',
+  )
+}
+
 export default buildConfig({
   admin: {
     user: Users.slug,
@@ -57,7 +67,7 @@ export default buildConfig({
   // No email adapter: lead/booking notifications are written to the server console.
   // Every lead and booking is also saved and visible in the admin Inbox, so nothing
   // is lost. Add an SMTP/email adapter later if you want delivered notifications.
-  secret: process.env.PAYLOAD_SECRET || '',
+  secret: payloadSecret || 'dev-only-insecure-secret-change-me',
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },

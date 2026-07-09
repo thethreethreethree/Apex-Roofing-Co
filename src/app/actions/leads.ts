@@ -1,6 +1,8 @@
 'use server'
 
+import { headers } from 'next/headers'
 import { getPayloadClient } from '@/lib/payload'
+import { rateLimit } from '@/lib/ratelimit'
 
 export type LeadInput = {
   name: string
@@ -22,6 +24,12 @@ export async function submitLead(input: LeadInput): Promise<LeadResult> {
   // Honeypot: real users never see the "website" field. A filled value means a
   // bot — return success so it moves on, but save nothing.
   if (input.website && input.website.trim()) return { ok: true }
+
+  // Per-IP throttle (honeypot stops dumb bots; this slows determined floods).
+  const ip = ((await headers()).get('x-forwarded-for') || '').split(',')[0].trim() || 'local'
+  if (!rateLimit(`lead:${ip}`, 5, 60_000)) {
+    return { ok: false, error: 'Too many requests — please wait a minute and try again.' }
+  }
 
   const name = input.name?.trim()
   const phone = input.phone?.trim()

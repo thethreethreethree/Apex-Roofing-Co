@@ -1,7 +1,9 @@
 'use server'
 
+import { headers } from 'next/headers'
 import { getPayloadClient } from '@/lib/payload'
 import { computeOpenDays, slotKeyToLabel, type Day, type AvailabilityConfig } from '@/lib/booking'
+import { rateLimit } from '@/lib/ratelimit'
 
 const esc = (s = '') => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 
@@ -57,6 +59,12 @@ export type BookingResult = { ok: true; label: string } | { ok: false; error: st
 export async function createBooking(input: BookingInput): Promise<BookingResult> {
   // Honeypot: a filled "website" field means a bot — accept without booking a slot.
   if (input.website && input.website.trim()) return { ok: true, label: 'your appointment' }
+
+  // Per-IP throttle against booking-spam floods.
+  const ip = ((await headers()).get('x-forwarded-for') || '').split(',')[0].trim() || 'local'
+  if (!rateLimit(`book:${ip}`, 5, 60_000)) {
+    return { ok: false, error: 'Too many requests — please wait a minute and try again.' }
+  }
 
   const name = input.name?.trim()
   const phone = input.phone?.trim()
