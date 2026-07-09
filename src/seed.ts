@@ -426,6 +426,16 @@ const seed = async () => {
       ]),
     },
   })
+  await payload.updateGlobal({
+    slug: 'availability-settings',
+    data: {
+      // Business is open Tue–Sat, 9am–6pm (closed Mon & Sun) — match the booking
+      // calendar to the real hours so customers can't book a closed day.
+      days: ['2', '3', '4', '5', '6'],
+      startTime: '09:00',
+      endTime: '18:00',
+    },
+  })
   console.log('[seed] ✓ Globals updated.')
 
   console.log('[seed] Done — demo content is ready.')
