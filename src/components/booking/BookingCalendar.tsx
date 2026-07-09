@@ -47,6 +47,7 @@ export const BookingCalendar = ({
       address: String(fd.get('address') || ''),
       service: String(fd.get('service') || ''),
       notes: String(fd.get('notes') || ''),
+      website: String(fd.get('website') || ''),
     })
     setSubmitting(false)
     if (res.ok) {
@@ -118,6 +119,16 @@ export const BookingCalendar = ({
           <strong className="text-ink">{slotKeyLabel(activeDay, slot)}</strong>
         </div>
         <div className="grid gap-3">
+          {/* Honeypot: hidden from people; bots that fill it are silently dropped. */}
+          <input
+            type="text"
+            name="website"
+            tabIndex={-1}
+            autoComplete="off"
+            aria-hidden="true"
+            className="hidden"
+            defaultValue=""
+          />
           <input required name="name" placeholder="Full name" className={inputCls} />
           <div className="grid grid-cols-2 gap-3">
             <input required name="phone" type="tel" placeholder="Phone" className={inputCls} />

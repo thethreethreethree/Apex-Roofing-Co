@@ -9,6 +9,8 @@ export type LeadInput = {
   service?: string
   message?: string
   sourcePage?: string
+  /** Honeypot — hidden from humans; if a bot fills it we silently drop the submission. */
+  website?: string
 }
 
 export type LeadResult = { ok: true } | { ok: false; error: string }
@@ -17,6 +19,10 @@ const esc = (s = '') =>
   s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 
 export async function submitLead(input: LeadInput): Promise<LeadResult> {
+  // Honeypot: real users never see the "website" field. A filled value means a
+  // bot — return success so it moves on, but save nothing.
+  if (input.website && input.website.trim()) return { ok: true }
+
   const name = input.name?.trim()
   const phone = input.phone?.trim()
   if (!name || !phone) {

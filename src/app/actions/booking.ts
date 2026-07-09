@@ -48,11 +48,16 @@ export type BookingInput = {
   address?: string
   service?: string
   notes?: string
+  /** Honeypot — hidden from humans; if a bot fills it we silently drop the booking. */
+  website?: string
 }
 
 export type BookingResult = { ok: true; label: string } | { ok: false; error: string }
 
 export async function createBooking(input: BookingInput): Promise<BookingResult> {
+  // Honeypot: a filled "website" field means a bot — accept without booking a slot.
+  if (input.website && input.website.trim()) return { ok: true, label: 'your appointment' }
+
   const name = input.name?.trim()
   const phone = input.phone?.trim()
   const slot = input.slot?.trim()

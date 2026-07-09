@@ -33,6 +33,7 @@ export const QuoteForm = ({
       service: String(fd.get('service') || ''),
       message: String(fd.get('message') || ''),
       sourcePage,
+      website: String(fd.get('website') || ''),
     })
     if (res.ok) setStatus('done')
     else {
@@ -71,6 +72,16 @@ export const QuoteForm = ({
         </div>
       )}
       <div className="grid gap-3">
+        {/* Honeypot: hidden from people; bots that fill it are silently dropped. */}
+        <input
+          type="text"
+          name="website"
+          tabIndex={-1}
+          autoComplete="off"
+          aria-hidden="true"
+          className="hidden"
+          defaultValue=""
+        />
         <input
           required
           name="fullName"
