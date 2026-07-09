@@ -1,9 +1,11 @@
 import { getPayload } from 'payload'
 import config from '../../src/payload.config.js'
 
+// Our Users collection authenticates by username (not email), so the test user
+// is seeded and matched by username.
 export const testUser = {
-  email: 'dev@payloadcms.com',
-  password: 'test',
+  username: 'e2e-admin',
+  password: 'test1234',
 }
 
 /**
@@ -16,8 +18,8 @@ export async function seedTestUser(): Promise<void> {
   await payload.delete({
     collection: 'users',
     where: {
-      email: {
-        equals: testUser.email,
+      username: {
+        equals: testUser.username,
       },
     },
   })
@@ -38,8 +40,8 @@ export async function cleanupTestUser(): Promise<void> {
   await payload.delete({
     collection: 'users',
     where: {
-      email: {
-        equals: testUser.email,
+      username: {
+        equals: testUser.username,
       },
     },
   })

@@ -5,22 +5,22 @@ export interface LoginOptions {
   page: Page
   serverURL?: string
   user: {
-    email: string
+    username: string
     password: string
   }
 }
 
 /**
- * Logs the user into the admin panel via the login page.
+ * Logs the user into the admin panel via the login page (username auth).
  */
 export async function login({
   page,
-  serverURL = 'http://localhost:3000',
+  serverURL = process.env.E2E_BASE_URL || 'http://localhost:3000',
   user,
 }: LoginOptions): Promise<void> {
   await page.goto(`${serverURL}/admin/login`)
 
-  await page.fill('#field-email', user.email)
+  await page.fill('#field-username', user.username)
   await page.fill('#field-password', user.password)
   await page.click('button[type="submit"]')
 
