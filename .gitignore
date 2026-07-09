@@ -42,10 +42,10 @@ next-env.d.ts
 
 /media
 
-# local SQLite demo database
-apex-demo.db
-apex-demo.db-shm
-apex-demo.db-wal
+# local SQLite database (never commit the live data)
+*.db
+*.db-shm
+*.db-wal
 
 # Playwright
 node_modules/
