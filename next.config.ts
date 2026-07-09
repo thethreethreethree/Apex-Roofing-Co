@@ -8,16 +8,10 @@ const dirname = path.dirname(__filename)
 
 const nextConfig: NextConfig = {
   images: {
+    // Media is served from the app's own /api/media/file/* route (local disk).
     localPatterns: [
       {
         pathname: '/api/media/file/**',
-      },
-    ],
-    // Allow next/image to load media served from Vercel Blob in production.
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: '**.public.blob.vercel-storage.com',
       },
     ],
   },

@@ -13,8 +13,8 @@ export const FinancingSection = ({
   return (
     <Section
       alt
-      eyebrow="Financing & Insurance"
-      title={info.heading ?? 'Flexible Financing'}
+      eyebrow="Packages & Pricing"
+      title={info.heading ?? 'Grooming Packages'}
       subtitle={info.intro ?? undefined}
     >
       <div className="grid gap-6 md:grid-cols-3">
@@ -30,8 +30,8 @@ export const FinancingSection = ({
         ))}
       </div>
       <div className="mt-10 text-center">
-        <Button href="/financing" variant="dark" size="lg">
-          See Financing & Insurance Help
+        <Button href="/packages" variant="dark" size="lg">
+          See All Packages & Pricing
         </Button>
       </div>
     </Section>

@@ -9,7 +9,7 @@ export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Contact Us',
-  description: 'Get in touch for a free roofing estimate. Call, email, or request a quote online.',
+  description: 'Get in touch to book mobile dog & cat grooming. Call, email, or request an appointment online.',
 }
 
 export default async function ContactPage() {
@@ -19,8 +19,8 @@ export default async function ContactPage() {
     <>
       <PageHero
         eyebrow="Contact"
-        title="Let's Talk About Your Roof"
-        subtitle="Free estimates, fast responses, and no pressure. Reach us however works best for you."
+        title="Let's Talk About Your Pet"
+        subtitle="Quick responses and friendly scheduling. Reach us however works best for you."
       />
 
       <Container className="grid gap-12 py-16 lg:grid-cols-2">
@@ -37,7 +37,7 @@ export default async function ContactPage() {
             </div>
             {settings.emergencyPhone && (
               <div>
-                <dt className="font-semibold text-muted">24/7 Emergency</dt>
+                <dt className="font-semibold text-muted">Text / After Hours</dt>
                 <dd>
                   <a href={telHref(settings.emergencyPhone)} className="font-bold text-brand hover:text-accent">
                     {settings.emergencyPhone}

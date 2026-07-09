@@ -1,7 +1,7 @@
 /**
  * Pure slot-computation for the self-scheduling calendar. Kept free of Payload
  * imports so the logic is independently testable. Times are computed in the
- * server's local timezone (fine for a single-region contractor).
+ * server's local timezone (fine for a single-region mobile groomer).
  */
 
 export type Slot = { key: string; time: string }
@@ -32,7 +32,7 @@ const toMinutes = (t: string) => {
 }
 
 /**
- * Compute the days (and open time slots within them) that a homeowner can book,
+ * Compute the days (and open time slots within them) that a client can book,
  * given the availability config, the slots already taken, and blackout dates.
  */
 export const computeOpenDays = (

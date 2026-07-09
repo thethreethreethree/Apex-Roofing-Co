@@ -1,6 +1,5 @@
 import 'dotenv/config'
 import { getPayload, type Payload } from 'payload'
-import { list, del } from '@vercel/blob'
 import sharp from 'sharp'
 import config from './payload.config'
 
@@ -11,7 +10,8 @@ import config from './payload.config'
  * - Wipes + recreates all *content* (services, projects, reviews, etc.) and
  *   media so the demo always lands in a known, complete state.
  * - Generates branded placeholder images with sharp (no binary assets in repo);
- *   every one is replaceable through the admin Media library.
+ *   every one is replaceable through the admin Media library. These are on-brand
+ *   paw-motif placeholders, NOT real photos — swap in real grooming photos in admin.
  */
 
 // ---------------------------------------------------------------------------
@@ -49,39 +49,57 @@ const esc = (s: string) =>
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&apos;')
 
-const roofMotif = (w: number, h: number) => `
-  <path d="M0 ${h * 0.66} L ${w * 0.5} ${h * 0.3} L ${w} ${h * 0.66} Z" fill="#ffffff" opacity="0.05"/>
-  <path d="M ${w * 0.2} ${h * 0.57} L ${w * 0.5} ${h * 0.34} L ${w * 0.8} ${h * 0.57} L ${w * 0.8} ${h * 0.8} L ${w * 0.2} ${h * 0.8} Z" fill="#ffffff" opacity="0.05"/>
-  <line x1="${w * 0.5}" y1="${h * 0.34}" x2="${w * 0.5}" y2="${h * 0.8}" stroke="#ffffff" opacity="0.04" stroke-width="2"/>`
+/** Subtle paw-print motif for placeholder image backgrounds. */
+const pawMotif = (w: number, h: number) => {
+  const r = h * 0.085
+  const t = r * 0.42
+  const cx = w * 0.5
+  const cy = h * 0.54
+  return `
+  <g fill="#ffffff" opacity="0.06">
+    <ellipse cx="${cx}" cy="${cy}" rx="${r}" ry="${r * 0.85}"/>
+    <circle cx="${cx - r}" cy="${cy - r * 0.9}" r="${t}"/>
+    <circle cx="${cx - r * 0.38}" cy="${cy - r * 1.35}" r="${t}"/>
+    <circle cx="${cx + r * 0.38}" cy="${cy - r * 1.35}" r="${t}"/>
+    <circle cx="${cx + r}" cy="${cy - r * 0.9}" r="${t}"/>
+  </g>`
+}
 
 const photoSvg = (
   label: string,
   sub: string,
   opts: { w?: number; h?: number; c1?: string; c2?: string } = {},
 ) => {
-  const { w = 1200, h = 800, c1 = '#0b2440', c2 = '#1f5170' } = opts
+  const { w = 1200, h = 800, c1 = '#0e4653', c2 = '#1c5f6b' } = opts
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">
     <defs><linearGradient id="g" x1="0" y1="0" x2="0.3" y2="1">
       <stop offset="0" stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/>
     </linearGradient></defs>
     <rect width="${w}" height="${h}" fill="url(#g)"/>
-    ${roofMotif(w, h)}
-    <text x="50%" y="49%" text-anchor="middle" font-family="Arial, sans-serif" font-size="${Math.round(w * 0.055)}" font-weight="700" fill="#ffffff">${esc(label)}</text>
-    <text x="50%" y="57%" text-anchor="middle" font-family="Arial, sans-serif" font-size="${Math.round(w * 0.024)}" fill="#ffffff" opacity="0.72">${esc(sub)}</text>
+    ${pawMotif(w, h)}
+    <text x="50%" y="49%" text-anchor="middle" font-family="Arial, sans-serif" font-size="${Math.round(w * 0.05)}" font-weight="700" fill="#ffffff">${esc(label)}</text>
+    <text x="50%" y="57%" text-anchor="middle" font-family="Arial, sans-serif" font-size="${Math.round(w * 0.022)}" fill="#ffffff" opacity="0.72">${esc(sub)}</text>
   </svg>`
 }
 
-const logoSvg = (textColor: string) => `<svg xmlns="http://www.w3.org/2000/svg" width="460" height="120" viewBox="0 0 460 120">
-    <path d="M18 74 L52 38 L86 74" stroke="#f97316" stroke-width="11" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-    <text x="104" y="60" font-family="Arial, sans-serif" font-size="44" font-weight="800" fill="${textColor}">APEX</text>
-    <text x="106" y="92" font-family="Arial, sans-serif" font-size="20" letter-spacing="7" fill="${textColor}" opacity="0.85">ROOFING CO</text>
+/** Wordmark logo: a paw glyph + business name. */
+const logoSvg = (textColor: string) => `<svg xmlns="http://www.w3.org/2000/svg" width="520" height="120" viewBox="0 0 520 120">
+    <g fill="#f2994a">
+      <ellipse cx="52" cy="70" rx="17" ry="15"/>
+      <circle cx="33" cy="52" r="7"/>
+      <circle cx="45" cy="42" r="7"/>
+      <circle cx="59" cy="42" r="7"/>
+      <circle cx="71" cy="52" r="7"/>
+    </g>
+    <text x="98" y="58" font-family="Arial, sans-serif" font-size="36" font-weight="800" fill="${textColor}">SHAGGY DOG SPA</text>
+    <text x="100" y="90" font-family="Arial, sans-serif" font-size="19" letter-spacing="6" fill="${textColor}" opacity="0.85">MOBILE GROOMING</text>
   </svg>`
 
-const certSvg = (initials: string) => `<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 240 240">
-    <circle cx="120" cy="120" r="110" fill="#102a43"/>
-    <circle cx="120" cy="120" r="110" fill="none" stroke="#f97316" stroke-width="6"/>
-    <text x="50%" y="46%" text-anchor="middle" font-family="Arial, sans-serif" font-size="64" font-weight="800" fill="#ffffff">${esc(initials)}</text>
-    <text x="50%" y="64%" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" letter-spacing="3" fill="#ffffff" opacity="0.8">CERTIFIED</text>
+/** Round badge with short initials (soft trust badge, not a formal certification). */
+const badgeSvg = (initials: string) => `<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 240 240">
+    <circle cx="120" cy="120" r="110" fill="#0e4653"/>
+    <circle cx="120" cy="120" r="110" fill="none" stroke="#f2994a" stroke-width="6"/>
+    <text x="50%" y="56%" text-anchor="middle" font-family="Arial, sans-serif" font-size="58" font-weight="800" fill="#ffffff">${esc(initials)}</text>
   </svg>`
 
 const createImage = async (payload: Payload, name: string, alt: string, svg: string) => {
@@ -90,85 +108,6 @@ const createImage = async (payload: Payload, name: string, alt: string, svg: str
     collection: 'media',
     data: { alt },
     file: { data, mimetype: 'image/png', name: `${name}.png`, size: data.length },
-  })
-  return doc.id
-}
-
-/**
- * Curated, license-free RESIDENTIAL home photos (Unsplash). Each ID was visually
- * confirmed to be a single-family home (no industrial/commercial buildings) and
- * verified to load. Every image is replaceable later via the admin Media library.
- */
-const U = (id: string, w: number, h: number) =>
-  `https://images.unsplash.com/photo-${id}?w=${w}&h=${h}&q=80&fm=jpg&fit=crop`
-
-const PHOTOS = {
-  hero: '1570129477492-45c003edd2be',
-  roof: '1605276374104-dee2a0ed3cd6',
-  repair: '1572120360610-d971b9d7767c',
-  inspection: '1583608205776-bfd35f0d9f83',
-  gutters: '1605146769289-440113cc3d00',
-  storm: '1564013799919-ab600027ffc6',
-  commercial: '1600596542815-ffad4c1539a9',
-  projAfter: [
-    '1568605114967-8130f3a36994',
-    '1600585154340-be6161a56a0c',
-    '1576941089067-2de3c901e126',
-    '1564013799919-ab600027ffc6',
-    '1512917774080-9991f1c4c750',
-    '1580587771525-78b9dba3b914',
-  ],
-  projBefore: [
-    '1583608205776-bfd35f0d9f83',
-    '1518780664697-55e3ad937233',
-    '1572120360610-d971b9d7767c',
-    '1605146769289-440113cc3d00',
-    '1605276374104-dee2a0ed3cd6',
-    '1600596542815-ffad4c1539a9',
-  ],
-} as const
-
-/** Download a specific photo URL (license-free). Returns buffer or null on failure. */
-const fetchUrl = async (url: string): Promise<Buffer | null> => {
-  try {
-    const res = await fetch(url, { signal: AbortSignal.timeout(25000), redirect: 'follow' })
-    if (res.ok) {
-      const buf = Buffer.from(await res.arrayBuffer())
-      if (buf.length > 3000) return buf
-    }
-  } catch {
-    /* fall through to fallback */
-  }
-  return null
-}
-
-/** Create a media doc from a specific photo URL, falling back to a generated SVG. */
-const createPhoto = async (
-  payload: Payload,
-  name: string,
-  alt: string,
-  url: string,
-  fallbackSvg: string,
-  w = 1200,
-  h = 800,
-) => {
-  const photo = await fetchUrl(url)
-  let data: Buffer
-  let ext: string
-  let mime: string
-  if (photo) {
-    data = await sharp(photo).resize(w, h, { fit: 'cover' }).jpeg({ quality: 80 }).toBuffer()
-    ext = 'jpg'
-    mime = 'image/jpeg'
-  } else {
-    data = await sharp(Buffer.from(fallbackSvg)).png().toBuffer()
-    ext = 'png'
-    mime = 'image/png'
-  }
-  const doc = await payload.create({
-    collection: 'media',
-    data: { alt },
-    file: { data, mimetype: mime, name: `${name}.${ext}`, size: data.length },
   })
   return doc.id
 }
@@ -192,9 +131,9 @@ const seed = async () => {
   if (users.totalDocs === 0) {
     await payload.create({
       collection: 'users',
-      data: { username: 'ApexRoofing', password: 'Admin2026!' },
+      data: { username: 'ShaggyDogSpa', password: 'Admin2026!' },
     })
-    console.log('[seed] ✓ Created admin account: ApexRoofing')
+    console.log('[seed] ✓ Created admin account: ShaggyDogSpa')
   }
 
   // 2) Wipe content for a deterministic demo
@@ -208,113 +147,96 @@ const seed = async () => {
   ])
   console.log('[seed] Cleared previous content.')
 
-  // 2b) Clear the Blob store too, so re-seeding can't collide with existing files.
-  const blobToken = process.env.BLOB_READ_WRITE_TOKEN
-  if (blobToken) {
-    try {
-      const { blobs } = await list({ token: blobToken, limit: 1000 })
-      if (blobs.length > 0) {
-        await del(
-          blobs.map((b) => b.url),
-          { token: blobToken },
-        )
-      }
-      console.log(`[seed] Cleared ${blobs.length} files from Blob storage.`)
-    } catch (e) {
-      console.warn('[seed] Blob clear skipped:', e instanceof Error ? e.message : e)
-    }
-  }
-
-  // 3) Images
-  const logo = await createImage(payload, 'logo', 'Apex Roofing Co logo', logoSvg('#102a43'))
-  const logoLight = await createImage(payload, 'logo-light', 'Apex Roofing Co logo', logoSvg('#ffffff'))
-  const hero = await createPhoto(
+  // 3) Images (branded paw-motif placeholders — replace with real photos in admin)
+  const logo = await createImage(payload, 'logo', 'Shaggy Dog Spa Mobile Grooming logo', logoSvg('#0e4653'))
+  const logoLight = await createImage(payload, 'logo-light', 'Shaggy Dog Spa Mobile Grooming logo', logoSvg('#ffffff'))
+  const hero = await createImage(
     payload,
     'hero',
-    'Beautiful residential home with a new roof',
-    U(PHOTOS.hero, 1600, 1000),
-    photoSvg('Apex Roofing Co', 'Quality roofing, done right', { w: 1600, h: 1000 }),
-    1600,
-    1000,
+    'A freshly groomed, happy dog',
+    photoSvg('Shaggy Dog Spa', 'Mobile grooming that comes to you', { w: 1600, h: 1000 }),
   )
   console.log('[seed] ✓ Brand images generated.')
 
   // 4) Services
   const serviceDefs = [
     {
-      title: 'Roof Replacement',
-      icon: 'roof',
-      priceRange: '$8,000–$30,000',
+      title: 'Full Groom',
+      icon: 'groom',
+      priceRange: 'From $75',
       featured: true,
       order: 1,
       summary:
-        'Full tear-off and replacement with premium architectural shingles, backed by a written workmanship warranty.',
+        'Bath, breed-style haircut, nail trim, ear cleaning, and a finishing spritz — all at your curb.',
       body: [
-        'When a repair is no longer enough, a full replacement protects your home for decades. We tear off the old roof, inspect and repair the decking, and install a complete, code-compliant roofing system.',
-        'Every replacement includes new underlayment, ice-and-water shield in vulnerable areas, proper ventilation, and a manufacturer-backed warranty in addition to our own workmanship guarantee.',
+        'Our signature service: a warm bath with pet-safe shampoo, a full haircut styled to your breed or your preference, nails trimmed and smoothed, ears cleaned, and a light finishing spray so your pet goes back inside soft, tidy, and fresh.',
+        'Every full groom happens one-on-one inside our mobile van — no cages, no cage dryers, and no long day at a salon. Final price depends on your pet’s size, coat, and condition, and we confirm the quote before we start.',
       ],
     },
     {
-      title: 'Roof Repair',
-      icon: 'repair',
-      priceRange: 'From $350',
+      title: 'Bath & Brush',
+      icon: 'bath',
+      priceRange: 'From $45',
       featured: true,
       order: 2,
-      summary: 'Fast, lasting repairs for leaks, missing shingles, flashing, and storm damage.',
+      summary: 'Warm bath, blow-dry, thorough brush-out, nails, and ears — perfect between full grooms.',
       body: [
-        'A small leak today is a major repair tomorrow. Our crews diagnose the real source of the problem — not just the symptom — and fix it right the first time.',
+        'A clean-up service for pets who hold their style well: a warm bath, gentle blow-dry, complete brush-out to remove loose fur, plus nails and ears. Keeps your pet fresh between full grooms.',
       ],
     },
     {
-      title: 'Free Roof Inspection',
-      icon: 'inspection',
-      priceRange: 'Always Free',
+      title: 'Deshedding Package',
+      icon: 'deshed',
+      priceRange: 'From $65',
       featured: true,
       order: 3,
-      summary: 'A thorough, no-pressure 21-point inspection with honest photos and a clear report.',
+      summary: 'Deep deshed treatment that cuts loose fur and shedding for double-coated and heavy shedders.',
       body: [
-        'We document the true condition of your roof with photos and a plain-English report, so you can make an informed decision with zero pressure.',
+        'Built for huskies, shepherds, retrievers, and other heavy shedders: a deshedding bath and treatment plus a specialized brush-out that pulls out the loose undercoat before it ends up all over your home.',
       ],
     },
     {
-      title: 'Gutter Installation & Repair',
-      icon: 'gutters',
-      priceRange: 'From $1,200',
-      featured: false,
-      order: 4,
-      summary: 'Seamless gutters and guards that move water away from your roof and foundation.',
-      body: ['Properly sized, seamless aluminum gutters protect your fascia, siding, and foundation year-round.'],
-    },
-    {
-      title: 'Storm & Hail Damage',
-      icon: 'storm',
-      priceRange: 'Insurance-Based',
+      title: 'Nail Trim & Grind',
+      icon: 'nails',
+      priceRange: 'From $20',
       featured: true,
-      order: 5,
-      summary: 'Storm damage specialists who guide you through the entire insurance claim process.',
+      order: 4,
+      summary: 'Quick, low-stress nail trim and a smooth grind — gentle even for pets who hate their feet touched.',
       body: [
-        'Hail and wind damage is not always visible from the ground. We inspect, document, and work directly with your insurance adjuster to make sure your claim is fair and complete.',
+        'A fast, calm nail trim followed by a grind to smooth every edge so there are no sharp tips or snags. Great as an add-on to any service or as a quick standalone visit.',
       ],
     },
     {
-      title: 'Commercial Roofing',
-      icon: 'commercial',
-      priceRange: 'Custom Quote',
+      title: 'Flea & Tick Treatment',
+      icon: 'flea',
+      priceRange: 'Add-on $25',
+      featured: false,
+      order: 5,
+      summary: 'A medicated bath add-on to knock down fleas and ticks, plus a careful coat check.',
+      body: [
+        'A medicated flea-and-tick bath that can be added to any groom, along with a thorough coat and skin check so nothing gets missed. Ask us to add it when you book.',
+      ],
+    },
+    {
+      title: 'Cat Grooming',
+      icon: 'cat',
+      priceRange: 'From $70',
       featured: false,
       order: 6,
-      summary: 'TPO, EPDM, and metal systems for flat and low-slope commercial buildings.',
-      body: ['Minimize downtime and protect your investment with durable, energy-efficient commercial roofing systems.'],
+      summary: 'Gentle, patient grooming for cats — bath, deshed, nails, and a tidy-up by request.',
+      body: [
+        'Cats deserve calm, careful handling. We offer bathing, deshedding, nail trims, and light tidy-ups for cats, worked at your cat’s pace to keep stress as low as possible.',
+      ],
     },
   ]
 
   const serviceIds: Record<string, number | string> = {}
   for (const s of serviceDefs) {
-    const img = await createPhoto(
+    const img = await createImage(
       payload,
       `service-${s.icon}`,
       `${s.title}`,
-      U((PHOTOS as Record<string, string>)[s.icon], 1200, 800),
-      photoSvg(s.title, 'Apex Roofing Co', { c1: '#0b2440', c2: '#27567a' }),
+      photoSvg(s.title, 'Shaggy Dog Spa', { c1: '#0e4653', c2: '#20707e' }),
     )
     const doc = await payload.create({
       collection: 'services',
@@ -323,7 +245,7 @@ const seed = async () => {
         summary: s.summary,
         description: lexical(s.body),
         priceRange: s.priceRange,
-        icon: s.icon as 'roof',
+        icon: s.icon as 'groom',
         image: img,
         featured: s.featured,
         order: s.order,
@@ -334,15 +256,18 @@ const seed = async () => {
   console.log('[seed] ✓ Services created.')
 
   // 5) Reviews
+  // NOTE: representative placeholder reviews modeled on the real Yelp listing's
+  // themes (gentle with senior pets, low-stress, mobile convenience, groomers
+  // Adam & Frank). Replace with the business's actual reviews in admin.
   const reviewDefs = [
-    { author: 'Marcus Bellamy', rating: 5, service: 'roof', featured: true, text: 'Apex replaced our roof after a hailstorm and handled the entire insurance claim. The crew was on time, spotless, and done in two days. Best contractor experience we have had.' },
-    { author: 'Janelle Ortiz', rating: 5, service: 'storm', featured: true, text: 'They found hail damage three other companies missed, documented everything, and our claim was approved. Honest and genuinely helpful from start to finish.' },
-    { author: 'David Cho', rating: 5, service: 'repair', featured: true, text: 'Had a stubborn leak two other roofers could not solve. Apex found the real source in fifteen minutes and fixed it for a fair price. Highly recommend.' },
-    { author: 'Priya Raman', rating: 5, service: 'roof', featured: true, text: 'Beautiful new roof and the cleanup was immaculate — you would never know a crew had been here. The warranty paperwork was clear and complete.' },
-    { author: 'Tom Whitaker', rating: 4, service: 'gutters', featured: false, text: 'Great seamless gutters, fairly priced. Scheduling took a little back-and-forth but the install was excellent.' },
-    { author: 'Sandra Lee', rating: 5, service: 'inspection', featured: false, text: 'The free inspection was genuinely free and genuinely thorough. No scare tactics, just honest photos and advice. We will use them when we are ready to replace.' },
-    { author: 'Greg Mathers', rating: 5, service: 'roof', featured: false, text: 'Second roof Apex has done for me across two homes. Same quality and professionalism both times. That consistency is why I keep calling them.' },
-    { author: 'Alicia Fontaine', rating: 5, service: 'commercial', featured: false, text: 'Re-roofed our building over a long weekend so we never lost a business day. Clean, communicative, and on budget.' },
+    { author: 'Denise M.', rating: 5, service: 'groom', featured: true, text: 'Adam showed up right on time and groomed our 9-year-old Doberman with so much care. She’s usually nervous at the salon but stayed calm the whole time. The van is spotless and she came back looking amazing.' },
+    { author: 'Robert T.', rating: 5, service: 'cat', featured: true, text: 'They groomed our 18-year-old Papillon and were far more concerned about keeping her stress low than rushing through it. You can tell they genuinely love animals. Completely satisfied.' },
+    { author: 'Marisol A.', rating: 5, service: 'deshed', featured: true, text: 'Our husky sheds like crazy and the deshedding package made a night-and-day difference — our whole house is cleaner. Booking was easy and they came right to us.' },
+    { author: 'Kevin D.', rating: 5, service: 'groom', featured: true, text: 'No more fighting the crate and driving across town. They pull up, groom, and our doodle comes back fluffy and happy. Worth every penny for the convenience alone.' },
+    { author: 'Priya S.', rating: 5, service: 'nails', featured: false, text: 'Frank has been our groomer for about two years now and both our maltipoo and mini terrier adore him. Consistent, kind, and always right on schedule.' },
+    { author: 'Tom W.', rating: 4, service: 'bath', featured: false, text: 'Great bath and brush at a fair price. Scheduling took a little back-and-forth, but the groom itself was excellent and very gentle with our older dog.' },
+    { author: 'Sandra L.', rating: 5, service: 'flea', featured: false, text: 'They caught the start of a flea problem during a bath and handled it that same visit. Honest and thorough — never tried to upsell me on things we didn’t need.' },
+    { author: 'Greg M.', rating: 5, service: 'groom', featured: false, text: 'Second dog I’ve had groomed with them and it’s the same gentle, careful quality every time. That consistency is exactly why I keep booking.' },
   ]
 
   const reviewIds: Record<string, number | string> = {}
@@ -353,7 +278,7 @@ const seed = async () => {
         author: r.author,
         rating: r.rating,
         text: r.text,
-        source: 'Google',
+        source: 'Yelp',
         service: serviceIds[r.service],
         featured: r.featured,
         date: new Date(2025, 10, 1).toISOString(),
@@ -363,20 +288,20 @@ const seed = async () => {
   }
   console.log('[seed] ✓ Reviews created.')
 
-  // 6) Projects (before / after)
+  // 6) Projects (before / after grooming transformations)
   const projectDefs = [
-    { title: 'Full Architectural Shingle Replacement', service: 'roof', review: 'Marcus Bellamy', featured: true, desc: 'Complete tear-off and replacement with premium architectural shingles after hail damage.' },
-    { title: 'Storm Damage Restoration', service: 'storm', review: 'Janelle Ortiz', featured: true, desc: 'Insurance-approved full restoration following a severe spring hailstorm.' },
-    { title: 'Standing-Seam Metal Roof', service: 'roof', review: 'Priya Raman', featured: true, desc: 'Charcoal standing-seam metal roof installed for durability and modern curb appeal.' },
-    { title: 'Leak Repair & Flashing Rebuild', service: 'repair', review: 'David Cho', featured: false, desc: 'Chimney flashing rebuilt and valley re-shingled to stop a long-standing leak.' },
-    { title: 'Seamless Gutter Installation', service: 'gutters', review: null, featured: false, desc: 'New seamless aluminum gutters and leaf guards around the full perimeter.' },
-    { title: 'Full Roof Replacement — Modern Home', service: 'roof', review: null, featured: false, desc: 'Complete re-roof of a modern two-story home with energy-efficient architectural shingles.' },
+    { title: 'Matted Doodle Full Makeover', service: 'groom', review: 'Denise M.', featured: true, desc: 'A heavily matted goldendoodle brought back to a soft, even teddy-bear trim.' },
+    { title: 'Senior Dog Gentle Deshed', service: 'deshed', review: 'Marisol A.', featured: true, desc: 'Low-stress deshedding for a senior husky — pounds of loose undercoat removed.' },
+    { title: 'Nervous Rescue’s First Groom', service: 'groom', review: 'Robert T.', featured: true, desc: 'A shy rescue’s very first full groom, taken slow and finished calm and clean.' },
+    { title: 'Double-Coat Deshed & Tidy', service: 'deshed', review: null, featured: false, desc: 'A German shepherd deshedded and neatened up right before summer.' },
+    { title: 'Puppy’s First Bath & Tidy', service: 'bath', review: null, featured: false, desc: 'A puppy’s gentle first introduction to the bath, dryer, and nail trim.' },
+    { title: 'Long-Haired Cat Comfort Groom', service: 'cat', review: null, featured: false, desc: 'A patient bath and deshed for a long-haired cat who hates the carrier.' },
   ]
 
   for (let pi = 0; pi < projectDefs.length; pi++) {
     const p = projectDefs[pi]
-    const before = await createPhoto(payload, `before-${pi}`, `${p.title} — before`, U(PHOTOS.projBefore[pi], 1200, 900), photoSvg('BEFORE', p.title, { c1: '#3a3f47', c2: '#5b6470' }), 1200, 900)
-    const after = await createPhoto(payload, `after-${pi}`, `${p.title} — after`, U(PHOTOS.projAfter[pi], 1200, 900), photoSvg('AFTER', p.title, { c1: '#0b2440', c2: '#27567a' }), 1200, 900)
+    const before = await createImage(payload, `before-${pi}`, `${p.title} — before`, photoSvg('BEFORE', p.title, { c1: '#3a3f47', c2: '#5b6470' }))
+    const after = await createImage(payload, `after-${pi}`, `${p.title} — after`, photoSvg('AFTER', p.title, { c1: '#0e4653', c2: '#20707e' }))
     await payload.create({
       collection: 'projects',
       data: {
@@ -393,56 +318,67 @@ const seed = async () => {
   }
   console.log('[seed] ✓ Projects created.')
 
-  // 7) Certifications
-  const certDefs = [
-    { name: 'GAF Master Elite®', initials: 'GAF', description: 'Only the top 2% of roofers earn this — it lets us offer GAF\'s strongest warranties.' },
-    { name: 'Owens Corning Preferred', initials: 'OC', description: 'Factory-trained installation that protects your manufacturer warranty.' },
-    { name: 'BBB A+ Accredited', initials: 'A+', description: 'An A+ rating from the Better Business Bureau for trust and resolution.' },
-    { name: 'CertainTeed ShingleMaster™', initials: 'CT', description: 'Credentialed for advanced roofing systems and extended warranty coverage.' },
+  // 7) Trust badges (stored in the "certifications" collection — soft, non-credential
+  //    trust signals for a mobile groomer, not formal certifications).
+  const badgeDefs = [
+    { name: 'We Come to You', initials: 'VAN', description: 'Fully mobile — we groom right outside your door, on your schedule.' },
+    { name: 'One-on-One, No Cages', initials: '1:1', description: 'Your pet is the only one in the van — never cage-dried or left waiting.' },
+    { name: 'Gentle with Seniors & Puppies', initials: 'TLC', description: 'Patient, low-stress handling for anxious, senior, and first-time pets.' },
+    { name: 'Insured & Reliable', initials: 'INS', description: 'Insured mobile grooming with on-time appointments you can count on.' },
   ]
-  for (let i = 0; i < certDefs.length; i++) {
-    const c = certDefs[i]
-    const logoId = await createImage(payload, `cert-${c.initials}`, `${c.name} badge`, certSvg(c.initials))
+  for (let i = 0; i < badgeDefs.length; i++) {
+    const b = badgeDefs[i]
+    const logoId = await createImage(payload, `badge-${i}`, `${b.name} badge`, badgeSvg(b.initials))
     await payload.create({
       collection: 'certifications',
-      data: { name: c.name, description: c.description, logo: logoId, order: i + 1 },
+      data: { name: b.name, description: b.description, logo: logoId, order: i + 1 },
     })
   }
-  console.log('[seed] ✓ Certifications created.')
+  console.log('[seed] ✓ Trust badges created.')
 
-  // 9) Financing options
-  const finDefs = [
-    { name: '0% APR for 12 Months', terms: 'No interest if paid in full within 12 months', description: 'Spread the cost of your new roof interest-free for a full year.', order: 1 },
-    { name: '60-Month Low Payment Plan', terms: 'Low fixed monthly payments', description: 'Predictable, budget-friendly payments with quick approval.', order: 2 },
-    { name: 'No Money Down', terms: '$0 down to get started', description: 'Start your project now and begin payments later.', order: 3 },
+  // 9) Grooming packages (stored in the "financing-options" collection, repurposed
+  //    as Packages & Pricing — name = package, terms = price, description = included).
+  const pkgDefs = [
+    { name: 'The Full Groom', terms: 'From $75', description: 'Bath, breed-style haircut, nail trim, ear cleaning, and a finishing spritz.', order: 1 },
+    { name: 'Bath & Brush', terms: 'From $45', description: 'Warm bath, blow-dry, thorough brush-out, nails, and ears — perfect between full grooms.', order: 2 },
+    { name: 'Deshed Deluxe', terms: 'From $65', description: 'Deep deshedding treatment plus a full bath and tidy for heavy, double-coated shedders.', order: 3 },
+    { name: 'À La Carte Add-Ons', terms: 'From $20', description: 'Nail trim & grind, ear cleaning, teeth brushing, and flea & tick treatment.', order: 4 },
   ]
-  for (const f of finDefs) {
+  for (const f of pkgDefs) {
     await payload.create({ collection: 'financing-options', data: f })
   }
-  console.log('[seed] ✓ Financing options created.')
+  console.log('[seed] ✓ Packages created.')
 
   // 10) Globals
   await payload.updateGlobal({
     slug: 'branding',
-    data: { logo, logoLight, favicon: logo, primaryColor: '#102a43', accentColor: '#f97316' },
+    data: { logo, logoLight, favicon: logo, primaryColor: '#1c5f6b', accentColor: '#f2994a' },
   })
 
   await payload.updateGlobal({
     slug: 'site-settings',
     data: {
-      // Region-neutral: no city/state and a generic license so the demo reads
-      // generically for any prospect (no Texas-specific references).
-      address: { street: '', city: '', state: '', zip: '' },
-      license: 'Lic. #0098124',
+      companyName: 'Shaggy Dog Spa Mobile Grooming',
+      tagline: 'Grooming That Comes to You',
+      phone: '(760) 269-6239',
+      emergencyPhone: '',
+      email: 'hello@shaggydogspa.example',
+      address: { street: '', city: 'Phelan', state: 'CA', zip: '92371' },
+      license: '',
+      insuranceStatement: 'Insured mobile grooming',
+      yearsInBusiness: null,
+      googleRating: 5,
+      googleReviewCount: 26,
       hours: [
-        { days: 'Mon – Fri', time: '7:00 AM – 6:00 PM' },
-        { days: 'Saturday', time: '8:00 AM – 2:00 PM' },
-        { days: 'Sunday', time: 'Emergencies only' },
+        { days: 'Monday', time: 'Closed' },
+        { days: 'Tue – Sat', time: '9:00 AM – 6:00 PM' },
+        { days: 'Sunday', time: 'Closed' },
       ],
       social: {
-        google: 'https://g.page/apex-roofing-co',
-        facebook: 'https://facebook.com/apexroofingco',
-        instagram: 'https://instagram.com/apexroofingco',
+        google: '',
+        facebook: 'https://facebook.com/shaggydoggyspa',
+        instagram: 'https://instagram.com/shaggydoggyspa',
+        yelp: 'https://www.yelp.com/biz/shaggy-dog-spa-mobile-grooming-phelan',
       },
     },
   })
@@ -450,22 +386,43 @@ const seed = async () => {
   await payload.updateGlobal({
     slug: 'home-page',
     data: {
-      hero: { backgroundImage: hero },
-      whyUs: [
-        { title: 'Free, No-Pressure Inspections', description: 'An honest 21-point assessment with photos — never a sales ambush.' },
-        { title: 'Licensed, Bonded & Insured', description: 'Fully credentialed crews and a written workmanship warranty on every job.' },
-        { title: 'Insurance Claim Experts', description: 'We document damage and work directly with your adjuster for a fair claim.' },
-        { title: 'Local & Responsive', description: '18+ years serving the area, with same-week inspection scheduling.' },
+      hero: {
+        heading: 'Mobile Dog & Cat Grooming That Comes to You',
+        subheading:
+          'Professional, low-stress grooming right in your driveway across Phelan and the High Desert. One pet at a time — no cages, no car rides — just a happy, fresh-smelling pet.',
+        backgroundImage: hero,
+        primaryCtaLabel: 'Book an Appointment',
+        secondaryCtaLabel: 'See Packages & Pricing',
+      },
+      trustBadges: [
+        { label: 'Fully Mobile' },
+        { label: 'One Pet at a Time' },
+        { label: 'Gentle & Low-Stress' },
+        { label: 'Serving the High Desert' },
       ],
+      whyUs: [
+        { title: 'Fully Mobile', description: 'We bring the full grooming salon to your driveway — no crating, no car rides, and no waiting room.' },
+        { title: 'One Pet at a Time', description: 'Your dog or cat gets our full attention from start to finish — calm, unhurried, and never cage-dried.' },
+        { title: 'Gentle with Every Pet', description: 'Patient, low-stress handling for seniors, puppies, and anxious pets who dread the salon.' },
+        { title: 'Local & Reliable', description: 'Serving Phelan and the High Desert with on-time appointments you can count on.' },
+      ],
+      finalCta: {
+        heading: 'Ready for a Happier Grooming Day?',
+        subheading: 'Book your mobile grooming appointment — we come to you.',
+        ctaLabel: 'Book an Appointment',
+      },
     },
   })
 
   await payload.updateGlobal({
     slug: 'financing-info',
     data: {
+      heading: 'Grooming Packages & Pricing',
+      intro:
+        'Simple, upfront pricing for mobile grooming that comes to you. Final price depends on your pet’s size, coat, and condition — you’ll always get a clear quote before we start.',
       insuranceClaimHelp: lexical([
-        'Storm damage is stressful — the claim process should not be. Our team inspects your roof, documents every point of damage with photographs, and meets your insurance adjuster on site to make sure nothing is missed.',
-        'You pay your deductible; we handle the paperwork and the roof. Most approved claims move from inspection to a finished roof in under three weeks.',
+        'Prices shown are starting points for a healthy, average-size pet. Heavy matting, larger breeds, or extra services may adjust the final quote — and we’ll always confirm it with you before we begin.',
+        'Add-ons like teeth brushing, flea & tick treatment, and de-matting can be added to any package. Just let us know what you need when you book.',
       ]),
     },
   })

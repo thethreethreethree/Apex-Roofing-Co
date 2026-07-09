@@ -71,7 +71,7 @@ export const BookingCalendar = ({
           </div>
           <h3 className="text-xl font-bold text-ink">You're booked!</h3>
           <p className="mt-1 text-muted">
-            Your free inspection is confirmed for
+            Your grooming appointment is confirmed for
             <br />
             <strong className="text-ink">{confirmedLabel}</strong>.
           </p>
@@ -123,7 +123,7 @@ export const BookingCalendar = ({
             <input required name="phone" type="tel" placeholder="Phone" className={inputCls} />
             <input name="email" type="email" placeholder="Email" className={inputCls} />
           </div>
-          <input name="address" placeholder="Property address" className={inputCls} />
+          <input name="address" placeholder="Address (where we'll come to you)" className={inputCls} />
           <select name="service" defaultValue="" className={inputCls}>
             <option value="" disabled>
               What's this about?

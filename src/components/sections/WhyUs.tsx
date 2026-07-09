@@ -4,7 +4,7 @@ import { Section } from '@/components/ui/Section'
 export const WhyUs = ({ items }: { items: HomePage['whyUs'] }) => {
   if (!items || items.length === 0) return null
   return (
-    <Section eyebrow="Why Apex" title="Why Homeowners Choose Us">
+    <Section eyebrow="Why Us" title="Why Pet Parents Choose Us">
       <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
         {items.map((w, i) => (
           <div key={i}>

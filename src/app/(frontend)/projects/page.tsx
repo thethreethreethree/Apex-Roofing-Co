@@ -10,7 +10,7 @@ export const dynamic = 'force-dynamic'
 export const metadata: Metadata = {
   title: 'Project Gallery',
   description:
-    'Browse real before-and-after roofing projects — replacements, repairs, storm restorations, and more, completed across the region.',
+    'Browse real before-and-after grooming transformations — full grooms, deshedding, and gentle makeovers for dogs and cats across the High Desert.',
 }
 
 export default async function ProjectsPage() {
@@ -18,9 +18,9 @@ export default async function ProjectsPage() {
   return (
     <>
       <PageHero
-        eyebrow="Our Work"
-        title="Project Gallery"
-        subtitle="Real homes, real results. Hover any project to see the before-and-after."
+        eyebrow="Before & After"
+        title="Grooming Gallery"
+        subtitle="Real pets, real transformations. Hover any groom to see the before-and-after."
       />
       <Section>
         <ProjectsGallery projects={projects} services={services} />

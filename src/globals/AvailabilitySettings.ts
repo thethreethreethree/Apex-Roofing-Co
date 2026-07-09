@@ -53,7 +53,7 @@ export const AvailabilitySettings: GlobalConfig = {
           name: 'capacityPerSlot',
           type: 'number',
           defaultValue: 2,
-          admin: { width: '33%', description: 'Max inspections per slot (crews).' },
+          admin: { width: '33%', description: 'Max appointments per slot (vans/groomers).' },
         },
         {
           name: 'weeksAhead',

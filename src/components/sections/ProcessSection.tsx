@@ -1,10 +1,10 @@
 import { Section } from '@/components/ui/Section'
 
 const STEPS = [
-  { t: 'Book Online', d: 'Pick an inspection time that works for you — in under a minute.' },
-  { t: 'Free Inspection', d: 'A thorough 21-point assessment with honest photos and findings.' },
-  { t: 'Clear Estimate', d: 'Transparent, line-item pricing with no pressure and no surprises.' },
-  { t: 'Expert Installation', d: 'A clean, on-time install backed by our written workmanship warranty.' },
+  { t: 'Book Online', d: 'Pick an appointment time that works for you — in under a minute.' },
+  { t: 'We Come to You', d: 'Our mobile grooming van pulls up to your driveway at the scheduled time.' },
+  { t: 'Low-Stress Groom', d: 'One-on-one bath, haircut, and nails — calm, cage-free, and unhurried.' },
+  { t: 'Happy, Fresh Pet', d: 'Your pet comes back clean, tidy, and smelling great — no car ride required.' },
 ]
 
 export const ProcessSection = () => (

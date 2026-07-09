@@ -8,18 +8,18 @@ import { BookCtaBand } from '@/components/sections/BookCtaBand'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Financing & Insurance',
+  title: 'Packages & Pricing',
   description:
-    'Flexible financing plans and expert help filing storm-damage insurance claims for your new roof.',
+    'Simple, upfront pricing for mobile dog & cat grooming — full grooms, baths, deshedding, nails, and add-ons that come to your door.',
 }
 
-export default async function FinancingPage() {
+export default async function PackagesPage() {
   const [info, options] = await Promise.all([getFinancingInfo(), getFinancingOptions()])
   return (
     <>
       <PageHero
-        eyebrow="Financing & Insurance"
-        title={info.heading ?? 'Flexible Financing & Insurance Help'}
+        eyebrow="Packages & Pricing"
+        title={info.heading ?? 'Grooming Packages & Pricing'}
         subtitle={info.intro ?? undefined}
       />
       <Section>
@@ -38,14 +38,14 @@ export default async function FinancingPage() {
       </Section>
 
       {info.insuranceClaimHelp && (
-        <Section alt eyebrow="Storm Damage" title="Insurance Claim Help">
+        <Section alt eyebrow="Good to Know" title="Pricing Notes">
           <div className="mx-auto max-w-3xl">
             <RichText data={info.insuranceClaimHelp} />
           </div>
         </Section>
       )}
 
-      <BookCtaBand heading="Let's make your new roof affordable" subheading="Book a free inspection and we'll walk you through financing and any insurance claim." />
+      <BookCtaBand heading="Not sure which package fits?" subheading="Book an appointment or call us — we'll help you pick the right groom for your pet." />
     </>
   )
 }

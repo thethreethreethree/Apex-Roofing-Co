@@ -52,8 +52,8 @@ export const QuoteForm = ({
           </div>
           <h3 className="text-lg font-bold text-ink">Request received!</h3>
           <p className="mt-1 text-sm text-muted">
-            Thanks — a member of our team will reach out within one business hour to confirm your
-            free estimate.
+            Thanks — we'll reach out shortly to confirm your grooming appointment and answer any
+            questions about your pet.
           </p>
         </div>
       </div>
@@ -66,8 +66,8 @@ export const QuoteForm = ({
     <form className={wrap} onSubmit={onSubmit}>
       {variant === 'card' && (
         <div className="mb-4">
-          <h3 className="text-lg font-bold text-ink">Get Your Free Estimate</h3>
-          <p className="text-sm text-muted">No obligation. Response within one business hour.</p>
+          <h3 className="text-lg font-bold text-ink">Request an Appointment</h3>
+          <p className="text-sm text-muted">Tell us about your pet and we'll get you scheduled.</p>
         </div>
       )}
       <div className="grid gap-3">
@@ -110,12 +110,12 @@ export const QuoteForm = ({
         <textarea
           name="message"
           rows={2}
-          placeholder="Tell us briefly about your roof (optional)"
+          placeholder="Tell us about your pet — breed, size, coat, anything special (optional)"
           className="w-full resize-none rounded-lg border border-line px-4 py-2.5 text-sm outline-none focus:border-accent"
         />
         {error && <p className="text-sm font-medium text-red-600">{error}</p>}
         <Button type="submit" size="lg" className="w-full" >
-          {busy ? 'Submitting…' : 'Request My Free Estimate'}
+          {busy ? 'Submitting…' : 'Request My Appointment'}
         </Button>
         <p className="text-center text-xs text-muted">
           By submitting you agree to be contacted about your project.

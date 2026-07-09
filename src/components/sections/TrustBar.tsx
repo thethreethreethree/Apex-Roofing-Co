@@ -3,12 +3,12 @@ import { Container } from '@/components/ui/Container'
 
 export const TrustBar = ({ settings }: { settings: SiteSetting }) => {
   const items = [
-    settings.yearsInBusiness ? { big: `${settings.yearsInBusiness}+`, label: 'Years in Business' } : null,
+    settings.yearsInBusiness ? { big: `${settings.yearsInBusiness}+`, label: 'Years Grooming' } : null,
     settings.googleRating
-      ? { big: `${settings.googleRating}★`, label: `${settings.googleReviewCount}+ 5-Star Reviews` }
+      ? { big: `${settings.googleRating}★`, label: `${settings.googleReviewCount}+ Reviews` }
       : null,
-    { big: 'Licensed', label: settings.insuranceStatement ?? '& Insured' },
-    { big: 'Written', label: 'Workmanship Warranty' },
+    { big: 'Mobile', label: 'We Come to You' },
+    { big: '1-on-1', label: 'One Pet at a Time' },
   ].filter(Boolean) as { big: string; label: string }[]
 
   return (

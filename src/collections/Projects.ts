@@ -1,7 +1,7 @@
 import type { CollectionConfig } from 'payload'
 import { slugField } from '../fields/slug'
 
-/** Before/after project portfolio — the highest-converting content on a roofing site. */
+/** Before/after grooming gallery — the highest-converting content on a groomer's site. */
 export const Projects: CollectionConfig = {
   slug: 'projects',
   labels: { singular: 'Project', plural: 'Projects' },

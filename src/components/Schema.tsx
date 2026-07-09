@@ -1,15 +1,15 @@
 import { getSiteSettings } from '@/lib/payload'
 
 /**
- * RoofingContractor JSON-LD. Region-neutral by design — no address or areaServed,
- * so the demo doesn't tie the business to any specific location.
+ * LocalBusiness JSON-LD for the mobile grooming business. Kept minimal (name,
+ * phone, rating) — the owner can extend address/areaServed in Site Settings.
  */
 export const Schema = async () => {
   const settings = await getSiteSettings()
 
   const data: Record<string, unknown> = {
     '@context': 'https://schema.org',
-    '@type': 'RoofingContractor',
+    '@type': 'LocalBusiness',
     name: settings.companyName,
     description: settings.tagline,
     telephone: settings.phone,

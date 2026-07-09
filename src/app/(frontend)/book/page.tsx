@@ -9,14 +9,14 @@ import { telHref } from '@/lib/format'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Book a Free Inspection',
-  description: 'Schedule your free, no-obligation roof inspection online in under a minute.',
+  title: 'Book an Appointment',
+  description: 'Schedule mobile dog & cat grooming online in under a minute — we come to you.',
 }
 
 const STEPS = [
   'Pick a date and time that works for you',
-  'Tell us where and what you need',
-  'We confirm and arrive — inspection is free',
+  'Tell us where you are and what your pet needs',
+  'We confirm and bring the grooming van to your door',
 ]
 
 export default async function BookPage() {
@@ -29,9 +29,9 @@ export default async function BookPage() {
   return (
     <>
       <PageHero
-        eyebrow="Free Inspection"
-        title="Book Your Free Roof Inspection"
-        subtitle="No cost, no obligation. Choose a time below and we'll confirm right away."
+        eyebrow="Book Online"
+        title="Book Your Mobile Grooming Appointment"
+        subtitle="Choose a time below and we'll confirm right away — then we come to you."
       />
       <Container className="grid gap-12 py-16 lg:grid-cols-2">
         <div>

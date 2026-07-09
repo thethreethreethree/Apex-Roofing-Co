@@ -1,7 +1,7 @@
 {
-  "name": "apex",
+  "name": "shaggy-dog-spa",
   "version": "1.0.0",
-  "description": "A blank template to get started with Payload 3.0",
+  "description": "Mobile pet grooming website (Payload 3.0 + Next.js)",
   "license": "MIT",
   "type": "module",
   "scripts": {
@@ -18,12 +18,9 @@
     "test:int": "cross-env NODE_OPTIONS=--no-deprecation vitest run --config ./vitest.config.mts"
   },
   "dependencies": {
-    "@payloadcms/db-postgres": "^3.85.1",
     "@payloadcms/db-sqlite": "^3.85.1",
-    "@payloadcms/email-resend": "^3.85.1",
     "@payloadcms/next": "3.85.1",
     "@payloadcms/richtext-lexical": "3.85.1",
-    "@payloadcms/storage-vercel-blob": "^3.85.1",
     "@payloadcms/ui": "3.85.1",
     "@tailwindcss/postcss": "^4.3.1",
     "cross-env": "^7.0.3",

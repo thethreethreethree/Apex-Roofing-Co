@@ -18,11 +18,11 @@ const darken = (hex: string, factor: number): string => {
 
 export const metadata = {
   title: {
-    default: 'Apex Roofing Co — Roofing You Can Trust',
-    template: '%s | Apex Roofing Co',
+    default: 'Shaggy Dog Spa Mobile Grooming — Grooming That Comes to You',
+    template: '%s | Shaggy Dog Spa',
   },
   description:
-    'Licensed, insured roofing contractor. Free estimates, fast repairs, and full replacements backed by a workmanship warranty. Book your free inspection online.',
+    'Mobile dog & cat grooming serving Phelan and the High Desert. Low-stress, one-on-one grooming that comes to your door — baths, full grooms, deshedding, and nails. Book online.',
 }
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {

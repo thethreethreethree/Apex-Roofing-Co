@@ -9,7 +9,7 @@ export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Customer Reviews',
-  description: 'Read verified reviews from homeowners who trusted us with their roof.',
+  description: 'Read reviews from local pet parents who trust us with their dogs and cats.',
 }
 
 export default async function ReviewsPage() {

@@ -222,13 +222,13 @@ export interface Service {
     [k: string]: unknown;
   } | null;
   /**
-   * e.g. "$8,000–$25,000" or "From $350". Shown for transparency.
+   * e.g. "From $75" or "Add-on $25". Shown for transparency.
    */
   priceRange?: string | null;
   /**
    * Icon shown on the service card.
    */
-  icon?: ('roof' | 'repair' | 'inspection' | 'gutters' | 'storm' | 'commercial') | null;
+  icon?: ('groom' | 'bath' | 'deshed' | 'nails' | 'flea' | 'cat') | null;
   image?: (number | null) | Media;
   featured?: boolean | null;
   /**
@@ -316,7 +316,7 @@ export interface Certification {
   name: string;
   logo?: (number | null) | Media;
   /**
-   * What this certification means for the customer (builds trust).
+   * What this trust point means for the customer (builds trust).
    */
   description?: string | null;
   /**
@@ -336,7 +336,7 @@ export interface FinancingOption {
   name: string;
   description?: string | null;
   /**
-   * e.g. "0% APR for 12 months" or "Low monthly payments".
+   * Price line, e.g. "From $75" or "Add-on $25".
    */
   terms?: string | null;
   partnerLogo?: (number | null) | Media;
@@ -386,7 +386,7 @@ export interface Booking {
   email?: string | null;
   service?: string | null;
   /**
-   * Property address for the inspection.
+   * Address where we’ll park and groom (the pet’s location).
    */
   address?: string | null;
   notes?: string | null;
@@ -400,7 +400,7 @@ export interface Booking {
 export interface Blackout {
   id: number;
   /**
-   * A day with no inspection availability.
+   * A day with no appointment availability.
    */
   date: string;
   /**
@@ -735,7 +735,7 @@ export interface SiteSetting {
    */
   phone: string;
   /**
-   * 24/7 emergency line (optional).
+   * After-hours / text line (optional).
    */
   emergencyPhone?: string | null;
   email?: string | null;
@@ -746,7 +746,7 @@ export interface SiteSetting {
     zip?: string | null;
   };
   /**
-   * One row per line, e.g. "Mon–Fri" / "7:00 AM – 6:00 PM".
+   * One row per line, e.g. "Tue – Sat" / "9:00 AM – 6:00 PM".
    */
   hours?:
     | {
@@ -762,9 +762,12 @@ export interface SiteSetting {
     yelp?: string | null;
   };
   /**
-   * License number.
+   * State license number, if applicable.
    */
   license?: string | null;
+  /**
+   * Optional — leave blank if you’d rather not state it.
+   */
   yearsInBusiness?: number | null;
   insuranceStatement?: string | null;
   /**
@@ -817,7 +820,7 @@ export interface HomePage {
     heading: string;
     subheading?: string | null;
     /**
-     * Hero background photo (a real completed roof works best).
+     * Hero background photo (a happy, freshly groomed pet works best).
      */
     backgroundImage?: (number | null) | Media;
     primaryCtaLabel?: string | null;
@@ -846,6 +849,9 @@ export interface HomePage {
     showProjects?: boolean | null;
     showReviews?: boolean | null;
     showServiceAreas?: boolean | null;
+    /**
+     * Show the Packages & Pricing section.
+     */
     showFinancing?: boolean | null;
   };
   finalCta?: {
@@ -865,7 +871,7 @@ export interface FinancingInfo {
   heading?: string | null;
   intro?: string | null;
   /**
-   * Explain how you help homeowners file and win storm/insurance claims.
+   * Notes on pricing, add-ons, and what can affect the final quote.
    */
   insuranceClaimHelp?: {
     root: {
@@ -905,7 +911,7 @@ export interface AvailabilitySetting {
    */
   slotMinutes?: number | null;
   /**
-   * Max inspections per slot (crews).
+   * Max appointments per slot (vans/groomers).
    */
   capacityPerSlot?: number | null;
   /**

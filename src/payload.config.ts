@@ -1,8 +1,5 @@
 import { sqliteAdapter } from '@payloadcms/db-sqlite'
-import { postgresAdapter } from '@payloadcms/db-postgres'
-import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
-import { resendAdapter } from '@payloadcms/email-resend'
 import path from 'path'
 import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
@@ -18,7 +15,6 @@ import { Financing } from './collections/Financing'
 import { Leads } from './collections/Leads'
 import { Bookings } from './collections/Bookings'
 import { Blackouts } from './collections/Blackouts'
-// ServiceAreas collection removed — site is region-neutral (no service-area pages).
 
 import { SiteSettings } from './globals/SiteSettings'
 import { Branding } from './globals/Branding'
@@ -29,15 +25,10 @@ import { AvailabilitySettings } from './globals/AvailabilitySettings'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
-// Database is chosen by environment: a postgres:// URL (Supabase/Neon/Vercel in
-// production) uses the Postgres adapter; otherwise it falls back to local SQLite
-// for zero-setup development.
-const databaseUrl =
-  process.env.DATABASE_URI ||
-  process.env.POSTGRES_URL ||
-  process.env.DATABASE_URL ||
-  'file:./apex-demo.db'
-const usePostgres = databaseUrl.startsWith('postgres')
+// Single-file SQLite database — no external database service (no Supabase/Postgres).
+// Point DATABASE_URI at any writable file path; defaults to a local file so the app
+// runs self-hosted on one server with zero cloud dependencies.
+const databaseUrl = process.env.DATABASE_URI || 'file:./shaggy.db'
 
 export default buildConfig({
   admin: {
@@ -46,7 +37,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
     meta: {
-      titleSuffix: '— Apex Roofing Co',
+      titleSuffix: '— Shaggy Dog Spa',
     },
   },
   collections: [
@@ -63,37 +54,15 @@ export default buildConfig({
   ],
   globals: [SiteSettings, Branding, HomePage, FinancingInfo, AvailabilitySettings],
   editor: lexicalEditor(),
-  // Email: uses Resend in production when RESEND_API_KEY is set; otherwise Payload
-  // logs emails to the console (dev) so the flow is fully testable without a key.
-  email: process.env.RESEND_API_KEY
-    ? resendAdapter({
-        defaultFromAddress: process.env.EMAIL_FROM_ADDRESS || 'noreply@apexroofing.example',
-        defaultFromName: process.env.EMAIL_FROM_NAME || 'Apex Roofing Co',
-        apiKey: process.env.RESEND_API_KEY,
-      })
-    : undefined,
+  // No email adapter: lead/booking notifications are written to the server console.
+  // Every lead and booking is also saved and visible in the admin Inbox, so nothing
+  // is lost. Add an SMTP/email adapter later if you want delivered notifications.
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
-  db: usePostgres
-    ? postgresAdapter({ pool: { connectionString: databaseUrl } })
-    : sqliteAdapter({ client: { url: databaseUrl } }),
+  // Media is stored on the server's local disk (see Media collection staticDir) and
+  // served by the app at /api/media/file/* — no external object storage (no Blob).
+  db: sqliteAdapter({ client: { url: databaseUrl } }),
   sharp,
-  plugins: [
-    // Cloud media storage in production (Vercel's filesystem is ephemeral).
-    // Active only when a Blob token is present; local dev uses the disk.
-    ...(process.env.BLOB_READ_WRITE_TOKEN
-      ? [
-          vercelBlobStorage({
-            enabled: true,
-            // Serve media as direct public Blob CDN URLs (not proxied through the
-            // /api/media/file route) so production images don't depend on the
-            // serverless route or a runtime token for reads.
-            collections: { media: { disablePayloadAccessControl: true } },
-            token: process.env.BLOB_READ_WRITE_TOKEN,
-          }),
-        ]
-      : []),
-  ],
 })

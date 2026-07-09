@@ -9,9 +9,9 @@ import { BookCtaBand } from '@/components/sections/BookCtaBand'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Roofing Services',
+  title: 'Grooming Services',
   description:
-    'Roof replacement, repair, inspections, gutters, storm restoration, and commercial roofing — backed by a written workmanship warranty.',
+    'Mobile dog & cat grooming: full grooms, baths & brush-outs, deshedding, nail trims, flea & tick treatment, and cat grooming — right at your door.',
 }
 
 export default async function ServicesPage() {
@@ -20,8 +20,8 @@ export default async function ServicesPage() {
     <>
       <PageHero
         eyebrow="Services"
-        title="Complete Roofing Services"
-        subtitle="From a single leak to a full replacement — done right the first time, backed by a written workmanship warranty."
+        title="Complete Mobile Grooming Services"
+        subtitle="From a quick bath to a full groom — gentle, one-on-one, and right at your door."
       />
       <Section>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

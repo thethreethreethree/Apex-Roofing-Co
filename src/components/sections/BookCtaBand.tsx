@@ -4,8 +4,8 @@ import { telHref } from '@/lib/format'
 import { getSiteSettings } from '@/lib/payload'
 
 export const BookCtaBand = async ({
-  heading = 'Ready to Protect Your Home?',
-  subheading = 'Book your free, no-obligation roof inspection today.',
+  heading = 'Ready for a Happier Grooming Day?',
+  subheading = 'Book your mobile grooming appointment — we come to you.',
 }: {
   heading?: string
   subheading?: string
@@ -18,7 +18,7 @@ export const BookCtaBand = async ({
         <p className="max-w-xl text-white/85">{subheading}</p>
         <div className="flex flex-wrap justify-center gap-3">
           <Button href="/book" size="lg">
-            Book a Free Inspection
+            Book an Appointment
           </Button>
           <Button href={telHref(settings.phone)} size="lg" variant="outlineLight">
             Call {settings.phone}

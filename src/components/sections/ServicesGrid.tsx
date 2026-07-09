@@ -8,8 +8,8 @@ export const ServicesGrid = ({ services }: { services: Service[] }) => (
     id="services"
     alt
     eyebrow="What We Do"
-    title="Complete Roofing Services"
-    subtitle="From a single leak to a full replacement — done right, backed by a written warranty."
+    title="Complete Mobile Grooming Services"
+    subtitle="From a quick bath to a full groom — gentle, one-on-one, and right at your door."
   >
     <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {services.map((s) => (

@@ -34,13 +34,13 @@ export const Branding: GlobalConfig = {
         {
           name: 'primaryColor',
           type: 'text',
-          defaultValue: '#102a43',
+          defaultValue: '#1c5f6b',
           admin: { width: '50%', description: 'Brand color (hex) — dark sections, headings.' },
         },
         {
           name: 'accentColor',
           type: 'text',
-          defaultValue: '#f97316',
+          defaultValue: '#f2994a',
           admin: { width: '50%', description: 'Accent/CTA color (hex) — buttons.' },
         },
       ],

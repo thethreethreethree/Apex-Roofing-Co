@@ -78,7 +78,7 @@ export const Bookings: CollectionConfig = {
         { name: 'service', type: 'text', admin: { width: '50%' } },
       ],
     },
-    { name: 'address', type: 'text', admin: { description: 'Property address for the inspection.' } },
+    { name: 'address', type: 'text', admin: { description: 'Address where we’ll park and groom (the pet’s location).' } },
     { name: 'notes', type: 'textarea' },
   ],
 }

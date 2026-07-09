@@ -10,9 +10,9 @@ import { isMedia } from '@/lib/format'
 
 const NAV = [
   { label: 'Services', href: '/services' },
-  { label: 'Projects', href: '/projects' },
+  { label: 'Gallery', href: '/projects' },
   { label: 'Reviews', href: '/reviews' },
-  { label: 'Financing', href: '/financing' },
+  { label: 'Packages', href: '/packages' },
   { label: 'About', href: '/about' },
   { label: 'Contact', href: '/contact' },
 ]
@@ -32,7 +32,7 @@ export const Header = ({
 }) => {
   const [open, setOpen] = useState(false)
   const phone = settings.phone ?? ''
-  const company = settings.companyName ?? 'Apex Roofing Co'
+  const company = settings.companyName ?? 'Shaggy Dog Spa Mobile Grooming'
 
   return (
     <header className="sticky top-0 z-50 bg-surface/95 shadow-sm backdrop-blur">
@@ -40,7 +40,7 @@ export const Header = ({
       <div className="hidden bg-brand text-white md:block">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-8 py-1.5 text-xs">
           <span className="opacity-90">
-            {settings.insuranceStatement ?? 'Licensed & Insured'}
+            {settings.insuranceStatement ?? 'Insured mobile grooming'}
             {settings.license ? ` · ${settings.license}` : ''}
           </span>
           <span className="flex items-center gap-4">
@@ -84,7 +84,7 @@ export const Header = ({
             <PhoneIcon /> {phone}
           </a>
           <Button href="/book" size="md" className="hidden sm:inline-flex">
-            Free Estimate
+            Book Now
           </Button>
           <button
             type="button"
@@ -116,7 +116,7 @@ export const Header = ({
             ))}
             <div className="flex flex-col gap-3 py-4">
               <Button href="/book" size="lg">
-                Book a Free Inspection
+                Book an Appointment
               </Button>
               <a
                 href={telHref(phone)}

@@ -10,9 +10,9 @@ export const GalleryPreview = ({ projects }: { projects: Project[] }) => {
 
   return (
     <Section
-      eyebrow="Recent Work"
-      title="Real Projects, Real Results"
-      subtitle="Hover any project to see the before-and-after transformation."
+      eyebrow="Before & After"
+      title="Real Grooms, Real Transformations"
+      subtitle="Hover any groom to see the before-and-after."
     >
       <div className="grid gap-6 md:grid-cols-3">
         {list.map((p) => (
@@ -40,7 +40,7 @@ export const GalleryPreview = ({ projects }: { projects: Project[] }) => {
       </div>
       <div className="mt-10 text-center">
         <Button href="/projects" variant="outline" size="lg">
-          View All Projects
+          View Full Gallery
         </Button>
       </div>
     </Section>

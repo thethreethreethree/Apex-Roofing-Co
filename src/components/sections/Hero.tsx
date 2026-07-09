@@ -63,7 +63,7 @@ export const Hero = ({
 
           <div className="mt-8 flex flex-wrap gap-3">
             <Button href="/book" size="lg">
-              {hero?.primaryCtaLabel ?? 'Book a Free Inspection'}
+              {hero?.primaryCtaLabel ?? 'Book an Appointment'}
             </Button>
             <Button href={telHref(settings.phone)} size="lg" variant="outlineLight">
               Call {settings.phone}

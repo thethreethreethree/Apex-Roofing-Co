@@ -92,13 +92,13 @@ export async function createBooking(input: BookingInput): Promise<BookingResult>
     try {
       const siteSettings = await payload.findGlobal({ slug: 'site-settings' })
       const owner = process.env.OWNER_NOTIFICATION_EMAIL || siteSettings.email || undefined
-      const company = siteSettings.companyName || 'Apex Roofing Co'
+      const company = siteSettings.companyName || 'Shaggy Dog Spa Mobile Grooming'
 
       if (owner) {
         await payload.sendEmail({
           to: owner,
           subject: `New booking: ${name} — ${label}`,
-          html: `<h2>New inspection booked</h2>
+          html: `<h2>New grooming appointment booked</h2>
             <p><strong>When:</strong> ${esc(label)}<br/>
             <strong>Name:</strong> ${esc(name)}<br/>
             <strong>Phone:</strong> ${esc(phone)}<br/>
@@ -112,9 +112,9 @@ export async function createBooking(input: BookingInput): Promise<BookingResult>
       if (input.email) {
         await payload.sendEmail({
           to: input.email,
-          subject: `Your inspection is booked — ${label}`,
+          subject: `Your grooming appointment is booked — ${label}`,
           html: `<p>Hi ${esc(name)},</p>
-            <p>Your free roof inspection with ${esc(company)} is confirmed for <strong>${esc(label)}</strong>.</p>
+            <p>Your mobile grooming appointment with ${esc(company)} is confirmed for <strong>${esc(label)}</strong>.</p>
             <p>We'll see you then. If anything changes, call us at ${esc(siteSettings.phone || '')}.</p>
             <p>— The ${esc(company)} Team</p>`,
         })

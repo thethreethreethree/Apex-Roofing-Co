@@ -12,7 +12,7 @@ export const Footer = async () => {
     getCertifications(),
   ])
 
-  const company = settings.companyName ?? 'Apex Roofing Co'
+  const company = settings.companyName ?? 'Shaggy Dog Spa Mobile Grooming'
   const year = 2026
 
   return (
@@ -26,8 +26,8 @@ export const Footer = async () => {
             <div className="mb-4 text-xl font-extrabold text-white">{company}</div>
           )}
           <p className="text-sm leading-relaxed">
-            {settings.tagline ?? 'Roofing You Can Trust'}.{' '}
-            {settings.insuranceStatement ?? 'Licensed & insured.'}
+            {settings.tagline ?? 'Grooming That Comes to You'}.{' '}
+            {settings.insuranceStatement ?? 'Insured mobile grooming.'}
           </p>
           {settings.license && <p className="mt-3 text-xs opacity-70">{settings.license}</p>}
           <div className="mt-4 flex gap-3">
@@ -68,10 +68,10 @@ export const Footer = async () => {
           <h3 className="mb-4 text-sm font-bold uppercase tracking-wide text-white">Company</h3>
           <ul className="space-y-2 text-sm">
             <li><Link href="/about" className="hover:text-accent">About Us</Link></li>
-            <li><Link href="/projects" className="hover:text-accent">Project Gallery</Link></li>
+            <li><Link href="/projects" className="hover:text-accent">Before & After Gallery</Link></li>
             <li><Link href="/reviews" className="hover:text-accent">Reviews</Link></li>
-            <li><Link href="/financing" className="hover:text-accent">Financing</Link></li>
-            <li><Link href="/book" className="hover:text-accent">Book an Inspection</Link></li>
+            <li><Link href="/packages" className="hover:text-accent">Packages & Pricing</Link></li>
+            <li><Link href="/book" className="hover:text-accent">Book an Appointment</Link></li>
           </ul>
         </div>
 

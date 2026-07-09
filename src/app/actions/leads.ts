@@ -43,7 +43,7 @@ export async function submitLead(input: LeadInput): Promise<LeadResult> {
     try {
       const settings = await payload.findGlobal({ slug: 'site-settings' })
       const owner = process.env.OWNER_NOTIFICATION_EMAIL || settings.email || undefined
-      const company = settings.companyName || 'Apex Roofing Co'
+      const company = settings.companyName || 'Shaggy Dog Spa Mobile Grooming'
 
       if (owner) {
         await payload.sendEmail({
@@ -64,8 +64,8 @@ export async function submitLead(input: LeadInput): Promise<LeadResult> {
           to: input.email,
           subject: `Thanks — we received your request | ${company}`,
           html: `<p>Hi ${esc(name)},</p>
-            <p>Thanks for reaching out to ${esc(company)}. We've received your request and a member
-            of our team will contact you within one business hour to confirm your free estimate.</p>
+            <p>Thanks for reaching out to ${esc(company)}. We've received your request and we'll
+            contact you shortly to confirm your grooming appointment.</p>
             <p>If it's urgent, just call us at ${esc(settings.phone || '')}.</p>
             <p>— The ${esc(company)} Team</p>`,
         })

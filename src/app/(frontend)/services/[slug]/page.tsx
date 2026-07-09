@@ -33,7 +33,7 @@ export default async function ServiceDetailPage({
 
   return (
     <>
-      <PageHero eyebrow="Roofing Service" title={service.title} subtitle={service.summary} />
+      <PageHero eyebrow="Grooming Service" title={service.title} subtitle={service.summary} />
       <Section>
         <div className="grid gap-10 lg:grid-cols-3">
           <div className="lg:col-span-2">
@@ -49,16 +49,16 @@ export default async function ServiceDetailPage({
             <div className="sticky top-28 rounded-2xl border border-line bg-surface-2 p-6">
               {service.priceRange && (
                 <>
-                  <p className="text-sm font-medium text-muted">Typical investment</p>
+                  <p className="text-sm font-medium text-muted">Starting price</p>
                   <p className="mb-4 text-2xl font-extrabold text-brand">{service.priceRange}</p>
                 </>
               )}
               <p className="mb-4 text-sm text-muted">
-                Get a free, no-obligation estimate for your {service.title.toLowerCase()}.
+                Book {service.title.toLowerCase()} and we'll come to you — final quote confirmed before we start.
               </p>
               <div className="flex flex-col gap-3">
                 <Button href="/book" size="lg" className="w-full">
-                  Book a Free Inspection
+                  Book an Appointment
                 </Button>
                 <Button href={telHref(settings.phone)} variant="outline" className="w-full">
                   Call {settings.phone}

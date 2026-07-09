@@ -24,7 +24,7 @@ export const Blackouts: CollectionConfig = {
       required: true,
       admin: {
         date: { pickerAppearance: 'dayOnly', displayFormat: 'yyyy-MM-dd' },
-        description: 'A day with no inspection availability.',
+        description: 'A day with no appointment availability.',
       },
     },
     { name: 'reason', type: 'text', admin: { description: 'Optional note (e.g. Holiday).' } },
