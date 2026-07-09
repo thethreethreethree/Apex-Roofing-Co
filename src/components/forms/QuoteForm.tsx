@@ -85,6 +85,7 @@ export const QuoteForm = ({
         <input
           required
           name="fullName"
+          aria-label="Full name"
           placeholder="Full name"
           className="w-full rounded-lg border border-line px-4 py-2.5 text-sm outline-none focus:border-accent"
         />
@@ -93,18 +94,21 @@ export const QuoteForm = ({
             required
             type="tel"
             name="phone"
+            aria-label="Phone number"
             placeholder="Phone"
             className="w-full rounded-lg border border-line px-4 py-2.5 text-sm outline-none focus:border-accent"
           />
           <input
             type="email"
             name="email"
+            aria-label="Email"
             placeholder="Email"
             className="w-full rounded-lg border border-line px-4 py-2.5 text-sm outline-none focus:border-accent"
           />
         </div>
         <select
           name="service"
+          aria-label="Service you need"
           defaultValue=""
           className="w-full rounded-lg border border-line px-4 py-2.5 text-sm text-ink outline-none focus:border-accent"
         >
@@ -120,6 +124,7 @@ export const QuoteForm = ({
         </select>
         <textarea
           name="message"
+          aria-label="About your pet"
           rows={2}
           placeholder="Tell us about your pet — breed, size, coat, anything special (optional)"
           className="w-full resize-none rounded-lg border border-line px-4 py-2.5 text-sm outline-none focus:border-accent"

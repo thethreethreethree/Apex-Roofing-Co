@@ -129,13 +129,13 @@ export const BookingCalendar = ({
             className="hidden"
             defaultValue=""
           />
-          <input required name="name" placeholder="Full name" className={inputCls} />
+          <input required name="name" aria-label="Full name" placeholder="Full name" className={inputCls} />
           <div className="grid grid-cols-2 gap-3">
-            <input required name="phone" type="tel" placeholder="Phone" className={inputCls} />
-            <input name="email" type="email" placeholder="Email" className={inputCls} />
+            <input required name="phone" type="tel" aria-label="Phone number" placeholder="Phone" className={inputCls} />
+            <input name="email" type="email" aria-label="Email" placeholder="Email" className={inputCls} />
           </div>
-          <input name="address" placeholder="Address (where we'll come to you)" className={inputCls} />
-          <select name="service" defaultValue="" className={inputCls}>
+          <input name="address" aria-label="Address where we'll groom" placeholder="Address (where we'll come to you)" className={inputCls} />
+          <select name="service" aria-label="Service" defaultValue="" className={inputCls}>
             <option value="" disabled>
               What's this about?
             </option>
@@ -146,7 +146,7 @@ export const BookingCalendar = ({
             ))}
             <option value="Not sure yet">Not sure yet</option>
           </select>
-          <textarea name="notes" rows={2} placeholder="Anything we should know? (optional)" className={`${inputCls} resize-none`} />
+          <textarea name="notes" rows={2} aria-label="Notes" placeholder="Anything we should know? (optional)" className={`${inputCls} resize-none`} />
           {error && <p className="text-sm font-medium text-red-600">{error}</p>}
           <Button type="submit" size="lg" className="w-full">
             {submitting ? 'Confirming…' : 'Confirm Booking'}
