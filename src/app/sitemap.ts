@@ -27,6 +27,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const serviceRoutes = services.map((s) => ({
     url: `${BASE}/services/${s.slug}`,
+    lastModified: s.updatedAt ? new Date(s.updatedAt) : undefined,
     changeFrequency: 'monthly' as const,
     priority: 0.6,
   }))
