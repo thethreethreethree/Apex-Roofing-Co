@@ -20,6 +20,12 @@ browser (`/admin`) or during deploy — no code changes needed.
 - [ ] Set a strong **`PAYLOAD_SECRET`** in `.env` (`openssl rand -hex 32`). The app refuses to
       start in production without it.
 
+## Before go-live (maintenance)
+- [ ] **Dependency patch pass** — `npm audit` shows a high advisory in `undici` (transitive
+      via Payload) and a dev-only critical in `vitest`. Real risk here is low, but patch
+      before launch: add a package.json `overrides` for a fixed `undici`, bump `vitest`, then
+      re-run `npm run build` + tests to confirm nothing breaks. (Details in AUDIT-2026-07-09.md.)
+
 ## Deploy (see `DEPLOY.md`)
 - [ ] Get a **Hetzner Cloud CX33** (8 GB, ~€8.99/mo) — or CX23 (4 GB) with swap.
 - [ ] Set **`NEXT_PUBLIC_SITE_URL`** to the real domain (fixes sitemap/robots/OG/canonical URLs).
