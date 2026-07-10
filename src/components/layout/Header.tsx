@@ -57,7 +57,7 @@ export const Header = ({
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3 sm:px-8">
         <Link href="/" className="flex items-center" aria-label={company}>
           {isMedia(branding.logo) ? (
-            <MediaImage media={branding.logo} alt={company} className="h-9 w-auto sm:h-10" priority />
+            <MediaImage media={branding.logo} alt={company} className="h-14 w-auto sm:h-16" priority />
           ) : (
             <span className="text-xl font-extrabold tracking-tight text-brand">{company}</span>
           )}
