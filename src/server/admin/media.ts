@@ -2,6 +2,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import sharp from 'sharp'
+import { eq } from 'drizzle-orm'
 import { revalidatePath } from 'next/cache'
 import { db, schema } from '@/server/db'
 import { requireUser } from '@/server/auth/session'
@@ -20,7 +21,10 @@ const FORMAT_MIME: Record<string, string> = {
   avif: 'image/avif',
 }
 
-export type UploadResult = { ok: true; id: number } | { ok: false; error: string }
+export type UploadResult =
+  | { ok: true; id: number; url: string; filename: string; alt: string }
+  | { ok: false; error: string }
+export type UpdateAltResult = { ok: true } | { ok: false; error: string }
 
 /** Upload a file to the media library: validate, save to disk + create a media row. */
 export async function uploadMedia(form: FormData): Promise<UploadResult> {
@@ -69,5 +73,26 @@ export async function uploadMedia(form: FormData): Promise<UploadResult> {
     .returning({ id: schema.media.id })
 
   revalidatePath('/admin/media')
-  return { ok: true, id: row.id as number }
+  return {
+    ok: true,
+    id: row.id as number,
+    filename,
+    url: `/media-file/${filename}`,
+    alt,
+  }
+}
+
+/**
+ * Update just the alt text of an existing media row. Used by the inline
+ * "Replace Image" control so an image dropped onto a field (uploaded with an
+ * auto-suggested alt) can have its alt refined without leaving the form —
+ * keeping the accessibility contract intact even in the fast drop flow.
+ */
+export async function updateMediaAlt(id: number, alt: string): Promise<UpdateAltResult> {
+  await requireUser()
+  const trimmed = alt.trim()
+  if (!trimmed) return { ok: false, error: 'Alt text is required (for accessibility & SEO).' }
+  await db.update(schema.media).set({ alt: trimmed, updatedAt: new Date() }).where(eq(schema.media.id, id))
+  revalidatePath('/admin/media')
+  return { ok: true }
 }

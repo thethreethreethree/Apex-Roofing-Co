@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { globals, type GlobalSlug } from '@/server/admin/globals'
-import { getGlobalRow, optionsFor } from '@/server/admin/data'
+import { getGlobalRow, optionsFor, type FieldOption } from '@/server/admin/data'
 import { saveGlobal } from '@/server/admin/actions'
 import { AdminForm } from '@/components/admin/AdminForm'
 
@@ -14,8 +14,8 @@ export default async function GlobalEditPage({ params }: { params: Promise<{ slu
 
   const row = await getGlobalRow(cfg.slug)
 
-  // Upload fields need media options.
-  const relOptions: Record<string, { id: number; label: string }[]> = {}
+  // Upload fields need media options (which carry url/alt for the visual control).
+  const relOptions: Record<string, FieldOption[]> = {}
   for (const f of cfg.fields) {
     if (f.type === 'upload') relOptions[f.name] = await optionsFor('media')
   }
@@ -35,6 +35,7 @@ export default async function GlobalEditPage({ params }: { params: Promise<{ slu
         fields={cfg.fields}
         row={row}
         relOptions={relOptions}
+        titleValue={cfg.label}
       />
     </main>
   )

@@ -4,8 +4,9 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import type { SaveResult } from '@/server/admin/actions'
 import type { FieldDef } from '@/server/admin/config'
+import { ImageField, type MediaOption } from './ImageField'
 
-type RelOptions = Record<string, { id: number; label: string }[]>
+type RelOptions = Record<string, MediaOption[]>
 
 const inputCls =
   'w-full rounded-lg border border-line px-3 py-2 text-sm outline-none focus:border-accent'
@@ -18,12 +19,15 @@ export function AdminForm({
   fields,
   row,
   relOptions,
+  titleValue,
 }: {
   action: (fd: FormData) => Promise<SaveResult>
   redirectTo: string
   fields: FieldDef[]
   row: Record<string, unknown> | null
   relOptions: RelOptions
+  /** Record's display title, used to auto-suggest alt text for image fields. */
+  titleValue?: string
 }) {
   const router = useRouter()
   const [error, setError] = useState<string | null>(null)
@@ -92,7 +96,16 @@ export function AdminForm({
                 ))}
               </select>
             )}
-            {(f.type === 'relationship' || f.type === 'upload') && (
+            {f.type === 'upload' && (
+              <ImageField
+                name={f.name}
+                currentId={val(f.name)}
+                options={relOptions[f.name] ?? []}
+                required={f.required}
+                suggestedAlt={[titleValue, f.label].filter(Boolean).join(' — ') || f.label}
+              />
+            )}
+            {f.type === 'relationship' && (
               <select id={`f-${f.name}`} name={f.name} defaultValue={val(f.name)} className={inputCls}>
                 <option value="">— none —</option>
                 {(relOptions[f.name] ?? []).map((o) => (

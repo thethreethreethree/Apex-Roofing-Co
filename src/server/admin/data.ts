@@ -36,10 +36,25 @@ export async function getRow(slug: CollectionSlug, id: number): Promise<Row | nu
   return rows[0] ?? null
 }
 
-/** Options for a relationship/upload dropdown: { id, label } from the target collection. */
-export async function optionsFor(slug: CollectionSlug): Promise<{ id: number; label: string }[]> {
+export type FieldOption = { id: number; label: string; url?: string; alt?: string }
+
+/**
+ * Options for a relationship/upload picker. For `media`, each option also carries
+ * its `url` and `alt` so the visual "Replace Image" control can render thumbnails
+ * (of the current value and the "choose existing" grid). Non-media relationships
+ * return { id, label } as before.
+ */
+export async function optionsFor(slug: CollectionSlug): Promise<FieldOption[]> {
   await requireUser()
   const cfg = collections[slug]
   const rows = (await db.select().from(cfg.table as any)) as Row[]
+  if (slug === 'media') {
+    return rows.map((r) => ({
+      id: r.id as number,
+      label: String(r.alt || r.filename || `#${r.id}`),
+      url: r.filename ? `/media-file/${String(r.filename)}` : undefined,
+      alt: typeof r.alt === 'string' ? r.alt : '',
+    }))
+  }
   return rows.map((r) => ({ id: r.id as number, label: String(r[cfg.titleField] ?? `#${r.id}`) }))
 }

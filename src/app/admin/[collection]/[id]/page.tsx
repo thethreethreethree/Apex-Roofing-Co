@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { collections, type CollectionSlug } from '@/server/admin/config'
-import { getRow, optionsFor } from '@/server/admin/data'
+import { getRow, optionsFor, type FieldOption } from '@/server/admin/data'
 import { deleteRow, saveRow } from '@/server/admin/actions'
 import { AdminForm } from '@/components/admin/AdminForm'
 
@@ -24,8 +24,8 @@ export default async function EditPage({
   const row = isNew ? null : await getRow(cfg.slug, numId as number)
   if (!isNew && !row) notFound()
 
-  // Load dropdown options for relationship + upload fields.
-  const relOptions: Record<string, { id: number; label: string }[]> = {}
+  // Load options for relationship + upload fields (media options carry url/alt).
+  const relOptions: Record<string, FieldOption[]> = {}
   for (const f of cfg.fields) {
     if (f.type === 'relationship' && f.relTo) relOptions[f.name] = await optionsFor(f.relTo)
     else if (f.type === 'upload') relOptions[f.name] = await optionsFor('media')
@@ -48,6 +48,7 @@ export default async function EditPage({
         fields={cfg.fields}
         row={row}
         relOptions={relOptions}
+        titleValue={row && typeof row[cfg.titleField] === 'string' ? String(row[cfg.titleField]) : cfg.singular}
       />
 
       {!isNew && (
