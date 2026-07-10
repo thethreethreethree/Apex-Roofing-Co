@@ -1,5 +1,6 @@
 import 'server-only'
 import { cookies } from 'next/headers'
+import { redirect } from 'next/navigation'
 import { randomBytes } from 'node:crypto'
 import { and, eq, gt, lt } from 'drizzle-orm'
 import { db, schema } from '../db'
@@ -38,6 +39,13 @@ export async function getCurrentUser(): Promise<SessionUser | null> {
     .where(and(eq(schema.sessions.token, token), gt(schema.sessions.expiresAt, new Date())))
     .limit(1)
   return rows[0] ?? null
+}
+
+/** Require a logged-in user or redirect to the login page. */
+export async function requireUser(): Promise<SessionUser> {
+  const user = await getCurrentUser()
+  if (!user) redirect('/manage/login')
+  return user
 }
 
 /** Destroy the current session (DB row + cookie). */
