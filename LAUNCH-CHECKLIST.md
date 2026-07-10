@@ -35,6 +35,12 @@ browser (`/admin`) or during deploy — no code changes needed.
       appointments — the reviews mention two groomers). Set it to `1` if only one
       van/groomer runs at a time.
 
+## Accessibility decision (your call)
+- [ ] **Accent color contrast** — the amber accent (`#f2994a`) fails WCAG AA for white
+      button text (2.23:1, needs 4.5:1). To comply, darken it to ~`#b45309` (5.02:1) in
+      Admin → **Branding → Accent color** — one change re-themes the whole site. Or keep the
+      current amber as a deliberate brand choice. (Everything else meets AA.)
+
 ## What's already done & verified
 Grooming re-skin · self-hosted SQLite + local media · security (secret guard, rate-limit,
 headers, honeypot) · accessibility labels · OG/social + local-SEO structured data · branded
