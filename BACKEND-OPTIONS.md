@@ -1,8 +1,15 @@
 # Backend options — decision record
 
-The site currently runs **Next.js + Payload CMS** on **SQLite + local-disk media**,
-self-hosted (no Vercel/Supabase/Docker). This records the alternatives considered so the
-choice can be revisited deliberately rather than from memory.
+> **RESOLVED (2026-07-10): Option 3, a fully custom backend, was chosen and shipped.** The
+> owner opted for full control / no framework lock-in. Payload CMS has been removed; the site
+> now runs on our own Drizzle + SQLite data layer, scrypt/cookie-session auth, and a
+> config-driven admin at `/admin` (see `src/server/`). The analysis below is kept as the
+> historical record of the alternatives weighed — its "current stack = Payload" framing
+> describes the state *before* this decision.
+
+This records the alternatives considered so the choice could be made deliberately rather than
+from memory. (At the time of writing, the site ran **Next.js + Payload CMS** on **SQLite +
+local-disk media**, self-hosted — no Vercel/Supabase/Docker.)
 
 ## What the backend has to do here
 A non-technical owner must **self-manage content online** (services, prices, hours, photos,
@@ -46,4 +53,5 @@ custom backend is the most effort for the least certain payoff here.
 - A specific capability Payload can't express → custom (rare for a brochure+booking site).
 - Cost → all four are cheap self-hosted; this is not the deciding factor.
 
-*Status: open — no change made. Current stack (Payload + SQLite) remains in place.*
+*Status: **closed (2026-07-10)** — Option 3 (fully custom backend) chosen and implemented;
+Payload removed. Driver on record: full control / no framework lock-in.*

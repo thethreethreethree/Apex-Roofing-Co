@@ -16,15 +16,19 @@ browser (`/admin`) or during deploy — no code changes needed.
 - [ ] **Trust badges** — confirm the "Insured" badge is accurate for the business.
 
 ## Security / accounts
-- [ ] **Change the admin password** — the seeded `ShaggyDogSpa` / `Admin2026!` is public in the repo.
-- [ ] Set a strong **`PAYLOAD_SECRET`** in `.env` (`openssl rand -hex 32`). The app refuses to
-      start in production without it.
+- [ ] **Change the admin password** — the seeded `ShaggyDogSpa` / `Admin2026!` is public in the
+      repo. Change it in the `hashPassword(...)` call in `src/server/db/seed.ts` and re-seed
+      **before** loading real content (the custom admin has no password-change screen yet).
+- [ ] Confirm **`.env`** has `DATABASE_URI=file:./shaggy.db` and the real `NEXT_PUBLIC_SITE_URL`.
+      The custom backend needs **no** CMS/signing secret — sessions use random DB-stored tokens.
 
 ## Before go-live (maintenance)
-- [ ] **Dependency patch pass** — `npm audit` shows a high advisory in `undici` (transitive
-      via Payload) and a dev-only critical in `vitest`. Real risk here is low, but patch
-      before launch: add a package.json `overrides` for a fixed `undici`, bump `vitest`, then
-      re-run `npm run build` + tests to confirm nothing breaks. (Details in AUDIT-2026-07-09.md.)
+- [ ] **Dependency patch pass** — `npm audit` shows 7 advisories (6 moderate, 1 critical), all
+      in **dev/build tooling**, not in code that ships to visitors: `esbuild` (via `drizzle-kit`),
+      `postcss` (via `next`, build-time), and a critical in `vitest` (only exploitable with the
+      Vitest UI server running, which we never run in prod). Real production risk is low. Patch
+      before launch: bump `vitest`, then re-run `npm run build` + tests to confirm nothing breaks.
+      ⚠️ Do **not** run `npm audit fix --force` — it downgrades `next` to 9.x (breaking).
 
 ## Deploy (see `DEPLOY.md`)
 - [ ] Get a **Hetzner Cloud CX33** (8 GB, ~€8.99/mo) — or CX23 (4 GB) with swap.
@@ -48,6 +52,8 @@ browser (`/admin`) or during deploy — no code changes needed.
       current amber as a deliberate brand choice. (Everything else meets AA.)
 
 ## What's already done & verified
-Grooming re-skin · self-hosted SQLite + local media · security (secret guard, rate-limit,
-headers, honeypot) · accessibility labels · OG/social + local-SEO structured data · branded
-404 + favicon · tests (int 8, e2e 6) · `next build` green.
+Grooming re-skin · **custom backend** (Drizzle + SQLite, cookie-session auth, config-driven
+`/admin`) replacing the third-party CMS · self-hosted SQLite + local-disk media · security
+(scrypt+session auth, `/admin` middleware guard, upload format allowlist, rate-limit, headers,
+honeypot, richtext link sanitization) · accessibility labels · OG/social + local-SEO structured
+data · branded 404 + favicon · tests (int 15, e2e 10) · `next build` green.

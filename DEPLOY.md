@@ -1,6 +1,6 @@
 # Deploying to a Hetzner VPS (no Vercel, no Supabase, no Docker)
 
-This runs the whole site — Next.js + Payload CMS **admin**, the **SQLite** database,
+This runs the whole site — Next.js + our **custom admin**, the **SQLite** database,
 **local-disk** media, and online **booking/lead** capture — on **one** small Hetzner server.
 Flat monthly cost, no per-project fees, no Docker, and you can host several sites on the box.
 
@@ -99,10 +99,9 @@ cd shaggy-dog-spa
 > Private repo? Use an SSH deploy key or a GitHub Personal Access Token in the clone URL.
 
 Create `.env` — this is what keeps it on **SQLite + local disk + no external services**
-(note there is **no** Blob/Postgres/Resend line):
+(note there is **no** Blob/Postgres/Resend line, and no CMS secret — the backend is our own):
 ```bash
 echo "DATABASE_URI=file:./shaggy.db"                 >  .env
-echo "PAYLOAD_SECRET=$(openssl rand -hex 32)"        >> .env
 echo "NEXT_PUBLIC_SITE_URL=https://yourdomain.com"   >> .env
 cat .env        # replace yourdomain.com with your real domain
 ```
@@ -114,10 +113,12 @@ cat .env        # replace yourdomain.com with your real domain
 ```bash
 npm ci                 # do NOT set NODE_ENV=production here — the build needs dev deps
 npm run build          # the memory-hungry step; swap (step 3) covers it
-npx tsx src/seed.ts    # creates the admin user + all demo content. RUN ONCE.
+npm run db:migrate     # create the SQLite schema (idempotent — safe to re-run)
+npm run db:seed        # admin user + all demo content. RUN ONCE.
 ```
-> ⚠️ `seed.ts` **wipes and recreates** content each run. Run it once on first deploy. After
-> that the owner edits content in `/admin` — never re-seed, or you'll erase their changes.
+> ⚠️ `npm run db:seed` **wipes and recreates** content and the media folder each run. Run it
+> once on first deploy. After that the owner edits content in `/admin` — never re-seed, or
+> you'll erase their changes. (`db:migrate` is safe to re-run any time; it only applies schema.)
 
 Optional quick test:
 ```bash
@@ -187,12 +188,13 @@ automatically.
 
 ---
 
-## 9. Log in and change the admin password
+## 9. Set the admin password + log in
 
-1. Go to **https://yourdomain.com/admin**
-2. Log in: **username** `ShaggyDogSpa` · **password** `Admin2026!`
-3. **Change the password immediately** (the seed credentials are public in the repo) under
-   **Admin → Users**.
+The seeded login is **`ShaggyDogSpa` / `Admin2026!`** — and those are public in the repo, so
+change the password **before** loading real content. Edit the password in the
+`hashPassword('Admin2026!')` call in **`src/server/db/seed.ts`**, then re-run
+`npm run db:seed` (this is still the first, one-time seed). Then log in at
+**https://yourdomain.com/admin**.
 
 From here the client manages everything in the browser — no local software, no Docker.
 
@@ -223,7 +225,8 @@ npm ci
 npm run build
 sudo systemctl restart shaggy
 ```
-Do **not** re-run `seed.ts` on updates — it would erase the owner's real content.
+Run `npm run db:migrate` after `git pull` only if the update adds schema (it's safe to run
+every time). Do **not** re-run `npm run db:seed` on updates — it would erase the owner's real content.
 
 ---
 
@@ -258,6 +261,5 @@ Each site keeps its own SQLite file and media folder. One flat server bill, many
 - ❌ **No Docker.** ❌ No Supabase. ❌ No Vercel. ❌ No external database or file storage.
 - ℹ️ Lead/booking **email** notifications print to the server log; every lead and booking is
   still saved and visible in `/admin`. Add SMTP later if you want emailed alerts.
-- ℹ️ The codebase still *contains* dormant Vercel Blob / Postgres / Resend adapters (inactive
-  because their env vars are absent). Ask me to strip them out for a cleaner project — it
-  doesn't change this guide.
+- ℹ️ No third-party CMS and no cloud adapters — the entire backend (data, auth, admin, media)
+  is our own code under `src/server/`, running on the one SQLite file and the `./media` folder.
