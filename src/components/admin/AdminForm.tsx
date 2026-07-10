@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import type { SaveResult } from '@/server/admin/actions'
 import type { FieldDef } from '@/server/admin/config'
 import { ImageField, type MediaOption } from './ImageField'
+import { ListField } from './ListField'
 
 type RelOptions = Record<string, MediaOption[]>
 
@@ -77,7 +78,10 @@ export function AdminForm({
             {f.type === 'textarea' && (
               <textarea id={`f-${f.name}`} name={f.name} rows={3} defaultValue={val(f.name)} className={inputCls} />
             )}
-            {(f.type === 'richText' || f.type === 'json') && (
+            {f.type === 'json' && f.itemFields && (
+              <ListField name={f.name} itemFields={f.itemFields} initial={row?.[f.name]} />
+            )}
+            {(f.type === 'richText' || (f.type === 'json' && !f.itemFields)) && (
               <textarea
                 id={`f-${f.name}`}
                 name={f.name}

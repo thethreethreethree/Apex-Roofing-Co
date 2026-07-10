@@ -27,6 +27,9 @@ export type FieldDef = {
   options?: string[] // for select
   relTo?: CollectionSlug // for relationship/upload
   help?: string
+  // For a `json` field holding a small list of objects: renders a friendly
+  // add/remove row editor (per item field) instead of a raw-JSON textarea.
+  itemFields?: { name: string; label: string; type?: 'text' | 'textarea' }[]
 }
 
 export type CollectionSlug =
