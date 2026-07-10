@@ -23,14 +23,14 @@ export default async function ListPage({ params }: { params: Promise<{ collectio
     <main className="mx-auto max-w-5xl px-6 py-12">
       <div className="flex items-center justify-between border-b border-line pb-5">
         <div>
-          <Link href="/manage" className="text-xs font-semibold text-accent hover:underline">
+          <Link href="/admin" className="text-xs font-semibold text-accent hover:underline">
             ← Manage
           </Link>
           <h1 className="text-2xl font-extrabold text-brand">{cfg.label}</h1>
         </div>
         {!cfg.createDisabled && (
           <Link
-            href={`/manage/${cfg.slug}/new`}
+            href={`/admin/${cfg.slug}/new`}
             className="rounded-lg bg-brand px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-dark"
           >
             + New {cfg.singular}
@@ -63,7 +63,7 @@ export default async function ListPage({ params }: { params: Promise<{ collectio
                   ))}
                   <td className="px-4 py-3 text-right">
                     <Link
-                      href={`/manage/${cfg.slug}/${r.id}`}
+                      href={`/admin/${cfg.slug}/${r.id}`}
                       className="font-semibold text-accent hover:underline"
                     >
                       Edit

@@ -77,14 +77,14 @@ export async function saveRow(slug: CollectionSlug, id: number | null, form: For
         .insert(cfg.table as any)
         .values({ ...data, createdAt: now, updatedAt: now })
         .returning({ id: (cfg.table as any).id })
-      revalidatePath(`/manage/${slug}`)
+      revalidatePath(`/admin/${slug}`)
       return { ok: true, id: row.id as number }
     }
     await db
       .update(cfg.table as any)
       .set({ ...data, updatedAt: now })
       .where(eq((cfg.table as any).id, id))
-    revalidatePath(`/manage/${slug}`)
+    revalidatePath(`/admin/${slug}`)
     return { ok: true, id }
   } catch (e) {
     return { ok: false, error: friendlyError(e) }
@@ -95,8 +95,8 @@ export async function deleteRow(slug: CollectionSlug, id: number): Promise<void>
   await requireUser()
   const cfg = collections[slug]
   await db.delete(cfg.table as any).where(eq((cfg.table as any).id, id))
-  revalidatePath(`/manage/${slug}`)
-  redirect(`/manage/${slug}`)
+  revalidatePath(`/admin/${slug}`)
+  redirect(`/admin/${slug}`)
 }
 
 /** Save a single-row global (update the existing row, or insert if missing). */

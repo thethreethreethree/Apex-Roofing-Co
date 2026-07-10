@@ -1,4 +1,3 @@
-import { withPayload } from '@payloadcms/next/withPayload'
 import type { NextConfig } from 'next'
 import path from 'path'
 import { fileURLToPath } from 'url'
@@ -8,8 +7,8 @@ const dirname = path.dirname(__filename)
 
 const nextConfig: NextConfig = {
   async headers() {
-    // Safe baseline security headers for every route. Deliberately no strict CSP
-    // here — the Payload admin needs inline scripts — so these won't break /admin.
+    // Safe baseline security headers for every route (the custom admin uses no
+    // third-party inline scripts, so these don't break it).
     return [
       {
         source: '/:path*',
@@ -23,13 +22,8 @@ const nextConfig: NextConfig = {
     ]
   },
   images: {
-    // Media is served from the app's own /api/media/file/* route (local disk).
-    localPatterns: [
-      // Custom backend media route (self-hosted, own DB).
-      { pathname: '/media-file/**' },
-      // Payload media route — still used by the admin during the transition.
-      { pathname: '/api/media/file/**' },
-    ],
+    // Media is served from the custom backend's own /media-file/* route (local disk).
+    localPatterns: [{ pathname: '/media-file/**' }],
   },
   webpack: (webpackConfig) => {
     webpackConfig.resolve.extensionAlias = {
@@ -37,7 +31,6 @@ const nextConfig: NextConfig = {
       '.js': ['.ts', '.tsx', '.js', '.jsx'],
       '.mjs': ['.mts', '.mjs'],
     }
-
     return webpackConfig
   },
   turbopack: {
@@ -45,4 +38,4 @@ const nextConfig: NextConfig = {
   },
 }
 
-export default withPayload(nextConfig, { devBundleServerPackages: false })
+export default nextConfig

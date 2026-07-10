@@ -44,7 +44,7 @@ export async function submitLead(input: LeadInput): Promise<LeadResult> {
       createdAt: new Date(),
       updatedAt: new Date(),
     })
-    // Notification: no email adapter yet — every lead is saved and visible in /manage.
+    // Notification: no email adapter yet — every lead is saved and visible in /admin.
     console.log(`[lead] ${name} · ${phone}${input.service ? ` · ${input.service}` : ''}`)
     return { ok: true }
   } catch (err) {

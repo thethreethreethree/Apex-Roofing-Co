@@ -98,10 +98,20 @@ const seed = async () => {
   await db.delete(schema.services)
   await db.delete(schema.certifications)
   await db.delete(schema.packages)
+  // Globals that reference media (branding, home page) must be cleared BEFORE
+  // media, or the media delete violates their foreign keys (makes the seed
+  // re-runnable — A12).
+  await db.delete(schema.branding)
+  await db.delete(schema.homePage)
   await db.delete(schema.media)
-  console.log('[seed] cleared content')
+  // Reset the media dir too, so a seed lands in a deterministic state (like the
+  // old seed cleared cloud storage). NOTE: this deletes uploaded photos — the seed
+  // is a demo-reset tool, not for use after real content is loaded.
+  fs.rmSync(MEDIA_DIR, { recursive: true, force: true })
+  console.log('[seed] cleared content + media dir')
 
-  // Admin user (wipe + insert)
+  // Admin user (wipe + insert). Delete sessions first — they reference users (FK).
+  await db.delete(schema.sessions)
   await db.delete(schema.users)
   await db
     .insert(schema.users)

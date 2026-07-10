@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation'
 import { collections, type CollectionSlug } from '@/server/admin/config'
 import { getRow, optionsFor } from '@/server/admin/data'
 import { deleteRow, saveRow } from '@/server/admin/actions'
-import { AdminForm } from '@/components/manage/AdminForm'
+import { AdminForm } from '@/components/admin/AdminForm'
 
 export const dynamic = 'force-dynamic'
 
@@ -32,7 +32,7 @@ export default async function EditPage({
   return (
     <main className="mx-auto max-w-2xl px-6 py-12">
       <div className="border-b border-line pb-5">
-        <Link href={`/manage/${cfg.slug}`} className="text-xs font-semibold text-accent hover:underline">
+        <Link href={`/admin/${cfg.slug}`} className="text-xs font-semibold text-accent hover:underline">
           ← {cfg.label}
         </Link>
         <h1 className="text-2xl font-extrabold text-brand">
@@ -42,7 +42,7 @@ export default async function EditPage({
 
       <AdminForm
         action={saveRow.bind(null, cfg.slug, numId)}
-        redirectTo={`/manage/${cfg.slug}`}
+        redirectTo={`/admin/${cfg.slug}`}
         fields={cfg.fields}
         row={row}
         relOptions={relOptions}

@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation'
 import { globals, type GlobalSlug } from '@/server/admin/globals'
 import { getGlobalRow, optionsFor } from '@/server/admin/data'
 import { saveGlobal } from '@/server/admin/actions'
-import { AdminForm } from '@/components/manage/AdminForm'
+import { AdminForm } from '@/components/admin/AdminForm'
 
 export const dynamic = 'force-dynamic'
 
@@ -23,7 +23,7 @@ export default async function GlobalEditPage({ params }: { params: Promise<{ slu
   return (
     <main className="mx-auto max-w-2xl px-6 py-12">
       <div className="border-b border-line pb-5">
-        <Link href="/manage" className="text-xs font-semibold text-accent hover:underline">
+        <Link href="/admin" className="text-xs font-semibold text-accent hover:underline">
           ← Manage
         </Link>
         <h1 className="text-2xl font-extrabold text-brand">{cfg.label}</h1>
@@ -31,7 +31,7 @@ export default async function GlobalEditPage({ params }: { params: Promise<{ slu
 
       <AdminForm
         action={saveGlobal.bind(null, cfg.slug)}
-        redirectTo="/manage"
+        redirectTo="/admin"
         fields={cfg.fields}
         row={row}
         relOptions={relOptions}

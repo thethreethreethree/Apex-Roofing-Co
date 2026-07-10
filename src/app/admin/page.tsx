@@ -9,7 +9,7 @@ export const dynamic = 'force-dynamic'
 
 export default async function ManageDashboard() {
   const user = await getCurrentUser()
-  if (!user) redirect('/manage/login')
+  if (!user) redirect('/admin/login')
 
   return (
     <main className="mx-auto max-w-4xl px-6 py-12">
@@ -30,7 +30,7 @@ export default async function ManageDashboard() {
         {collectionList.map((c) => (
           <Link
             key={c.slug}
-            href={`/manage/${c.slug}`}
+            href={`/admin/${c.slug}`}
             className="rounded-xl border border-line bg-surface p-5 transition hover:-translate-y-0.5 hover:border-accent/50 hover:shadow-sm"
           >
             <div className="font-bold text-ink">{c.label}</div>
@@ -46,7 +46,7 @@ export default async function ManageDashboard() {
         {globalList.map((g) => (
           <Link
             key={g.slug}
-            href={`/manage/globals/${g.slug}`}
+            href={`/admin/globals/${g.slug}`}
             className="rounded-xl border border-line bg-surface p-5 transition hover:-translate-y-0.5 hover:border-accent/50 hover:shadow-sm"
           >
             <div className="font-bold text-ink">{g.label}</div>

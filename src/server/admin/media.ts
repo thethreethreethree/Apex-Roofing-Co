@@ -68,6 +68,6 @@ export async function uploadMedia(form: FormData): Promise<UploadResult> {
     })
     .returning({ id: schema.media.id })
 
-  revalidatePath('/manage/media')
+  revalidatePath('/admin/media')
   return { ok: true, id: row.id as number }
 }

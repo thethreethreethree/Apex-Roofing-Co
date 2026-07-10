@@ -95,7 +95,7 @@ export async function createBooking(input: BookingInput): Promise<BookingResult>
       createdAt: new Date(),
       updatedAt: new Date(),
     })
-    // Notification: no email adapter yet — every booking is saved and visible in /manage.
+    // Notification: no email adapter yet — every booking is saved and visible in /admin.
     console.log(`[booking] ${name} · ${label}`)
     return { ok: true, label }
   } catch {

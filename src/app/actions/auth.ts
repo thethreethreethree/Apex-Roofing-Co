@@ -24,5 +24,5 @@ export async function login(input: { username: string; password: string }): Prom
 
 export async function logout(): Promise<void> {
   await destroySession()
-  redirect('/manage/login')
+  redirect('/admin/login')
 }

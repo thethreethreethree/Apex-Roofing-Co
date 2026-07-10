@@ -8,9 +8,9 @@ import { drizzle } from 'drizzle-orm/libsql'
 import { createClient } from '@libsql/client'
 import * as schema from './schema'
 
-// The custom backend uses its OWN database file — never Payload's DATABASE_URI
-// (whose table structure differs). Override only via APP_DATABASE_URI.
-const url = process.env.APP_DATABASE_URI || 'file:./shaggy-app.db'
+// Single application database. Set DATABASE_URI (a libsql/sqlite URL, e.g.
+// file:./shaggy.db) in production; defaults to a local file for zero-setup dev.
+const url = process.env.DATABASE_URI || 'file:./shaggy.db'
 
 export const client = createClient({ url })
 export const db = drizzle(client, { schema })

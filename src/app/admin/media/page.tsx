@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { listRows } from '@/server/admin/data'
-import { MediaUpload } from '@/components/manage/MediaUpload'
+import { MediaUpload } from '@/components/admin/MediaUpload'
 
 export const dynamic = 'force-dynamic'
 
@@ -10,7 +10,7 @@ export default async function MediaLibrary() {
   return (
     <main className="mx-auto max-w-5xl px-6 py-12">
       <div className="border-b border-line pb-5">
-        <Link href="/manage" className="text-xs font-semibold text-accent hover:underline">
+        <Link href="/admin" className="text-xs font-semibold text-accent hover:underline">
           ← Manage
         </Link>
         <h1 className="text-2xl font-extrabold text-brand">Media</h1>
@@ -27,7 +27,7 @@ export default async function MediaLibrary() {
           {rows.map((r) => (
             <Link
               key={String(r.id)}
-              href={`/manage/media/${r.id}`}
+              href={`/admin/media/${r.id}`}
               className="group overflow-hidden rounded-xl border border-line bg-surface transition hover:border-accent/50"
             >
               <div className="aspect-square bg-surface-2">

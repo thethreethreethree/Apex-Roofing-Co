@@ -22,7 +22,7 @@ export default function ManageLogin() {
       password: String(fd.get('password') || ''),
     })
     setBusy(false)
-    if (res.ok) router.replace('/manage')
+    if (res.ok) router.replace('/admin')
     else setError(res.error)
   }
 
