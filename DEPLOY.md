@@ -29,12 +29,18 @@ You need:
 ## 1. Create the server
 
 1. Hetzner Cloud Console → **New Project** → open it → **Add Server**.
-2. **Location:** Hillsboro, OR (US-West, closest to California).
-3. **Image:** Ubuntu 24.04.
-4. **Type:** **CX22** (2 vCPU / 4 GB / ~40 GB) is fine for a few low-traffic sites; pick
-   **CX32** (8 GB) for extra headroom.
-5. **SSH key:** paste your `id_ed25519.pub`.
-6. Create it, then note the server's **public IPv4 address**.
+2. **Location + Type together** — these two are linked, so pick them as a pair:
+   - **Best for a US (California) audience:** **Location = Hillsboro, OR (us-west)** and
+     **Type = a CPX plan** (`CPX21` ≈ 3 vCPU / 4 GB, or `CPX31` ≈ 4 vCPU / 8 GB for headroom).
+     The cheaper **CX line is EU-only** — if you pick a CX type, the only locations offered are
+     Nuremberg / Falkenstein / Helsinki (Germany/Finland), which adds ~150 ms of latency for
+     California visitors. It still *works*, just loads a touch slower.
+   - **Cheapest, latency OK:** **Type = CX23** (2 vCPU / 4 GB) or **CX33** (4 vCPU / 8 GB) with
+     **Location = Nuremberg**. Fine for a low-traffic booking site; nothing breaks. Local SEO is
+     unaffected either way (it keys off your Google Business Profile, not the server's country).
+3. **Image:** Ubuntu 24.04 (or the latest LTS offered).
+4. **SSH key:** paste your `id_ed25519.pub`.
+5. Create it, then note the server's **public IPv4 address**.
 
 Log in:
 ```bash

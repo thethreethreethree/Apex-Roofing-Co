@@ -31,7 +31,9 @@ browser (`/admin`) or during deploy — no code changes needed.
       downgrades `next` to 9.x (breaking).
 
 ## Deploy (see `DEPLOY.md`)
-- [ ] Get a **Hetzner Cloud CX33** (8 GB, ~€8.99/mo) — or CX23 (4 GB) with swap.
+- [ ] Get a Hetzner server. For a **US/California audience**, pick a **CPX plan in Hillsboro, OR
+      (us-west)** — the cheaper **CX line is EU-only** (Nuremberg). CX33 (8 GB, ~€8.99/mo) in
+      Nuremberg also works, just ~150 ms slower for US visitors. Either way, 4 GB needs swap.
 - [ ] Set **`NEXT_PUBLIC_SITE_URL`** to the real domain (fixes sitemap/robots/OG/canonical URLs).
 - [ ] Point DNS at the server; Caddy issues HTTPS automatically.
 - [ ] Set up the nightly **SQLite + media backup** (DEPLOY.md §10) and copy it off-server.
