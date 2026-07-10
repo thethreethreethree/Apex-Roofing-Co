@@ -2,9 +2,17 @@
 
 import { eq } from 'drizzle-orm'
 import { redirect } from 'next/navigation'
+import { headers } from 'next/headers'
 import { db, schema } from '@/server/db'
 import { hashPassword, verifyPassword } from '@/server/auth/password'
 import { createSession, destroySession, requireUser } from '@/server/auth/session'
+import { rateLimit } from '@/lib/ratelimit'
+
+// Brute-force throttle for the admin login. We only consume a token on a FAILED
+// attempt, so a legitimate owner logging in successfully is never locked out; an
+// attacker guessing passwords is capped at LOGIN_MAX_FAILS per LOGIN_WINDOW_MS per IP.
+const LOGIN_MAX_FAILS = 8
+const LOGIN_WINDOW_MS = 5 * 60_000
 
 export type LoginResult = { ok: true } | { ok: false; error: string }
 export type ChangePasswordResult = { ok: true } | { ok: false; error: string }
@@ -16,9 +24,17 @@ export async function login(input: { username: string; password: string }): Prom
   const password = input.password ?? ''
   if (!username || !password) return { ok: false, error: 'Enter your username and password.' }
 
+  const ip = ((await headers()).get('x-forwarded-for') || '').split(',')[0].trim() || 'local'
+
   const [user] = await db.select().from(schema.users).where(eq(schema.users.username, username)).limit(1)
   // Same generic error whether the user is missing or the password is wrong.
   if (!user || !verifyPassword(user.passwordHash, password)) {
+    // Only failed attempts count toward the throttle. Once over the limit, say so
+    // (the message is the same for a bad username or a bad password, so it leaks
+    // nothing about which usernames exist).
+    if (!rateLimit(`login:${ip}`, LOGIN_MAX_FAILS, LOGIN_WINDOW_MS)) {
+      return { ok: false, error: 'Too many failed attempts. Please wait a few minutes and try again.' }
+    }
     return { ok: false, error: 'Invalid username or password.' }
   }
   await createSession(user.id)
