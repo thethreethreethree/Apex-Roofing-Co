@@ -37,6 +37,17 @@ export const users = sqliteTable('users', {
   ...timestamps,
 })
 
+// --- Sessions (auth) ---------------------------------------------------------
+export const sessions = sqliteTable('sessions', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  token: text('token').notNull().unique(),
+  userId: integer('user_id')
+    .notNull()
+    .references(() => users.id),
+  expiresAt: integer('expires_at', { mode: 'timestamp' }).notNull(),
+  createdAt: integer('created_at', { mode: 'timestamp' }),
+})
+
 // --- Media -------------------------------------------------------------------
 export const media = sqliteTable('media', {
   id: integer('id').primaryKey({ autoIncrement: true }),
