@@ -53,6 +53,8 @@ browser (`/admin`) or during deploy — no code changes needed.
 ## What's already done & verified
 Grooming re-skin · **custom backend** (Drizzle + SQLite, cookie-session auth, config-driven
 `/admin`) replacing the third-party CMS · self-hosted SQLite + local-disk media · security
-(scrypt+session auth, `/admin` middleware guard, upload format allowlist, rate-limit, headers,
-honeypot, richtext link sanitization) · accessibility labels · OG/social + local-SEO structured
-data · branded 404 + favicon · tests (int 15, e2e 10) · `next build` green.
+(scrypt+session auth, `/admin` middleware guard, **self-service password change**, **failed-login
+throttle**, upload format allowlist + 10 MB photo limit, form rate-limit, headers, honeypot,
+richtext link sanitization) · **atomic booking capacity guard** (no double-booking under
+concurrency) · accessibility labels · OG/social + local-SEO structured data · branded 404 +
+favicon · tests (int 18, e2e 13) · `next build` green.
