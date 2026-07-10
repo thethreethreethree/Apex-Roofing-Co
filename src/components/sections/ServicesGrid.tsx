@@ -2,6 +2,7 @@ import Link from 'next/link'
 import type { Service } from '@/server/types'
 import { Section } from '@/components/ui/Section'
 import { ServiceIcon } from '@/components/ui/ServiceIcon'
+import { Button } from '@/components/ui/Button'
 
 export const ServicesGrid = ({ services }: { services: Service[] }) => (
   <Section
@@ -31,6 +32,11 @@ export const ServicesGrid = ({ services }: { services: Service[] }) => (
           </div>
         </Link>
       ))}
+    </div>
+    <div className="mt-10 text-center">
+      <Button href="/packages" size="lg">
+        See All Packages &amp; Pricing
+      </Button>
     </div>
   </Section>
 )

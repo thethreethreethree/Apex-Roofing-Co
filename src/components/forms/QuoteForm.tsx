@@ -87,7 +87,7 @@ export const QuoteForm = ({
           name="fullName"
           aria-label="Full name"
           placeholder="Full name"
-          className="w-full rounded-lg border border-line px-4 py-2.5 text-sm outline-none focus:border-accent"
+          className="w-full rounded-lg border border-line px-4 py-2.5 text-sm text-ink placeholder:text-muted outline-none focus:border-accent"
         />
         <div className="grid grid-cols-2 gap-3">
           <input
@@ -96,14 +96,14 @@ export const QuoteForm = ({
             name="phone"
             aria-label="Phone number"
             placeholder="Phone"
-            className="w-full rounded-lg border border-line px-4 py-2.5 text-sm outline-none focus:border-accent"
+            className="w-full rounded-lg border border-line px-4 py-2.5 text-sm text-ink placeholder:text-muted outline-none focus:border-accent"
           />
           <input
             type="email"
             name="email"
             aria-label="Email"
             placeholder="Email"
-            className="w-full rounded-lg border border-line px-4 py-2.5 text-sm outline-none focus:border-accent"
+            className="w-full rounded-lg border border-line px-4 py-2.5 text-sm text-ink placeholder:text-muted outline-none focus:border-accent"
           />
         </div>
         <select
@@ -127,7 +127,7 @@ export const QuoteForm = ({
           aria-label="About your pet"
           rows={2}
           placeholder="Tell us about your pet — breed, size, coat, anything special (optional)"
-          className="w-full resize-none rounded-lg border border-line px-4 py-2.5 text-sm outline-none focus:border-accent"
+          className="w-full resize-none rounded-lg border border-line px-4 py-2.5 text-sm text-ink placeholder:text-muted outline-none focus:border-accent"
         />
         {error && <p className="text-sm font-medium text-red-600">{error}</p>}
         <Button type="submit" size="lg" className="w-full" disabled={busy}>

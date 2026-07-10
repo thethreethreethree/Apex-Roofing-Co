@@ -32,7 +32,7 @@ export const Header = ({
 }) => {
   const [open, setOpen] = useState(false)
   const phone = settings.phone ?? ''
-  const company = settings.companyName ?? 'Shaggy Dog Spa Mobile Grooming'
+  const company = settings.companyName ?? 'Shaggy Doggy Spa Mobile Grooming'
 
   return (
     <header className="sticky top-0 z-50 bg-surface/95 shadow-sm backdrop-blur">
@@ -40,8 +40,7 @@ export const Header = ({
       <div className="hidden bg-brand text-white md:block">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-8 py-1.5 text-xs">
           <span className="opacity-90">
-            {settings.insuranceStatement ?? 'Insured mobile grooming'}
-            {settings.license ? ` · ${settings.license}` : ''}
+            {[settings.insuranceStatement, settings.license].filter(Boolean).join(' · ')}
           </span>
           <span className="flex items-center gap-4">
             {settings.emergencyPhone && (

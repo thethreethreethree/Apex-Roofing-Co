@@ -119,9 +119,9 @@ const seed = async () => {
   console.log('[seed] admin user ready (ShaggyDogSpa)')
 
   // Brand images
-  const logo = await createImage('logo', 'Shaggy Dog Spa Mobile Grooming logo', logoSvg('#0e4653'))
-  const logoLight = await createImage('logo-light', 'Shaggy Dog Spa Mobile Grooming logo', logoSvg('#ffffff'))
-  const hero = await createImage('hero', 'A freshly groomed, happy dog', photoSvg('Shaggy Dog Spa', 'Mobile grooming that comes to you', { w: 1600, h: 1000 }))
+  const logo = await createImage('logo', 'Shaggy Doggy Spa Mobile Grooming logo', logoSvg('#0e4653'))
+  const logoLight = await createImage('logo-light', 'Shaggy Doggy Spa Mobile Grooming logo', logoSvg('#ffffff'))
+  const hero = await createImage('hero', 'A freshly groomed, happy dog', photoSvg('Shaggy Doggy Spa', 'Mobile grooming that comes to you', { w: 1600, h: 1000 }))
 
   // Services
   const serviceDefs = [
@@ -134,7 +134,7 @@ const seed = async () => {
   ]
   const serviceIds: Record<string, number> = {}
   for (const s of serviceDefs) {
-    const img = await createImage(`service-${s.icon}`, s.title, photoSvg(s.title, 'Shaggy Dog Spa', { c1: '#0e4653', c2: '#20707e' }))
+    const img = await createImage(`service-${s.icon}`, s.title, photoSvg(s.title, 'Shaggy Doggy Spa', { c1: '#0e4653', c2: '#20707e' }))
     const [row] = await db
       .insert(schema.services)
       .values({
@@ -220,7 +220,6 @@ const seed = async () => {
     { name: 'We Come to You', initials: 'VAN', description: 'Fully mobile — we groom right outside your door, on your schedule.' },
     { name: 'One-on-One, No Cages', initials: '1:1', description: 'Your pet is the only one in the van — never cage-dried or left waiting.' },
     { name: 'Gentle with Seniors & Puppies', initials: 'TLC', description: 'Patient, low-stress handling for anxious, senior, and first-time pets.' },
-    { name: 'Insured & Reliable', initials: 'INS', description: 'Insured mobile grooming with on-time appointments you can count on.' },
   ]
   for (let i = 0; i < badgeDefs.length; i++) {
     const b = badgeDefs[i]
@@ -247,9 +246,9 @@ const seed = async () => {
 
   await db.delete(schema.siteSettings)
   await db.insert(schema.siteSettings).values({
-    companyName: 'Shaggy Dog Spa Mobile Grooming',
+    companyName: 'Shaggy Doggy Spa Mobile Grooming',
     tagline: 'Grooming That Comes to You',
-    phone: '(760) 269-6239',
+    phone: '(760) 217-1264',
     emergencyPhone: '',
     email: 'hello@shaggydogspa.example',
     addressStreet: '',
@@ -267,7 +266,7 @@ const seed = async () => {
     socialYelp: 'https://www.yelp.com/biz/shaggy-dog-spa-mobile-grooming-phelan',
     license: '',
     yearsInBusiness: null,
-    insuranceStatement: 'Insured mobile grooming',
+    insuranceStatement: '',
     googleRating: 5,
     googleReviewCount: 26,
   })

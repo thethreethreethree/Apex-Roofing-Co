@@ -2,7 +2,7 @@ import React from 'react'
 import '../(frontend)/styles.css'
 
 export const metadata = {
-  title: 'Manage — Shaggy Dog Spa',
+  title: 'Manage — Shaggy Doggy Spa',
 }
 
 // Brand CSS variables so the shared utility classes (bg-brand, text-ink, …) work

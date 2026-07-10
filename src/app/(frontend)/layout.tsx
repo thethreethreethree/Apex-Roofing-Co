@@ -19,22 +19,22 @@ const darken = (hex: string, factor: number): string => {
 export const metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
   title: {
-    default: 'Shaggy Dog Spa Mobile Grooming — Grooming That Comes to You',
-    template: '%s | Shaggy Dog Spa',
+    default: 'Shaggy Doggy Spa Mobile Grooming — Grooming That Comes to You',
+    template: '%s | Shaggy Doggy Spa',
   },
   description:
     'Mobile dog & cat grooming serving Phelan and the High Desert. Low-stress, one-on-one grooming that comes to your door — baths, full grooms, deshedding, and nails. Book online.',
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    siteName: 'Shaggy Dog Spa Mobile Grooming',
-    title: 'Shaggy Dog Spa Mobile Grooming — Grooming That Comes to You',
+    siteName: 'Shaggy Doggy Spa Mobile Grooming',
+    title: 'Shaggy Doggy Spa Mobile Grooming — Grooming That Comes to You',
     description:
       'Mobile dog & cat grooming serving Phelan and the High Desert — low-stress, one-on-one grooming that comes to your door.',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Shaggy Dog Spa Mobile Grooming',
+    title: 'Shaggy Doggy Spa Mobile Grooming',
     description:
       'Mobile dog & cat grooming serving Phelan and the High Desert — grooming that comes to you.',
   },

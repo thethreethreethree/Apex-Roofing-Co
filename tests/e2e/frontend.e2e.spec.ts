@@ -11,7 +11,7 @@ test.describe('Frontend', () => {
   test('can go on homepage', async ({ page }) => {
     await page.goto('/')
 
-    await expect(page).toHaveTitle(/Shaggy Dog Spa/)
+    await expect(page).toHaveTitle(/Shaggy Doggy Spa/)
 
     const heading = page.locator('h1').first()
 

@@ -10,7 +10,7 @@ export const dynamic = 'force-dynamic'
 export const metadata: Metadata = {
   title: 'About Us',
   description:
-    'A local, insured mobile dog & cat groomer serving Phelan and the High Desert — gentle, one-on-one grooming that comes to your door.',
+    'A local mobile dog & cat groomer serving Phelan and the High Desert — gentle, one-on-one grooming that comes to your door.',
 }
 
 export default async function AboutPage() {
@@ -19,7 +19,7 @@ export default async function AboutPage() {
     getCertifications(),
     getHomePage(),
   ])
-  const company = settings.companyName ?? 'Shaggy Dog Spa Mobile Grooming'
+  const company = settings.companyName ?? 'Shaggy Doggy Spa Mobile Grooming'
 
   const stats = [
     settings.yearsInBusiness ? { big: `${settings.yearsInBusiness}+`, label: 'Years Grooming' } : null,
@@ -47,7 +47,7 @@ export default async function AboutPage() {
           <p>
             Our approach is simple: one pet at a time, no cages, no cage dryers, and no stressful
             car ride or crowded salon — just calm, patient, one-on-one grooming that's gentle enough
-            for anxious pets, seniors, and puppies. {settings.insuranceStatement ?? 'Insured mobile grooming.'}
+            for anxious pets, seniors, and puppies.{settings.insuranceStatement ? ` ${settings.insuranceStatement}.` : ''}
             {settings.license ? ` License ${settings.license}.` : ''}
           </p>
         </div>

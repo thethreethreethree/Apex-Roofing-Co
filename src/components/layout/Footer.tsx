@@ -12,7 +12,7 @@ export const Footer = async () => {
     getCertifications(),
   ])
 
-  const company = settings.companyName ?? 'Shaggy Dog Spa Mobile Grooming'
+  const company = settings.companyName ?? 'Shaggy Doggy Spa Mobile Grooming'
   const year = 2026
 
   return (
@@ -26,8 +26,8 @@ export const Footer = async () => {
             <div className="mb-4 text-xl font-extrabold text-white">{company}</div>
           )}
           <p className="text-sm leading-relaxed">
-            {settings.tagline ?? 'Grooming That Comes to You'}.{' '}
-            {settings.insuranceStatement ?? 'Insured mobile grooming.'}
+            {settings.tagline ?? 'Grooming That Comes to You'}.
+            {settings.insuranceStatement ? ` ${settings.insuranceStatement}.` : ''}
           </p>
           {settings.license && <p className="mt-3 text-xs opacity-70">{settings.license}</p>}
           <div className="mt-4 flex gap-3">

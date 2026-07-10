@@ -217,7 +217,7 @@ export const BookingCalendar = ({
 }
 
 const inputCls =
-  'w-full rounded-lg border border-line px-4 py-2.5 text-sm outline-none focus:border-accent'
+  'w-full rounded-lg border border-line px-4 py-2.5 text-sm text-ink placeholder:text-muted outline-none focus:border-accent'
 
 const slotKeyLabel = (day: Day | null, slot: Slot) =>
   day ? `${day.weekday}, ${day.label} at ${slot.time}` : slot.time

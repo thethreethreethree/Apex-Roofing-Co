@@ -29,7 +29,7 @@ export default function ManageLogin() {
   return (
     <main className="mx-auto flex min-h-screen max-w-sm flex-col justify-center px-6">
       <div className="rounded-2xl border border-line bg-surface p-8 shadow-sm">
-        <h1 className="text-xl font-extrabold text-brand">Shaggy Dog Spa</h1>
+        <h1 className="text-xl font-extrabold text-brand">Shaggy Doggy Spa</h1>
         <p className="mb-6 text-sm text-muted">Sign in to manage your site.</p>
         <form onSubmit={onSubmit} className="grid gap-3">
           <input required name="username" aria-label="Username" placeholder="Username" className={inputCls} autoComplete="username" />
