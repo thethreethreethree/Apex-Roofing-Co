@@ -7,8 +7,17 @@ import { eq } from 'drizzle-orm'
 import { db } from '@/server/db'
 import { requireUser } from '@/server/auth/session'
 import { collections, type CollectionSlug } from './config'
+import { globals, type GlobalSlug } from './globals'
 
 export type Row = Record<string, unknown>
+
+/** The single row of a global (or null if not yet created). */
+export async function getGlobalRow(slug: GlobalSlug): Promise<Row | null> {
+  await requireUser()
+  const cfg = globals[slug]
+  const rows = (await db.select().from(cfg.table as any).limit(1)) as Row[]
+  return rows[0] ?? null
+}
 
 export async function listRows(slug: CollectionSlug): Promise<Row[]> {
   await requireUser()

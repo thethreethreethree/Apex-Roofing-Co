@@ -2,8 +2,8 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { saveRow } from '@/server/admin/actions'
-import type { CollectionSlug, FieldDef } from '@/server/admin/config'
+import type { SaveResult } from '@/server/admin/actions'
+import type { FieldDef } from '@/server/admin/config'
 
 type RelOptions = Record<string, { id: number; label: string }[]>
 
@@ -13,14 +13,14 @@ const inputCls =
 const asDateInput = (v: unknown): string => (typeof v === 'string' ? v.slice(0, 10) : '')
 
 export function AdminForm({
-  slug,
-  id,
+  action,
+  redirectTo,
   fields,
   row,
   relOptions,
 }: {
-  slug: CollectionSlug
-  id: number | null
+  action: (fd: FormData) => Promise<SaveResult>
+  redirectTo: string
   fields: FieldDef[]
   row: Record<string, unknown> | null
   relOptions: RelOptions
@@ -34,9 +34,9 @@ export function AdminForm({
     setBusy(true)
     setError(null)
     const fd = new FormData(e.currentTarget)
-    const res = await saveRow(slug, id, fd)
+    const res = await action(fd)
     setBusy(false)
-    if (res.ok) router.push(`/manage/${slug}`)
+    if (res.ok) router.push(redirectTo)
     else setError(res.error)
   }
 
@@ -130,7 +130,7 @@ export function AdminForm({
         </button>
         <button
           type="button"
-          onClick={() => router.push(`/manage/${slug}`)}
+          onClick={() => router.push(redirectTo)}
           className="rounded-lg border border-line px-5 py-2.5 text-sm font-semibold text-ink transition hover:border-accent"
         >
           Cancel

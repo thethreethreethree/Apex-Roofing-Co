@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { getCurrentUser } from '@/server/auth/session'
 import { logout } from '@/app/actions/auth'
 import { collectionList } from '@/server/admin/config'
+import { globalList } from '@/server/admin/globals'
 
 export const dynamic = 'force-dynamic'
 
@@ -40,10 +41,19 @@ export default async function ManageDashboard() {
         ))}
       </div>
 
-      <p className="mt-8 text-xs text-muted">
-        Site settings, branding, home page & packages intro (globals) editors — coming in the next
-        increment.
-      </p>
+      <h2 className="mt-10 mb-3 text-xs font-bold uppercase tracking-wide text-muted">Settings</h2>
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {globalList.map((g) => (
+          <Link
+            key={g.slug}
+            href={`/manage/globals/${g.slug}`}
+            className="rounded-xl border border-line bg-surface p-5 transition hover:-translate-y-0.5 hover:border-accent/50 hover:shadow-sm"
+          >
+            <div className="font-bold text-ink">{g.label}</div>
+            <div className="mt-1 text-xs text-muted">Edit</div>
+          </Link>
+        ))}
+      </div>
     </main>
   )
 }

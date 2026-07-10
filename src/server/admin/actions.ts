@@ -5,16 +5,18 @@ import { redirect } from 'next/navigation'
 import { eq } from 'drizzle-orm'
 import { db } from '@/server/db'
 import { requireUser } from '@/server/auth/session'
-import { collections, type CollectionConfig, type CollectionSlug } from './config'
+import { collections, type CollectionSlug, type FieldDef } from './config'
+import { globals, type GlobalSlug } from './globals'
 
 export type SaveResult = { ok: true; id: number } | { ok: false; error: string }
 
 const slugify = (s: string) =>
   s.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')
 
-function coerce(cfg: CollectionConfig, form: FormData): { data: Record<string, unknown>; error?: string } {
+/** Coerce a FormData into a typed row per the field definitions (+ required validation). */
+function coerceFields(fields: FieldDef[], form: FormData): { data: Record<string, unknown>; error?: string } {
   const data: Record<string, unknown> = {}
-  for (const f of cfg.fields) {
+  for (const f of fields) {
     if (f.type === 'checkbox') {
       data[f.name] = form.get(f.name) != null
       continue
@@ -46,12 +48,12 @@ function coerce(cfg: CollectionConfig, form: FormData): { data: Record<string, u
         data[f.name] = s === '' && !f.required ? null : s
     }
   }
-  // Auto-slug from the title field when a slug field exists and is blank.
-  if (cfg.fields.some((f) => f.name === 'slug') && !data.slug) {
-    const src = data[cfg.titleField]
-    if (typeof src === 'string' && src) data.slug = slugify(src)
-  }
   return { data }
+}
+
+const friendlyError = (e: unknown): string => {
+  const msg = e instanceof Error ? e.message : 'Save failed.'
+  return /unique/i.test(msg) ? 'That value must be unique (e.g. the slug is already taken).' : msg
 }
 
 export async function saveRow(slug: CollectionSlug, id: number | null, form: FormData): Promise<SaveResult> {
@@ -59,8 +61,14 @@ export async function saveRow(slug: CollectionSlug, id: number | null, form: For
   const cfg = collections[slug]
   if (id == null && cfg.createDisabled) return { ok: false, error: 'This collection cannot be created from the admin.' }
 
-  const { data, error } = coerce(cfg, form)
+  const { data, error } = coerceFields(cfg.fields, form)
   if (error) return { ok: false, error }
+
+  // Auto-slug from the title field when a slug field exists and is blank.
+  if (cfg.fields.some((f) => f.name === 'slug') && !data.slug) {
+    const src = data[cfg.titleField]
+    if (typeof src === 'string' && src) data.slug = slugify(src)
+  }
 
   const now = new Date()
   try {
@@ -79,9 +87,7 @@ export async function saveRow(slug: CollectionSlug, id: number | null, form: For
     revalidatePath(`/manage/${slug}`)
     return { ok: true, id }
   } catch (e) {
-    const msg = e instanceof Error ? e.message : 'Save failed.'
-    // Friendlier message for the common unique-constraint (slug) case.
-    return { ok: false, error: /unique/i.test(msg) ? 'That value must be unique (e.g. the slug is already taken).' : msg }
+    return { ok: false, error: friendlyError(e) }
   }
 }
 
@@ -91,4 +97,34 @@ export async function deleteRow(slug: CollectionSlug, id: number): Promise<void>
   await db.delete(cfg.table as any).where(eq((cfg.table as any).id, id))
   revalidatePath(`/manage/${slug}`)
   redirect(`/manage/${slug}`)
+}
+
+/** Save a single-row global (update the existing row, or insert if missing). */
+export async function saveGlobal(slug: GlobalSlug, form: FormData): Promise<SaveResult> {
+  await requireUser()
+  const cfg = globals[slug]
+  const { data, error } = coerceFields(cfg.fields, form)
+  if (error) return { ok: false, error }
+  try {
+    const existing = (await db
+      .select({ id: (cfg.table as any).id })
+      .from(cfg.table as any)
+      .limit(1)) as { id: number }[]
+    if (existing.length) {
+      await db
+        .update(cfg.table as any)
+        .set(data)
+        .where(eq((cfg.table as any).id, existing[0].id))
+      revalidatePath('/', 'layout')
+      return { ok: true, id: existing[0].id }
+    }
+    const [row] = await db
+      .insert(cfg.table as any)
+      .values(data)
+      .returning({ id: (cfg.table as any).id })
+    revalidatePath('/', 'layout')
+    return { ok: true, id: row.id as number }
+  } catch (e) {
+    return { ok: false, error: friendlyError(e) }
+  }
 }

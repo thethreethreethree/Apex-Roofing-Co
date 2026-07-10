@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { collections, type CollectionSlug } from '@/server/admin/config'
 import { getRow, optionsFor } from '@/server/admin/data'
-import { deleteRow } from '@/server/admin/actions'
+import { deleteRow, saveRow } from '@/server/admin/actions'
 import { AdminForm } from '@/components/manage/AdminForm'
 
 export const dynamic = 'force-dynamic'
@@ -40,7 +40,13 @@ export default async function EditPage({
         </h1>
       </div>
 
-      <AdminForm slug={cfg.slug} id={numId} fields={cfg.fields} row={row} relOptions={relOptions} />
+      <AdminForm
+        action={saveRow.bind(null, cfg.slug, numId)}
+        redirectTo={`/manage/${cfg.slug}`}
+        fields={cfg.fields}
+        row={row}
+        relOptions={relOptions}
+      />
 
       {!isNew && (
         <form action={deleteRow.bind(null, cfg.slug, numId as number)} className="mt-10 border-t border-line pt-6">
