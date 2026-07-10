@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { computeOpenDays, type AvailabilityConfig } from '@/lib/booking'
+import { computeOpenDays, slotKeyToLabel, type AvailabilityConfig } from '@/lib/booking'
 import { rateLimit } from '@/lib/ratelimit'
 
 // Pure-logic tests — no DB, no Payload. `computeOpenDays` takes `now` explicitly,
@@ -51,6 +51,19 @@ describe('computeOpenDays', () => {
     // 08:00..15:00 inclusive at 60-min steps = 8 slots (endTime 16:00 is exclusive)
     expect(days[0].slots.length).toBe(8)
     expect(days[0].slots[0].time).toBe('8:00 AM')
+  })
+})
+
+describe('slotKeyToLabel', () => {
+  it('formats a slot key into the human confirmation label', () => {
+    // 2026-01-06 is a Tuesday.
+    expect(slotKeyToLabel('2026-01-06T09:00')).toBe('Tuesday, Jan 6 at 9:00 AM')
+  })
+  it('renders afternoon times in 12-hour PM', () => {
+    expect(slotKeyToLabel('2026-01-06T13:30')).toContain('1:30 PM')
+  })
+  it('renders midnight as 12:00 AM (not 0:00)', () => {
+    expect(slotKeyToLabel('2026-01-06T00:00')).toContain('12:00 AM')
   })
 })
 
