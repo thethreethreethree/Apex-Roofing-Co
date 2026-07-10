@@ -19,10 +19,18 @@ You need:
 - A **domain name** you can edit DNS for
 - The site's **GitHub repo URL** (push this repo to GitHub first)
 - An **SSH key** on your computer. If you don't have one:
-  ```bash
-  ssh-keygen -t ed25519 -C "you@email.com"     # press Enter through the prompts
-  cat ~/.ssh/id_ed25519.pub                     # copy this — you'll paste it into Hetzner
-  ```
+  - **macOS / Linux:**
+    ```bash
+    ssh-keygen -t ed25519 -C "you@email.com"     # press Enter through the prompts
+    cat ~/.ssh/id_ed25519.pub                     # copy this — you'll paste it into Hetzner
+    ```
+  - **Windows 10/11 (PowerShell — OpenSSH is built in):**
+    ```powershell
+    ssh-keygen -t ed25519 -C "you@email.com"       # press Enter through the prompts
+    Get-Content $env:USERPROFILE\.ssh\id_ed25519.pub | Set-Clipboard   # now paste into Hetzner
+    ```
+    The **public** key (`.pub`) is what you paste into Hetzner; the private key (no extension)
+    stays on your PC — never share it.
 
 ---
 
