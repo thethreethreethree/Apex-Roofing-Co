@@ -1,7 +1,7 @@
 'use server'
 
 import { headers } from 'next/headers'
-import { and, eq, ne } from 'drizzle-orm'
+import { sql } from 'drizzle-orm'
 import { db, schema } from '@/server/db'
 import { computeOpenDays, slotKeyToLabel, type Day, type AvailabilityConfig } from '@/lib/booking'
 import { rateLimit } from '@/lib/ratelimit'
@@ -72,29 +72,25 @@ export async function createBooking(input: BookingInput): Promise<BookingResult>
       return { ok: false, error: 'Sorry — that time is no longer available. Please pick another.' }
     }
 
-    // Capacity guard (defense-in-depth): count non-cancelled bookings for this slot.
-    const held = await db
-      .select({ id: schema.bookings.id })
-      .from(schema.bookings)
-      .where(and(eq(schema.bookings.slot, slot), ne(schema.bookings.status, 'cancelled')))
-    if (held.length >= (cfg.capacityPerSlot || 1)) {
+    const label = slotKeyToLabel(slot)
+    const capacity = cfg.capacityPerSlot || 1
+
+    // Atomic capacity guard. A single INSERT...SELECT...WHERE evaluates the
+    // slot's current count and inserts within one SQLite write lock, so two
+    // simultaneous bookings for the last opening can't both slip through (a
+    // separate count-then-insert has a TOCTOU race). `unixepoch()` yields the
+    // same unix-seconds that drizzle's `mode:'timestamp'` columns store/read.
+    const res = await db.run(sql`
+      INSERT INTO bookings (status, slot, slot_label, name, phone, email, address, service, notes, created_at, updated_at)
+      SELECT 'confirmed', ${slot}, ${label}, ${name}, ${phone},
+             ${input.email?.trim() || null}, ${input.address?.trim() || null},
+             ${input.service?.trim() || null}, ${input.notes?.trim() || null},
+             unixepoch(), unixepoch()
+      WHERE (SELECT count(*) FROM bookings WHERE slot = ${slot} AND status != 'cancelled') < ${capacity}
+    `)
+    if (!res.rowsAffected) {
       return { ok: false, error: 'That time slot just filled up. Please choose another time.' }
     }
-
-    const label = slotKeyToLabel(slot)
-    await db.insert(schema.bookings).values({
-      slot,
-      slotLabel: label,
-      name,
-      phone,
-      email: input.email?.trim() || null,
-      address: input.address?.trim() || null,
-      service: input.service?.trim() || null,
-      notes: input.notes?.trim() || null,
-      status: 'confirmed',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    })
     // Notification: no email adapter yet — every booking is saved and visible in /admin.
     console.log(`[booking] ${name} · ${label}`)
     return { ok: true, label }

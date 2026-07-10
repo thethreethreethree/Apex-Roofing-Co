@@ -13,8 +13,9 @@
  *   (Lexical) are stored as JSON text columns. These are always read/written as a
  *   unit and never queried by inner value, so a child table would add joins for no
  *   benefit. Relationships between top-level entities use real integer FKs.
- * - Booleans are SQLite integers (0/1); timestamps are unix-ms integers; dates the
- *   app sorts on (completedDate, review date) are ISO text.
+ * - Booleans are SQLite integers (0/1); timestamps use drizzle `mode:'timestamp'`,
+ *   i.e. unix-*seconds* integers (SQLite `unixepoch()`); dates the app sorts on
+ *   (completedDate, review date) are ISO text.
  */
 import { sqliteTable, integer, text, real } from 'drizzle-orm/sqlite-core'
 
