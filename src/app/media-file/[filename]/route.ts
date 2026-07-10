@@ -8,13 +8,16 @@ import path from 'node:path'
  */
 const MEDIA_DIR = path.resolve(process.cwd(), 'media')
 
+// Only the raster formats the uploader accepts get a real image Content-Type.
+// SVG is deliberately absent: uploads already reject it (it can carry active
+// content), and this makes sure a stray .svg on disk is never rendered inline —
+// it falls through to application/octet-stream below and won't execute.
 const TYPES: Record<string, string> = {
   '.png': 'image/png',
   '.jpg': 'image/jpeg',
   '.jpeg': 'image/jpeg',
   '.webp': 'image/webp',
   '.gif': 'image/gif',
-  '.svg': 'image/svg+xml',
   '.avif': 'image/avif',
 }
 

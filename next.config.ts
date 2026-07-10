@@ -6,6 +6,12 @@ const __filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(__filename)
 
 const nextConfig: NextConfig = {
+  experimental: {
+    // Media uploads go through the `uploadMedia` Server Action. The default
+    // Server Action body limit is 1 MB, which is smaller than a typical phone
+    // photo — raise it so the owner can upload real grooming photos.
+    serverActions: { bodySizeLimit: '10mb' },
+  },
   async headers() {
     // Safe baseline security headers for every route (the custom admin uses no
     // third-party inline scripts, so these don't break it).
