@@ -246,12 +246,24 @@ every time). Do **not** re-run `npm run db:seed` on updates — it would erase t
 
 ## 12. Hosting more sites on the same box
 
-Repeat steps 5–9 per site, changing three things so they don't collide:
+The app is fully self-contained, so nothing in the code needs to change for multi-site — each
+copy is isolated. Repeat steps 5–9 per site, changing four things so they don't collide:
 - a **different folder** (`~/second-site`)
-- a **different port** (`PORT=3001`, `3002`, …) in that site's systemd service
+- a **different port** (`PORT=3001`, `3002`, …) in that site's env / systemd service
+- its **own systemd service** with a unique name (`second.service`, not a second copy of
+  `shaggy.service`) so each site starts/stops/restarts independently
 - a **new domain block** in `/etc/caddy/Caddyfile` → that port, then `sudo systemctl reload caddy`
 
-Each site keeps its own SQLite file and media folder. One flat server bill, many sites.
+Each site keeps its own SQLite file (`./shaggy.db` relative to its folder) and its own `./media`
+folder, so they never share data. One flat server bill, many sites.
+
+**Memory — the one real shared-box constraint.** A *running* site is light (~150–250 MB each),
+so an 8 GB box comfortably serves several low-traffic sites at once. The heavy moment is the
+**build**: `npm run build` is allowed up to an 8 GB heap (`--max-old-space-size=8000` in
+`package.json`), so **build/deploy one site at a time — never run two `npm run build`s at
+once**, and keep the 4 GB **swap** from step 3 on (that's what carries a build past a transient
+spike while the other sites keep running). Steady-state traffic is not the limit here;
+concurrent builds are. If you ever add many sites, build them on a schedule or one-by-one.
 
 ---
 
