@@ -130,11 +130,11 @@ export const QuoteForm = ({
           className="w-full resize-none rounded-lg border border-line px-4 py-2.5 text-sm outline-none focus:border-accent"
         />
         {error && <p className="text-sm font-medium text-red-600">{error}</p>}
-        <Button type="submit" size="lg" className="w-full" >
+        <Button type="submit" size="lg" className="w-full" disabled={busy}>
           {busy ? 'Submitting…' : 'Request My Appointment'}
         </Button>
         <p className="text-center text-xs text-muted">
-          By submitting you agree to be contacted about your project.
+          By submitting you agree to be contacted about your grooming appointment.
         </p>
       </div>
     </form>

@@ -27,6 +27,7 @@ type Props = {
   type?: 'button' | 'submit'
   className?: string
   onClick?: () => void
+  disabled?: boolean
 }
 
 export const Button = ({
@@ -37,6 +38,7 @@ export const Button = ({
   type = 'button',
   className = '',
   onClick,
+  disabled,
 }: Props) => {
   const cls = `${base} ${variants[variant]} ${sizes[size]} ${className}`
   if (href) {
@@ -55,7 +57,7 @@ export const Button = ({
     )
   }
   return (
-    <button type={type} className={cls} onClick={onClick}>
+    <button type={type} className={cls} onClick={onClick} disabled={disabled}>
       {children}
     </button>
   )

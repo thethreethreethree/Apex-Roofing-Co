@@ -8,7 +8,7 @@ import { BookCtaBand } from '@/components/sections/BookCtaBand'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Project Gallery',
+  title: 'Grooming Gallery',
   description:
     'Browse real before-and-after grooming transformations — full grooms, deshedding, and gentle makeovers for dogs and cats across the High Desert.',
 }

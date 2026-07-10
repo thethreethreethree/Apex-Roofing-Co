@@ -148,7 +148,7 @@ export const BookingCalendar = ({
           </select>
           <textarea name="notes" rows={2} aria-label="Notes" placeholder="Anything we should know? (optional)" className={`${inputCls} resize-none`} />
           {error && <p className="text-sm font-medium text-red-600">{error}</p>}
-          <Button type="submit" size="lg" className="w-full">
+          <Button type="submit" size="lg" className="w-full" disabled={submitting}>
             {submitting ? 'Confirming…' : 'Confirm Booking'}
           </Button>
         </div>
