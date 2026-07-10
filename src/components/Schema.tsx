@@ -31,13 +31,17 @@ export const Schema = async () => {
       'Phelan', 'Piñon Hills', 'Oak Hills', 'Wrightwood', 'Hesperia',
       'Victorville', 'Apple Valley', 'Adelanto', 'Lucerne Valley', 'Helendale',
     ].map((name) => ({ '@type': 'City', name })),
-    ...(settings.googleRating && {
-      aggregateRating: {
-        '@type': 'AggregateRating',
-        ratingValue: settings.googleRating,
-        reviewCount: settings.googleReviewCount ?? undefined,
-      },
-    }),
+    // Only emit aggregateRating when BOTH the value and a count are present —
+    // Google treats a rating without a count as invalid and drops the whole block.
+    ...(settings.googleRating && settings.googleReviewCount
+      ? {
+          aggregateRating: {
+            '@type': 'AggregateRating',
+            ratingValue: settings.googleRating,
+            reviewCount: settings.googleReviewCount,
+          },
+        }
+      : {}),
   }
 
   return (
