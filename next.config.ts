@@ -19,6 +19,10 @@ const nextConfig: NextConfig = {
     // Next's hydration uses inline scripts/styles and we don't run a nonce; even
     // so this blocks external script/style/img/frame/connect sources and clamps
     // object-src, base-uri, frame-ancestors, and form-action.
+    // Dev-only: React's development build uses eval() for debugging and HMR uses
+    // a websocket. Production (next build/start) needs neither, so it stays strict
+    // (no unsafe-eval). This only loosens the LOCAL dev server, never production.
+    const dev = process.env.NODE_ENV !== 'production'
     const csp = [
       "default-src 'self'",
       "base-uri 'self'",
@@ -28,8 +32,8 @@ const nextConfig: NextConfig = {
       "img-src 'self' data:",
       "font-src 'self' data:",
       "style-src 'self' 'unsafe-inline'",
-      "script-src 'self' 'unsafe-inline'",
-      "connect-src 'self'",
+      `script-src 'self' 'unsafe-inline'${dev ? " 'unsafe-eval'" : ''}`,
+      `connect-src 'self'${dev ? ' ws: wss:' : ''}`,
     ].join('; ')
 
     // Safe baseline security headers for every route (the custom admin uses no
