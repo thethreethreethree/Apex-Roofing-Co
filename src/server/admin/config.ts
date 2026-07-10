@@ -104,7 +104,11 @@ export const collections: Record<CollectionSlug, CollectionConfig> = {
       { name: 'completedDate', label: 'Completed date', type: 'date' },
       { name: 'beforeImageId', label: 'Before image', type: 'upload' },
       { name: 'afterImageId', label: 'After image', type: 'upload' },
-      { name: 'gallery', label: 'Gallery (media id list)', type: 'json' },
+      // `gallery` (a JSON list of media ids) is intentionally NOT exposed here: the
+      // public site renders only the before/after pair, so a raw-JSON id box would
+      // be a footgun that changes nothing on the page. The column is kept in the
+      // schema (data preserved); re-add this field if a multi-photo gallery section
+      // is ever built on the projects page.
       { name: 'description', label: 'Description', type: 'textarea' },
       { name: 'linkedReviewId', label: 'Linked review', type: 'relationship', relTo: 'reviews' },
       { name: 'featured', label: 'Featured', type: 'checkbox' },
