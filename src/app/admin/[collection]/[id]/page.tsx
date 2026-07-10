@@ -19,6 +19,8 @@ export default async function EditPage({
   const isNew = id === 'new'
   if (isNew && cfg.createDisabled) notFound()
   const numId = isNew ? null : Number(id)
+  // Reject malformed ids (e.g. /admin/services/abc) before touching the DB.
+  if (!isNew && !Number.isInteger(numId)) notFound()
   const row = isNew ? null : await getRow(cfg.slug, numId as number)
   if (!isNew && !row) notFound()
 
