@@ -22,12 +22,13 @@ browser (`/admin`) or during deploy — no code changes needed.
       The custom backend needs **no** CMS/signing secret — sessions use random DB-stored tokens.
 
 ## Before go-live (maintenance)
-- [ ] **Dependency patch pass** — `npm audit` shows 7 advisories (6 moderate, 1 critical), all
-      in **dev/build tooling**, not in code that ships to visitors: `esbuild` (via `drizzle-kit`),
-      `postcss` (via `next`, build-time), and a critical in `vitest` (only exploitable with the
-      Vitest UI server running, which we never run in prod). Real production risk is low. Patch
-      before launch: bump `vitest`, then re-run `npm run build` + tests to confirm nothing breaks.
-      ⚠️ Do **not** run `npm audit fix --force` — it downgrades `next` to 9.x (breaking).
+- [x] **Critical advisory cleared** — the `vitest` critical was fixed by bumping to 4.1.x
+      (int suite still 18/18). It was dev-only anyway (needs the Vitest UI server, never run in prod).
+- [ ] **Remaining `npm audit`: 6 moderate, all dev/build-only** — `esbuild` (via `drizzle-kit`)
+      and `postcss` (via `next`, build-time). None ship to visitors. Clearing them needs a
+      `next` / `drizzle-kit` major bump that may be breaking, so do it in a maintenance window
+      with a full `npm run build` + test pass. ⚠️ Do **not** run `npm audit fix --force` — it
+      downgrades `next` to 9.x (breaking).
 
 ## Deploy (see `DEPLOY.md`)
 - [ ] Get a **Hetzner Cloud CX33** (8 GB, ~€8.99/mo) — or CX23 (4 GB) with swap.
