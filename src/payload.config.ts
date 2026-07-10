@@ -46,8 +46,15 @@ export default buildConfig({
     importMap: {
       baseDir: path.resolve(dirname),
     },
+    components: {
+      graphics: {
+        Logo: '/components/admin/Logo#Logo',
+        Icon: '/components/admin/Icon#Icon',
+      },
+    },
     meta: {
       titleSuffix: '— Shaggy Dog Spa',
+      icons: [{ rel: 'icon', type: 'image/svg+xml', url: '/icon.svg' }],
     },
   },
   collections: [
