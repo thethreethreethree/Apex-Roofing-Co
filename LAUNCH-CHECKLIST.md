@@ -17,8 +17,7 @@ browser (`/admin`) or during deploy — no code changes needed.
 
 ## Security / accounts
 - [ ] **Change the admin password** — the seeded `ShaggyDogSpa` / `Admin2026!` is public in the
-      repo. Change it in the `hashPassword(...)` call in `src/server/db/seed.ts` and re-seed
-      **before** loading real content (the custom admin has no password-change screen yet).
+      repo. Change it after first login at **Admin → Account** (rotates all sessions).
 - [ ] Confirm **`.env`** has `DATABASE_URI=file:./shaggy.db` and the real `NEXT_PUBLIC_SITE_URL`.
       The custom backend needs **no** CMS/signing secret — sessions use random DB-stored tokens.
 

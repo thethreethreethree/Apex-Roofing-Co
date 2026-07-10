@@ -19,8 +19,8 @@ npm run db:migrate     # create the SQLite schema (first time)
 npm run db:seed        # create admin + demo content (WIPES + recreates content + media dir)
 npm run dev            # http://localhost:3000
 ```
-Admin: `/admin` — seeded login `ShaggyDogSpa` / `Admin2026!`. To change it, edit the
-password in `src/server/db/seed.ts` and re-seed **before** loading real content.
+Admin: `/admin` — seeded login `ShaggyDogSpa` / `Admin2026!`. Change the password after first
+login at **Admin → Account** (it rotates all sessions, so other devices are signed out).
 
 ## Tests
 ```bash

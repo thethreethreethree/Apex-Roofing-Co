@@ -18,11 +18,19 @@ export default async function ManageDashboard() {
           <h1 className="text-2xl font-extrabold text-brand">Manage</h1>
           <p className="text-sm text-muted">Signed in as {user.username}</p>
         </div>
-        <form action={logout}>
-          <button className="rounded-lg border border-line px-4 py-2 text-sm font-semibold text-ink transition hover:border-accent">
-            Log out
-          </button>
-        </form>
+        <div className="flex items-center gap-2">
+          <Link
+            href="/admin/account"
+            className="rounded-lg border border-line px-4 py-2 text-sm font-semibold text-ink transition hover:border-accent"
+          >
+            Account
+          </Link>
+          <form action={logout}>
+            <button className="rounded-lg border border-line px-4 py-2 text-sm font-semibold text-ink transition hover:border-accent">
+              Log out
+            </button>
+          </form>
+        </div>
       </div>
 
       <h2 className="mt-8 mb-3 text-xs font-bold uppercase tracking-wide text-muted">Content</h2>

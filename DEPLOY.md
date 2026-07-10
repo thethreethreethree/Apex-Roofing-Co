@@ -188,13 +188,13 @@ automatically.
 
 ---
 
-## 9. Set the admin password + log in
+## 9. Log in and change the admin password
 
-The seeded login is **`ShaggyDogSpa` / `Admin2026!`** — and those are public in the repo, so
-change the password **before** loading real content. Edit the password in the
-`hashPassword('Admin2026!')` call in **`src/server/db/seed.ts`**, then re-run
-`npm run db:seed` (this is still the first, one-time seed). Then log in at
-**https://yourdomain.com/admin**.
+1. Go to **https://yourdomain.com/admin**
+2. Log in: **username** `ShaggyDogSpa` · **password** `Admin2026!`
+3. **Change the password immediately** (the seed credentials are public in the repo) at
+   **Admin → Account**. Changing it rotates every session, so any other logged-in device is
+   signed out.
 
 From here the client manages everything in the browser — no local software, no Docker.
 
