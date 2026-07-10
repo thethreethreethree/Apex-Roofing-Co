@@ -13,12 +13,32 @@ const nextConfig: NextConfig = {
     serverActions: { bodySizeLimit: '10mb' },
   },
   async headers() {
+    // Content-Security-Policy: the whole app is self-contained (media, styles,
+    // fonts, and scripts all come from this origin — no CDNs, no third-party CMS),
+    // so we can lock every fetch to 'self'. 'unsafe-inline' is required because
+    // Next's hydration uses inline scripts/styles and we don't run a nonce; even
+    // so this blocks external script/style/img/frame/connect sources and clamps
+    // object-src, base-uri, frame-ancestors, and form-action.
+    const csp = [
+      "default-src 'self'",
+      "base-uri 'self'",
+      "object-src 'none'",
+      "frame-ancestors 'self'",
+      "form-action 'self'",
+      "img-src 'self' data:",
+      "font-src 'self' data:",
+      "style-src 'self' 'unsafe-inline'",
+      "script-src 'self' 'unsafe-inline'",
+      "connect-src 'self'",
+    ].join('; ')
+
     // Safe baseline security headers for every route (the custom admin uses no
     // third-party inline scripts, so these don't break it).
     return [
       {
         source: '/:path*',
         headers: [
+          { key: 'Content-Security-Policy', value: csp },
           { key: 'X-Content-Type-Options', value: 'nosniff' },
           { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
