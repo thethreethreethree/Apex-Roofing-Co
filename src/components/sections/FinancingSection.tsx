@@ -1,4 +1,4 @@
-import type { FinancingOption, FinancingInfo } from '@/payload-types'
+import type { FinancingOption, FinancingInfo } from '@/server/types'
 import { Section } from '@/components/ui/Section'
 import { Button } from '@/components/ui/Button'
 

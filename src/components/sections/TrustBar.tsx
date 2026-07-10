@@ -1,4 +1,4 @@
-import type { SiteSetting } from '@/payload-types'
+import type { SiteSetting } from '@/server/types'
 import { Container } from '@/components/ui/Container'
 
 export const TrustBar = ({ settings }: { settings: SiteSetting }) => {

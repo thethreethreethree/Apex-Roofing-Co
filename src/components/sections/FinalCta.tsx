@@ -1,4 +1,4 @@
-import type { HomePage, SiteSetting } from '@/payload-types'
+import type { HomePage, SiteSetting } from '@/server/types'
 import { Container } from '@/components/ui/Container'
 import { Button } from '@/components/ui/Button'
 import { telHref } from '@/lib/format'

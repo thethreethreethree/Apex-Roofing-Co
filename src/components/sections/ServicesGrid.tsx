@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import type { Service } from '@/payload-types'
+import type { Service } from '@/server/types'
 import { Section } from '@/components/ui/Section'
 import { ServiceIcon } from '@/components/ui/ServiceIcon'
 

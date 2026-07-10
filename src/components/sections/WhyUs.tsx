@@ -1,4 +1,4 @@
-import type { HomePage } from '@/payload-types'
+import type { HomePage } from '@/server/types'
 import { Section } from '@/components/ui/Section'
 
 export const WhyUs = ({ items }: { items: HomePage['whyUs'] }) => {

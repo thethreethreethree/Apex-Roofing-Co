@@ -1,4 +1,4 @@
-import type { Certification } from '@/payload-types'
+import type { Certification } from '@/server/types'
 import { Container } from '@/components/ui/Container'
 import { MediaImage } from '@/components/ui/MediaImage'
 

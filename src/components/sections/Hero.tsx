@@ -1,4 +1,4 @@
-import type { HomePage, Service, SiteSetting } from '@/payload-types'
+import type { HomePage, Service, SiteSetting } from '@/server/types'
 import { Container } from '@/components/ui/Container'
 import { MediaImage } from '@/components/ui/MediaImage'
 import { Button } from '@/components/ui/Button'

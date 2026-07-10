@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import type { Service } from '@/payload-types'
+import type { Service } from '@/server/types'
 import type { Day, Slot } from '@/lib/booking'
 import { Button } from '@/components/ui/Button'
 import { createBooking, getOpenSlots } from '@/app/actions/booking'

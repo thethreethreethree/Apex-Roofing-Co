@@ -1,4 +1,4 @@
-import type { Review, SiteSetting } from '@/payload-types'
+import type { Review, SiteSetting } from '@/server/types'
 import { Section } from '@/components/ui/Section'
 import { Stars } from '@/components/ui/Stars'
 

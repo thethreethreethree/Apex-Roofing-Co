@@ -1,4 +1,4 @@
-import type { Media } from '@/payload-types'
+import type { Media } from '@/server/types'
 
 /** A Payload upload field at depth>=1 is a populated Media object; at depth 0 it's an id. */
 export type MediaLike = Media | number | string | null | undefined

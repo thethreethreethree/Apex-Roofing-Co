@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import type { SiteSetting, Branding } from '@/payload-types'
+import type { SiteSetting, Branding } from '@/server/types'
 import { MediaImage } from '@/components/ui/MediaImage'
 import { Button } from '@/components/ui/Button'
 import { telHref } from '@/lib/format'

@@ -1,4 +1,4 @@
-import type { Project } from '@/payload-types'
+import type { Project } from '@/server/types'
 import { Section } from '@/components/ui/Section'
 import { MediaImage } from '@/components/ui/MediaImage'
 import { Button } from '@/components/ui/Button'

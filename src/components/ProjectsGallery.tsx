@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import type { Project, Service } from '@/payload-types'
+import type { Project, Service } from '@/server/types'
 import { MediaImage } from '@/components/ui/MediaImage'
 
 const serviceId = (p: Project): string =>

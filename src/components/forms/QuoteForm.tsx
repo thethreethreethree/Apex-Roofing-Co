@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import type { Service } from '@/payload-types'
+import type { Service } from '@/server/types'
 import { Button } from '@/components/ui/Button'
 import { submitLead } from '@/app/actions/leads'
 
