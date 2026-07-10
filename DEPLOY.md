@@ -246,6 +246,9 @@ every time). Do **not** re-run `npm run db:seed` on updates — it would erase t
 
 ## 12. Hosting more sites on the same box
 
+> **Full step-by-step:** [MULTI-SITE.md](MULTI-SITE.md) — Caddy routing, per-site systemd,
+> DNS, a 3-site Caddyfile example, memory limits, and an all-sites backup cron. Summary below.
+
 The app is fully self-contained, so nothing in the code needs to change for multi-site — each
 copy is isolated. Repeat steps 5–9 per site, changing four things so they don't collide:
 - a **different folder** (`~/second-site`)
