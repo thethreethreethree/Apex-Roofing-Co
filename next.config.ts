@@ -25,9 +25,10 @@ const nextConfig: NextConfig = {
   images: {
     // Media is served from the app's own /api/media/file/* route (local disk).
     localPatterns: [
-      {
-        pathname: '/api/media/file/**',
-      },
+      // Custom backend media route (self-hosted, own DB).
+      { pathname: '/media-file/**' },
+      // Payload media route — still used by the admin during the transition.
+      { pathname: '/api/media/file/**' },
     ],
   },
   webpack: (webpackConfig) => {

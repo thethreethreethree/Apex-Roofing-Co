@@ -36,7 +36,7 @@ const shapeMedia = (m: MediaRow | undefined | null): Media | null =>
     ? ({
         id: m.id,
         alt: m.alt,
-        url: `/api/media/file/${m.filename}`,
+        url: `/media-file/${m.filename}`,
         filename: m.filename,
         mimeType: m.mimeType ?? undefined,
         filesize: m.filesize ?? undefined,
