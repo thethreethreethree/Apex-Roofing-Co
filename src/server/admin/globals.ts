@@ -116,7 +116,7 @@ export const globals: Record<GlobalSlug, GlobalConfig> = {
     label: 'Booking Availability',
     table: schema.availabilitySettings,
     fields: [
-      { name: 'days', label: 'Weekdays (JSON: ["2","3","4","5","6"], 0=Sun)', type: 'json' },
+      { name: 'days', label: 'Days you take bookings', type: 'json', weekdays: true },
       { name: 'startTime', label: 'Start time (HH:mm)', type: 'text' },
       { name: 'endTime', label: 'End time (HH:mm)', type: 'text' },
       { name: 'slotMinutes', label: 'Slot length (min)', type: 'number' },

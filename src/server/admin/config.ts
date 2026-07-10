@@ -30,6 +30,9 @@ export type FieldDef = {
   // For a `json` field holding a small list of objects: renders a friendly
   // add/remove row editor (per item field) instead of a raw-JSON textarea.
   itemFields?: { name: string; label: string; type?: 'text' | 'textarea' }[]
+  // For a `json` field holding day-of-week numbers (["0".."6"]): renders
+  // clickable day buttons (Sun–Sat) instead of a raw-JSON textarea.
+  weekdays?: boolean
 }
 
 export type CollectionSlug =

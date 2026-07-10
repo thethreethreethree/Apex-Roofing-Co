@@ -6,6 +6,8 @@ import type { SaveResult } from '@/server/admin/actions'
 import type { FieldDef } from '@/server/admin/config'
 import { ImageField, type MediaOption } from './ImageField'
 import { ListField } from './ListField'
+import { WeekdayField } from './WeekdayField'
+import { RichTextField } from './RichTextField'
 
 type RelOptions = Record<string, MediaOption[]>
 
@@ -81,7 +83,13 @@ export function AdminForm({
             {f.type === 'json' && f.itemFields && (
               <ListField name={f.name} itemFields={f.itemFields} initial={row?.[f.name]} />
             )}
-            {(f.type === 'richText' || (f.type === 'json' && !f.itemFields)) && (
+            {f.type === 'json' && f.weekdays && (
+              <WeekdayField name={f.name} initial={row?.[f.name]} />
+            )}
+            {f.type === 'richText' && <RichTextField name={f.name} initial={row?.[f.name]} />}
+            {/* Fallback: a bare `json` field with no friendly descriptor. None ship today;
+                kept so a future unconfigured json field degrades safely rather than crashing. */}
+            {f.type === 'json' && !f.itemFields && !f.weekdays && (
               <textarea
                 id={`f-${f.name}`}
                 name={f.name}
