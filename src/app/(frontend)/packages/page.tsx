@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { getFinancingInfo, getFinancingOptions } from '@/lib/payload'
+import { getFinancingInfo, getFinancingOptions } from '@/lib/content'
 import { Section } from '@/components/ui/Section'
 import { PageHero } from '@/components/ui/PageHero'
 import { RichText } from '@/components/ui/RichText'

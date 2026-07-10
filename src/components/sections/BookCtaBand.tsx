@@ -1,7 +1,7 @@
 import { Container } from '@/components/ui/Container'
 import { Button } from '@/components/ui/Button'
 import { telHref } from '@/lib/format'
-import { getSiteSettings } from '@/lib/payload'
+import { getSiteSettings } from '@/lib/content'
 
 export const BookCtaBand = async ({
   heading = 'Ready for a Happier Grooming Day?',

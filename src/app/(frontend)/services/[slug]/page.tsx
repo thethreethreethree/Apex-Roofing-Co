@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { getServiceBySlug, getSiteSettings } from '@/lib/payload'
+import { getServiceBySlug, getSiteSettings } from '@/lib/content'
 import { Section } from '@/components/ui/Section'
 import { PageHero } from '@/components/ui/PageHero'
 import { MediaImage } from '@/components/ui/MediaImage'

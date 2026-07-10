@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { Container } from '@/components/ui/Container'
 import { MediaImage } from '@/components/ui/MediaImage'
 import { isMedia, telHref } from '@/lib/format'
-import { getSiteSettings, getBranding, getServices, getCertifications } from '@/lib/payload'
+import { getSiteSettings, getBranding, getServices, getCertifications } from '@/lib/content'
 
 export const Footer = async () => {
   const [settings, branding, services, certs] = await Promise.all([

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { Container } from '@/components/ui/Container'
 import { Button } from '@/components/ui/Button'
-import { getSiteSettings } from '@/lib/payload'
+import { getSiteSettings } from '@/lib/content'
 import { telHref } from '@/lib/format'
 
 export const dynamic = 'force-dynamic'

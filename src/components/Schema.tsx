@@ -1,4 +1,4 @@
-import { getSiteSettings } from '@/lib/payload'
+import { getSiteSettings } from '@/lib/content'
 
 /**
  * LocalBusiness JSON-LD for the mobile grooming business. Kept minimal (name,

@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { getProjects, getServices } from '@/lib/payload'
+import { getProjects, getServices } from '@/lib/content'
 import { Section } from '@/components/ui/Section'
 import { PageHero } from '@/components/ui/PageHero'
 import { ProjectsGallery } from '@/components/ProjectsGallery'

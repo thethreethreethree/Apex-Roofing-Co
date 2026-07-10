@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { getReviews, getSiteSettings } from '@/lib/payload'
+import { getReviews, getSiteSettings } from '@/lib/content'
 import { Section } from '@/components/ui/Section'
 import { PageHero } from '@/components/ui/PageHero'
 import { Stars } from '@/components/ui/Stars'

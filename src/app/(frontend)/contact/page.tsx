@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { getSiteSettings, getServices } from '@/lib/payload'
+import { getSiteSettings, getServices } from '@/lib/content'
 import { Container } from '@/components/ui/Container'
 import { PageHero } from '@/components/ui/PageHero'
 import { QuoteForm } from '@/components/forms/QuoteForm'

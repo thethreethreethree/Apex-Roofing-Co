@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { getServices, getSiteSettings } from '@/lib/payload'
+import { getServices, getSiteSettings } from '@/lib/content'
 import { getOpenSlots } from '@/app/actions/booking'
 import { Container } from '@/components/ui/Container'
 import { PageHero } from '@/components/ui/PageHero'

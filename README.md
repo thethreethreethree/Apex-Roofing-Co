@@ -33,8 +33,8 @@ The custom backend lives under `src/server/`:
 - `db/` — Drizzle `schema.ts`, `migrate.ts`, `seed.ts`, generated `migrations/`.
 - `auth/` — scrypt passwords + cookie sessions; `middleware.ts` guards `/admin/*`.
 - `admin/` — config-driven CRUD (`config.ts`, `globals.ts`, `data.ts`, `actions.ts`, `media.ts`).
-- `queries.ts` — typed reads the public site consumes (`src/lib/payload.ts` is a thin
-  compat re-export of these, kept only so existing frontend imports don't churn — no CMS).
+- `queries.ts` — typed reads the public site consumes (re-exported to the frontend via
+  `src/lib/content.ts`, so pages never import the server layer directly).
 
 ## Deploy
 See **[DEPLOY.md](DEPLOY.md)** — one Hetzner VPS (Node + systemd + Caddy HTTPS + swap +

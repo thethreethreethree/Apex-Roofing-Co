@@ -4,7 +4,7 @@ import './styles.css'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { Schema } from '@/components/Schema'
-import { getSiteSettings, getBranding } from '@/lib/payload'
+import { getSiteSettings, getBranding } from '@/lib/content'
 
 const inter = Inter({ subsets: ['latin'], display: 'swap', variable: '--font-inter' })
 

@@ -9,7 +9,7 @@ import {
   getCertifications,
   getFinancingOptions,
   getFinancingInfo,
-} from '@/lib/payload'
+} from '@/lib/content'
 import { Hero } from '@/components/sections/Hero'
 import { TrustBar } from '@/components/sections/TrustBar'
 import { ServicesGrid } from '@/components/sections/ServicesGrid'

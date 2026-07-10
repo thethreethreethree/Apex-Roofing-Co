@@ -1,5 +1,5 @@
 import type { MetadataRoute } from 'next'
-import { getServices } from '@/lib/payload'
+import { getServices } from '@/lib/content'
 
 // Generate on-demand (not at build time) so the production build never depends
 // on the database being reachable during `next build`.

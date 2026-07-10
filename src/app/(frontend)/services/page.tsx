@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
-import { getServices } from '@/lib/payload'
+import { getServices } from '@/lib/content'
 import { Section } from '@/components/ui/Section'
 import { PageHero } from '@/components/ui/PageHero'
 import { ServiceIcon } from '@/components/ui/ServiceIcon'

@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { getSiteSettings, getCertifications, getHomePage } from '@/lib/payload'
+import { getSiteSettings, getCertifications, getHomePage } from '@/lib/content'
 import { Section } from '@/components/ui/Section'
 import { PageHero } from '@/components/ui/PageHero'
 import { MediaImage } from '@/components/ui/MediaImage'
