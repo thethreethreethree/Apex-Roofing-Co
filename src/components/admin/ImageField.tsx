@@ -112,6 +112,7 @@ export function ImageField({
                 Alt text (accessibility &amp; SEO)
               </label>
               <input
+                aria-label="Alt text"
                 value={alt}
                 onChange={(e) => setAlt(e.target.value)}
                 onBlur={saveAlt}

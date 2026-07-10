@@ -32,6 +32,35 @@ test.describe('Visual media Replace control', () => {
     await expect(page.getByText(/drag & drop or click/i)).toBeVisible()
   })
 
+  test('editing alt text on an image field persists to the media record', async ({ page }) => {
+    // Uses "Cat Grooming" (its own image; not touched by the other media tests) so
+    // the persisted alt edit can't race the drag-drop test on "Full Groom".
+    await login(page)
+    await page.goto('/admin/services')
+    await page.getByRole('row').filter({ hasText: 'Cat Grooming' }).getByRole('link', { name: 'Edit' }).click()
+
+    const alt = page.getByLabel('Alt text')
+    await expect(alt).toBeVisible()
+    const original = await alt.inputValue()
+    const marker = `alt-edited-${Date.now()}`
+
+    // Blur fires updateMediaAlt (a server action POST); wait for it before reloading.
+    await alt.fill(marker)
+    await Promise.all([
+      page.waitForResponse((r) => r.request().method() === 'POST' && r.status() === 200),
+      alt.blur(),
+    ])
+    await page.reload()
+    await expect(page.getByLabel('Alt text')).toHaveValue(marker) // persisted to the DB
+
+    // Restore so the test is re-runnable.
+    await page.getByLabel('Alt text').fill(original)
+    await Promise.all([
+      page.waitForResponse((r) => r.request().method() === 'POST' && r.status() === 200),
+      page.getByLabel('Alt text').blur(),
+    ])
+  })
+
   test('the globals editor renders the Replace control for the branding logo', async ({ page }) => {
     await login(page)
     await page.goto('/admin/globals/branding')
