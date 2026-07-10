@@ -74,8 +74,11 @@ export type FieldOption = { id: number; label: string; url?: string; alt?: strin
 export async function optionsFor(slug: CollectionSlug): Promise<FieldOption[]> {
   await requireUser()
   const cfg = collections[slug]
-  const rows = (await db.select().from(cfg.table as any)) as Row[]
+  const table = cfg.table as any
   if (slug === 'media') {
+    // Newest-first, to match the Media list — the owner finds photos they just
+    // uploaded at the top of the "Choose existing" picker.
+    const rows = (await db.select().from(table).orderBy(desc(table.id))) as Row[]
     return rows.map((r) => ({
       id: r.id as number,
       label: String(r.alt || r.filename || `#${r.id}`),
@@ -83,5 +86,6 @@ export async function optionsFor(slug: CollectionSlug): Promise<FieldOption[]> {
       alt: typeof r.alt === 'string' ? r.alt : '',
     }))
   }
+  const rows = (await db.select().from(table)) as Row[]
   return rows.map((r) => ({ id: r.id as number, label: String(r[cfg.titleField] ?? `#${r.id}`) }))
 }
