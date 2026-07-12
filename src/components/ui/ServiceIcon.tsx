@@ -1,3 +1,13 @@
+// Map a service's icon name to the real brand icon art (in /public/brand).
+const iconArt: Record<string, string> = {
+  groom: 'icon-scissors-comb',
+  bath: 'icon-bath',
+  deshed: 'icon-brush',
+  nails: 'icon-nail-clipper',
+  flea: 'icon-shield-paw',
+  cat: 'icon-cat',
+}
+
 const paths: Record<string, string> = {
   groom: 'M6 5a2 2 0 1 0 0 4 2 2 0 1 0 0-4ZM6 15a2 2 0 1 0 0 4 2 2 0 1 0 0-4ZM7.7 7.7 20 20M7.7 16.3 20 4',
   bath: 'M12 3s6 6.4 6 10a6 6 0 0 1-12 0c0-3.6 6-10 6-10Z',
@@ -13,17 +23,24 @@ export const ServiceIcon = ({
 }: {
   name?: string | null
   className?: string
-}) => (
-  <svg
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth={1.6}
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className={className}
-    aria-hidden="true"
-  >
-    <path d={paths[name ?? 'groom'] ?? paths.groom} />
-  </svg>
-)
+}) => {
+  const art = iconArt[name ?? '']
+  if (art) {
+    // eslint-disable-next-line @next/next/no-img-element
+    return <img src={`/brand/${art}.webp`} alt="" aria-hidden="true" className={`${className} object-contain`} />
+  }
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.6}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden="true"
+    >
+      <path d={paths[name ?? 'groom'] ?? paths.groom} />
+    </svg>
+  )
+}

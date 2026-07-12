@@ -17,6 +17,7 @@ export default async function ReviewsPage() {
   return (
     <>
       <PageHero
+        image="reviews-dog"
         eyebrow="Reviews"
         title="What Our Customers Say"
         subtitle={

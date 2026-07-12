@@ -33,7 +33,7 @@ export default async function ServiceDetailPage({
 
   return (
     <>
-      <PageHero eyebrow="Grooming Service" title={service.title} subtitle={service.summary ?? undefined} />
+      <PageHero image="groomer-dog" eyebrow="Grooming Service" title={service.title} subtitle={service.summary ?? undefined} />
       <Section>
         <div className="grid gap-10 lg:grid-cols-3">
           <div className="lg:col-span-2">

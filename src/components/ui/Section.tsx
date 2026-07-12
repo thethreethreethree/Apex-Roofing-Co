@@ -21,11 +21,14 @@ export const Section = ({
   <section id={id} className={`${alt ? 'bg-surface-2' : 'bg-surface'} py-16 sm:py-20 ${className}`}>
     <Container>
       {(eyebrow || title || subtitle) && (
-        <div className="mx-auto mb-12 max-w-2xl text-center">
+        <div className="mx-auto mb-12 flex max-w-2xl flex-col items-center text-center">
           {eyebrow && (
-            <p className="mb-2 text-sm font-bold uppercase tracking-wider text-accent">{eyebrow}</p>
+            <p className="mb-3 inline-flex items-center gap-1.5 rounded-full bg-accent/10 px-3.5 py-1.5 text-xs font-extrabold uppercase tracking-wide text-accent">
+              <span aria-hidden>🐾</span> {eyebrow}
+            </p>
           )}
-          {title && <h2 className="text-3xl font-extrabold text-ink sm:text-4xl">{title}</h2>}
+          {title && <h2 className="text-3xl text-ink sm:text-4xl">{title}</h2>}
+          {title && <span className="squiggle mx-auto" aria-hidden />}
           {subtitle && <p className="mt-4 text-lg text-muted">{subtitle}</p>}
         </div>
       )}

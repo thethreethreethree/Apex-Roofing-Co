@@ -29,6 +29,7 @@ export default async function BookPage() {
   return (
     <>
       <PageHero
+        image="hero-mascot"
         eyebrow="Book Online"
         title="Book Your Mobile Grooming Appointment"
         subtitle="Choose a time below and we'll confirm right away — then we come to you."

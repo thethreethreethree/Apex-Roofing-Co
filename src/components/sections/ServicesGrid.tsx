@@ -4,6 +4,9 @@ import { Section } from '@/components/ui/Section'
 import { ServiceIcon } from '@/components/ui/ServiceIcon'
 import { Button } from '@/components/ui/Button'
 
+// Soft rotating tile tints — the pink/plum icon art pops on a pale background.
+const tileColors = ['bg-lav', 'bg-cream', 'bg-sky/15', 'bg-bubble/15', 'bg-sunny/20']
+
 export const ServicesGrid = ({ services }: { services: Service[] }) => (
   <Section
     id="services"
@@ -12,21 +15,29 @@ export const ServicesGrid = ({ services }: { services: Service[] }) => (
     title="Complete Mobile Grooming Services"
     subtitle="From a quick bath to a full groom — gentle, one-on-one, and right at your door."
   >
+    <div className="relative mx-auto mb-10 w-fit">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="/brand/suds-cluster.webp" alt="" aria-hidden="true" className="absolute -left-20 -top-2 hidden h-20 w-auto opacity-90 sm:block" />
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="/brand/groomer-dog.webp" alt="" aria-hidden="true" className="h-44 w-auto drop-shadow-xl" />
+    </div>
     <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      {services.map((s) => (
+      {services.map((s, i) => (
         <Link
           key={s.id}
           href={`/services/${s.slug}`}
-          className="group flex flex-col rounded-2xl border border-line bg-surface p-6 transition duration-200 hover:-translate-y-0.5 hover:border-accent/40 hover:shadow-lg"
+          className="group flex flex-col rounded-3xl border border-line bg-surface p-6 shadow-soft transition duration-200 hover:-translate-y-1 hover:shadow-lg"
         >
-          <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-brand/5 text-brand transition group-hover:bg-accent/10 group-hover:text-accent">
-            <ServiceIcon name={s.icon} />
+          <div
+            className={`mb-4 inline-flex h-16 w-16 items-center justify-center rounded-2xl transition duration-200 group-hover:-rotate-6 group-hover:scale-105 ${tileColors[i % tileColors.length]}`}
+          >
+            <ServiceIcon name={s.icon} className="h-10 w-10" />
           </div>
-          <h3 className="text-lg font-bold text-ink">{s.title}</h3>
+          <h3 className="text-lg text-ink">{s.title}</h3>
           <p className="mt-2 flex-1 text-sm text-muted">{s.summary}</p>
           <div className="mt-4 flex items-center justify-between">
-            {s.priceRange && <span className="text-sm font-semibold text-brand">{s.priceRange}</span>}
-            <span className="ml-auto text-sm font-semibold text-accent group-hover:underline">
+            {s.priceRange && <span className="text-sm font-bold text-brand">{s.priceRange}</span>}
+            <span className="ml-auto text-sm font-bold text-accent transition group-hover:translate-x-0.5">
               Learn more →
             </span>
           </div>

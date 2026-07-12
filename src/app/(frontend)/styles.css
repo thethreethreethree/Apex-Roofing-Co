@@ -16,21 +16,37 @@
   --color-line: var(--line);
   --color-surface: var(--surface);
   --color-surface-2: var(--surface-2);
+  /* Playful accent pops — used for icon tiles, blobs, and little highlights. */
+  --color-sunny: var(--sunny);
+  --color-sky: var(--sky);
+  --color-bubble: var(--bubble);
+  --color-lav: var(--lav);
+  --color-cream: var(--cream);
   --font-sans: var(--font-sans);
+  --font-display: var(--font-display);
 }
 
 :root {
-  --brand: #102a43; /* deep slate navy */
-  --brand-dark: #0a1c2e;
-  --accent: #f97316; /* high-contrast orange CTA */
-  --accent-hover: #ea6a0c;
-  --ink: #0f172a; /* primary text */
-  --muted: #5b6b7f; /* secondary text */
-  --line: #e2e8f0; /* hairline borders */
+  /* Palette sampled from the Shaggy Doggy Spa van: plum + hot-pink + lavender. */
+  --brand: #4a2360; /* deep plum (logo outline) — dark anchor for hero/footer/headings */
+  --brand-dark: #331445;
+  --accent: #e84c9a; /* bubblegum hot-pink (the "217") — CTA */
+  --accent-hover: #d43a88;
+  --ink: #3a2440; /* plum-charcoal text */
+  --muted: #6d5a76; /* muted mauve */
+  --line: #efe0ec; /* soft pink hairline borders */
   --surface: #ffffff;
-  --surface-2: #f8fafc; /* alternating section bg */
+  --surface-2: #fbeef7; /* pink-lavender cream — alternating sections */
+  /* Playful pops */
+  --sunny: #ffc94d; /* sunshine yellow (confetti) */
+  --sky: #6fc5ec; /* sky blue (squiggles/confetti) */
+  --bubble: #f48fbf; /* soft pink */
+  --lav: #f3e6f6; /* pale lavender */
+  --cream: #fbeef7;
   --font-sans:
-    var(--font-inter), ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    var(--font-nunito), ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-display:
+    var(--font-fredoka), var(--font-nunito), ui-sans-serif, system-ui, sans-serif;
 }
 
 @layer base {
@@ -57,9 +73,10 @@
   h2,
   h3,
   h4 {
-    line-height: 1.12;
-    letter-spacing: -0.02em;
-    font-weight: 700;
+    font-family: var(--font-display);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    font-weight: 600;
     text-wrap: balance;
   }
 
@@ -75,6 +92,81 @@
   :focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 2px;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * Playful helpers — soft colored shadows, floating blobs, a paw-print motif,
+ * and gentle motion. Kept small and reusable so the whole site shares one
+ * fun visual language. Motion respects prefers-reduced-motion.
+ * ------------------------------------------------------------------------- */
+.shadow-soft {
+  box-shadow: 0 18px 40px -18px rgb(23 114 127 / 0.28);
+}
+.shadow-pop {
+  box-shadow: 0 10px 0 -2px var(--brand-dark);
+}
+
+/* Decorative gradient blob (position/size set by utility classes at call site). */
+.blob {
+  position: absolute;
+  border-radius: 42% 58% 63% 37% / 41% 44% 56% 59%;
+  filter: blur(2px);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* Tileable paw-print background — subtle whimsy behind dark sections. */
+.paw-field {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='%23ffffff' fill-opacity='0.12'%3E%3Cellipse cx='30' cy='40' rx='7' ry='9'/%3E%3Cellipse cx='45' cy='30' rx='5.5' ry='7'/%3E%3Cellipse cx='60' cy='30' rx='5.5' ry='7'/%3E%3Cellipse cx='75' cy='40' rx='7' ry='9'/%3E%3Cpath d='M35 58c0-11 12-16 17.5-16S70 47 70 58s-8 12-17.5 12S35 69 35 58z'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 130px 130px;
+}
+
+/* Polka-dot pastel field — for cheerful alternating section backgrounds. */
+.dot-field {
+  background-image: radial-gradient(currentColor 1.6px, transparent 1.7px);
+  background-size: 22px 22px;
+  color: rgb(232 76 154 / 0.14); /* dot color = faint hot-pink */
+}
+
+/* A big soft single paw watermark (decorative, behind hero content). */
+.paw-mark {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240' viewBox='0 0 240 240'%3E%3Cg fill='%23ffffff'%3E%3Cellipse cx='70' cy='92' rx='26' ry='34'/%3E%3Cellipse cx='120' cy='66' rx='22' ry='30'/%3E%3Cellipse cx='170' cy='92' rx='26' ry='34'/%3E%3Cellipse cx='205' cy='150' rx='20' ry='26'/%3E%3Cpath d='M78 168c0-34 20-52 42-52s42 18 42 52-20 40-42 40-42-6-42-40z'/%3E%3C/g%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+/* Hand-drawn sky-blue squiggle underline — a complete, symmetric wave that
+ * starts and ends on the same baseline so it never looks truncated. */
+.squiggle {
+  display: block;
+  width: 132px;
+  height: 16px;
+  margin-top: 0.5rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='132' height='16' viewBox='0 0 132 16'%3E%3Cpath d='M5 10 Q 20 2 35 10 T 65 10 T 95 10 T 125 10' fill='none' stroke='%236fc5ec' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.squiggle.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@keyframes ff-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+.animate-float {
+  animation: ff-float 6s ease-in-out infinite;
+}
+.animate-float-slow {
+  animation: ff-float 9s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-float,
+  .animate-float-slow {
+    animation: none;
   }
 }
 

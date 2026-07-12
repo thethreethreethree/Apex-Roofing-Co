@@ -19,6 +19,7 @@ export default async function ServicesPage() {
   return (
     <>
       <PageHero
+        image="groomer-dog"
         eyebrow="Services"
         title="Complete Mobile Grooming Services"
         subtitle="From a quick bath to a full groom — gentle, one-on-one, and right at your door."

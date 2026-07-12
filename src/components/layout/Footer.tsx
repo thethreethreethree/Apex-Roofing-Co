@@ -1,13 +1,11 @@
 import Link from 'next/link'
 import { Container } from '@/components/ui/Container'
-import { MediaImage } from '@/components/ui/MediaImage'
-import { isMedia, telHref } from '@/lib/format'
-import { getSiteSettings, getBranding, getServices, getCertifications } from '@/lib/content'
+import { telHref } from '@/lib/format'
+import { getSiteSettings, getServices, getCertifications } from '@/lib/content'
 
 export const Footer = async () => {
-  const [settings, branding, services, certs] = await Promise.all([
+  const [settings, services, certs] = await Promise.all([
     getSiteSettings(),
-    getBranding(),
     getServices(),
     getCertifications(),
   ])
@@ -17,14 +15,17 @@ export const Footer = async () => {
 
   return (
     <footer className="bg-brand-dark text-white/80">
+      {/* Leopard-print accent band — van callback */}
+      <div
+        className="h-4 w-full bg-repeat"
+        style={{ backgroundImage: "url('/brand/leopard-pattern-pink.webp')", backgroundSize: 'auto 100%' }}
+        aria-hidden="true"
+      />
       <Container className="grid grid-cols-2 gap-10 py-14 md:grid-cols-4">
         {/* Brand */}
         <div className="col-span-2 md:col-span-1">
-          {isMedia(branding.logoLight) ? (
-            <MediaImage media={branding.logoLight} alt={company} className="mb-4 h-10 w-auto" />
-          ) : (
-            <div className="mb-4 text-xl font-extrabold text-white">{company}</div>
-          )}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/brand/logo-wordmark.webp" alt={company} className="mb-4 h-14 w-auto" />
           <p className="text-sm leading-relaxed">
             {settings.tagline ?? 'Grooming That Comes to You'}.
             {settings.insuranceStatement ? ` ${settings.insuranceStatement}.` : ''}
@@ -47,6 +48,8 @@ export const Footer = async () => {
               </a>
             )}
           </div>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/brand/locally-loved-stamp.webp" alt="Locally loved — Phelan & the High Desert" className="mt-6 h-24 w-24" />
         </div>
 
         {/* Services */}

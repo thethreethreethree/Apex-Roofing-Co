@@ -18,6 +18,7 @@ export default async function PackagesPage() {
   return (
     <>
       <PageHero
+        image="party-dog"
         eyebrow="Packages & Pricing"
         title={info.heading ?? 'Grooming Packages & Pricing'}
         subtitle={info.intro ?? undefined}

@@ -1,6 +1,5 @@
 import type { HomePage, Service, SiteSetting } from '@/server/types'
 import { Container } from '@/components/ui/Container'
-import { MediaImage } from '@/components/ui/MediaImage'
 import { Button } from '@/components/ui/Button'
 import { Stars } from '@/components/ui/Stars'
 import { QuoteForm } from '@/components/forms/QuoteForm'
@@ -25,36 +24,44 @@ export const Hero = ({
   const badges = home.trustBadges ?? []
 
   return (
-    <section className="relative isolate overflow-hidden bg-brand text-white">
-      {/* Background */}
+    <section className="relative isolate overflow-hidden text-ink">
+      {/* Background — the provided brand background graphic */}
       <div className="absolute inset-0 -z-10">
-        <MediaImage media={hero?.backgroundImage} fill priority className="object-cover" sizes="100vw" />
-        <div className="absolute inset-0 bg-linear-to-r from-brand via-brand/95 to-brand/70" />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/brand/bg-graphic.webp" alt="" aria-hidden="true" className="h-full w-full object-cover" />
+        {/* soft light scrim so the dark text stays readable over busier areas */}
+        <div className="absolute inset-0 bg-white/25" />
+      </div>
+
+      {/* Hero mascot peeking up from the bottom-left (large screens) */}
+      <div className="pointer-events-none absolute -left-6 bottom-0 z-0 hidden lg:block" aria-hidden>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/brand/hero-mascot.webp" alt="" aria-hidden="true" className="animate-float-slow h-44 drop-shadow-2xl xl:h-52" />
       </div>
 
       <Container className="grid items-center gap-10 py-14 lg:grid-cols-2 lg:py-20">
         <div>
           {settings.googleRating != null && (
-            <div className="mb-5 inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 text-sm backdrop-blur">
+            <div className="mb-5 inline-flex items-center gap-2 rounded-full bg-white/80 px-3 py-1.5 text-sm text-ink shadow-sm ring-1 ring-line">
               <Stars rating={settings.googleRating} />
               <span className="font-semibold">{settings.googleRating}</span>
-              <span className="opacity-80">
+              <span className="text-muted">
                 ({settings.googleReviewCount}+ reviews)
               </span>
             </div>
           )}
 
-          <h1 className="text-4xl font-extrabold leading-[1.08] sm:text-5xl">
+          <h1 className="text-4xl font-extrabold leading-[1.08] text-brand sm:text-5xl">
             {hero?.heading}
           </h1>
           {hero?.subheading && (
-            <p className="mt-5 max-w-xl text-lg text-white/85">{hero.subheading}</p>
+            <p className="mt-5 max-w-xl text-lg text-ink/75">{hero.subheading}</p>
           )}
 
           {badges.length > 0 && (
             <ul className="mt-6 grid max-w-md grid-cols-2 gap-x-6 gap-y-2.5">
               {badges.map((b, i) => (
-                <li key={i} className="flex items-center gap-2 text-sm font-medium">
+                <li key={i} className="flex items-center gap-2 text-sm font-semibold text-ink">
                   <Check /> {b.label}
                 </li>
               ))}
@@ -65,7 +72,7 @@ export const Hero = ({
             <Button href="/book" size="lg">
               {hero?.primaryCtaLabel ?? 'Book an Appointment'}
             </Button>
-            <Button href={telHref(settings.phone)} size="lg" variant="outlineLight">
+            <Button href={telHref(settings.phone)} size="lg" variant="outline">
               Call {settings.phone}
             </Button>
           </div>

@@ -18,6 +18,7 @@ export default async function ContactPage() {
   return (
     <>
       <PageHero
+        image="grooming-van"
         eyebrow="Contact"
         title="Let's Talk About Your Pet"
         subtitle="Quick responses and friendly scheduling. Reach us however works best for you."

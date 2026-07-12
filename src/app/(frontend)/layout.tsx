@@ -1,12 +1,19 @@
 import React from 'react'
-import { Inter } from 'next/font/google'
+import { Nunito, Fredoka } from 'next/font/google'
 import './styles.css'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { Schema } from '@/components/Schema'
 import { getSiteSettings, getBranding } from '@/lib/content'
 
-const inter = Inter({ subsets: ['latin'], display: 'swap', variable: '--font-inter' })
+// Friendly, rounded type: Nunito for body copy, Fredoka for the playful display headings.
+const nunito = Nunito({ subsets: ['latin'], display: 'swap', variable: '--font-nunito' })
+const fredoka = Fredoka({
+  subsets: ['latin'],
+  weight: ['500', '600', '700'],
+  display: 'swap',
+  variable: '--font-fredoka',
+})
 
 /** Darken a #rrggbb hex by a 0–1 factor (for derived brand-dark / accent-hover tones). */
 const darken = (hex: string, factor: number): string => {
@@ -31,24 +38,26 @@ export const metadata = {
     title: 'Shaggy Doggy Spa Mobile Grooming — Grooming That Comes to You',
     description:
       'Mobile dog & cat grooming serving Phelan and the High Desert — low-stress, one-on-one grooming that comes to your door.',
+    images: ['/brand/og-banner-1.webp'],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Shaggy Doggy Spa Mobile Grooming',
     description:
       'Mobile dog & cat grooming serving Phelan and the High Desert — grooming that comes to you.',
+    images: ['/brand/og-banner-1.webp'],
   },
 }
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const [settings, branding] = await Promise.all([getSiteSettings(), getBranding()])
 
-  const brand = branding.primaryColor || '#102a43'
-  const accent = branding.accentColor || '#f97316'
+  const brand = branding.primaryColor || '#4a2360'
+  const accent = branding.accentColor || '#e84c9a'
   const cssVars = `:root{--brand:${brand};--brand-dark:${darken(brand, 0.25)};--accent:${accent};--accent-hover:${darken(accent, 0.1)};}`
 
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en" className={`${nunito.variable} ${fredoka.variable}`}>
       <head>
         {/* eslint-disable-next-line react/no-danger */}
         <style dangerouslySetInnerHTML={{ __html: cssVars }} />

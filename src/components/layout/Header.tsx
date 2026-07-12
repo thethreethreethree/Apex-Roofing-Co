@@ -3,10 +3,8 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import type { SiteSetting, Branding } from '@/server/types'
-import { MediaImage } from '@/components/ui/MediaImage'
 import { Button } from '@/components/ui/Button'
 import { telHref } from '@/lib/format'
-import { isMedia } from '@/lib/format'
 
 const NAV = [
   { label: 'Services', href: '/services' },
@@ -25,7 +23,6 @@ const PhoneIcon = () => (
 
 export const Header = ({
   settings,
-  branding,
 }: {
   settings: SiteSetting
   branding: Branding
@@ -37,7 +34,7 @@ export const Header = ({
   return (
     <header className="sticky top-0 z-50 bg-surface/95 shadow-sm backdrop-blur">
       {/* Utility bar */}
-      <div className="hidden bg-brand text-white md:block">
+      <div className="hidden bg-accent text-white md:block">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-8 py-1.5 text-xs">
           <span className="opacity-90">
             {[settings.insuranceStatement, settings.license].filter(Boolean).join(' · ')}
@@ -56,11 +53,8 @@ export const Header = ({
       {/* Main bar */}
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3 sm:px-8">
         <Link href="/" className="flex items-center" aria-label={company}>
-          {isMedia(branding.logo) ? (
-            <MediaImage media={branding.logo} alt={company} className="h-14 w-auto sm:h-16" priority />
-          ) : (
-            <span className="text-xl font-extrabold tracking-tight text-brand">{company}</span>
-          )}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/brand/logo-wordmark.webp" alt={company} className="h-12 w-auto sm:h-14" />
         </Link>
 
         <nav className="hidden items-center gap-6 lg:flex">

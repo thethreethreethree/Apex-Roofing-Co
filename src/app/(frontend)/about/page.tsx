@@ -31,6 +31,7 @@ export default async function AboutPage() {
   return (
     <>
       <PageHero
+        image="spa-dog"
         eyebrow="About Us"
         title="Mobile Grooming, Right at Your Door"
         subtitle={`${company} was built on a simple idea: treat every pet like our own — with patience, gentleness, and care — and skip the stress of the salon.`}

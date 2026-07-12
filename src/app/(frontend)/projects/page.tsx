@@ -18,6 +18,7 @@ export default async function ProjectsPage() {
   return (
     <>
       <PageHero
+        image="dog-golden"
         eyebrow="Before & After"
         title="Grooming Gallery"
         subtitle="Real pets, real transformations. Hover any groom to see the before-and-after."
