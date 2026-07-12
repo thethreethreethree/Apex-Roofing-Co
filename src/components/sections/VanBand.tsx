@@ -19,7 +19,7 @@ export const VanBand = ({ settings }: { settings: SiteSetting }) => (
         </p>
         <h2 className="text-3xl text-ink sm:text-4xl">The spa comes to your driveway</h2>
         <span className="squiggle" aria-hidden />
-        <p className="mt-4 max-w-md text-lg text-muted">
+        <p className="mt-4 max-w-md text-lg text-ink/85">
           No cages, no car rides, no waiting room. Our fully-equipped pink grooming van pulls
           right up to your door for calm, one-on-one pampering across Phelan and the High Desert.
         </p>
