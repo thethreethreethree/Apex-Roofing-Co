@@ -10,7 +10,7 @@ const base =
 const variants: Record<Variant, string> = {
   accent: 'bg-accent text-white hover:bg-accent-hover shadow-soft hover:shadow-lg',
   dark: 'bg-brand text-white hover:bg-brand-dark shadow-soft',
-  outline: 'border-2 border-brand text-brand hover:bg-brand hover:text-white',
+  outline: 'border-2 border-brand bg-white text-brand hover:bg-brand hover:text-white',
   outlineLight: 'border-2 border-white/70 text-white hover:bg-white hover:text-brand',
 }
 

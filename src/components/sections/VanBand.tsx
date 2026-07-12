@@ -6,10 +6,10 @@ import { telHref } from '@/lib/format'
 /** "We come to you" band featuring the Shaggy Doggy Spa grooming van. */
 export const VanBand = ({ settings }: { settings: SiteSetting }) => (
   <section className="relative overflow-hidden bg-lav">
-    {/* soft polka-dot wash (real tile) */}
+    {/* provided dusty-pink dot pattern (seamless, transparent tile) */}
     <div
-      className="pointer-events-none absolute inset-0 opacity-60"
-      style={{ backgroundImage: "url('/brand/polka-dot-tile.webp')", backgroundSize: '360px auto' }}
+      className="pointer-events-none absolute inset-0"
+      style={{ backgroundImage: "url('/brand/dot-pattern.webp')", backgroundSize: '190px 190px' }}
       aria-hidden="true"
     />
     <Container className="relative grid items-center gap-8 py-14 sm:py-16 lg:grid-cols-2">
