@@ -9,7 +9,9 @@ export const CertsStrip = ({ certs }: { certs: Certification[] }) => {
       <Container className="flex flex-wrap items-center justify-center gap-x-10 gap-y-6 py-10">
         {certs.map((c) => (
           <div key={c.id} className="flex items-center gap-3">
-            <MediaImage media={c.logo} alt={c.name} className="h-12 w-12 rounded-full" />
+            <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-full">
+              <MediaImage media={c.logo} alt={c.name} fill className="object-cover" />
+            </div>
             <div className="text-sm">
               <div className="font-bold text-ink">{c.name}</div>
               {c.description && (

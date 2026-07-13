@@ -43,6 +43,7 @@ export const VanBand = ({ settings }: { settings: SiteSetting }) => (
       <img
         src="/brand/grooming-van.webp"
         alt="The Shaggy Doggy Spa mobile grooming van"
+        loading="lazy"
         className="animate-float mx-auto h-auto w-full max-w-lg drop-shadow-2xl"
       />
     </Container>

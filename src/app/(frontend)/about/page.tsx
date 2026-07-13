@@ -57,6 +57,7 @@ export default async function AboutPage() {
           <img
             src="/brand/meet-the-groomer.webp"
             alt="A Shaggy Doggy Spa groomer brushing a happy doodle on the grooming table"
+            loading="lazy"
             className="mx-auto w-full max-w-md drop-shadow-xl"
           />
         </div>
@@ -90,6 +91,7 @@ export default async function AboutPage() {
         <img
           src="/brand/service-area-map.webp"
           alt="Map of the High Desert areas Shaggy Doggy Spa serves"
+          loading="lazy"
           className="mx-auto w-full max-w-3xl"
         />
       </Section>
@@ -99,8 +101,8 @@ export default async function AboutPage() {
           <div className="flex flex-wrap justify-center gap-6">
             {certs.map((c) => (
               <div key={c.id} className="w-full rounded-2xl border border-line bg-surface p-6 text-center sm:w-64">
-                <div className="mx-auto mb-4 h-16 w-16">
-                  <MediaImage media={c.logo} alt={c.name} className="h-16 w-16 rounded-full" />
+                <div className="relative mx-auto mb-4 h-16 w-16 overflow-hidden rounded-full">
+                  <MediaImage media={c.logo} alt={c.name} fill className="object-cover" />
                 </div>
                 <h3 className="font-bold text-ink">{c.name}</h3>
                 {c.description && <p className="mt-2 text-sm text-muted">{c.description}</p>}
