@@ -1,5 +1,6 @@
 import type { Review, SiteSetting } from '@/server/types'
 import { Section } from '@/components/ui/Section'
+import { ScallopEdge } from '@/components/ui/ScallopEdge'
 import { Stars } from '@/components/ui/Stars'
 
 export const ReviewsSection = ({
@@ -15,14 +16,9 @@ export const ReviewsSection = ({
 
   return (
     <div className="relative">
-      {/* scalloped top edge — cream scallops rise into the white section above */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src="/brand/divider-scallop-cream-top.webp"
-        alt=""
-        aria-hidden="true"
-        className="pointer-events-none absolute bottom-full left-0 z-10 -mb-px block w-full select-none"
-      />
+      {/* scalloped top edge — cream scallops rise into the white section above.
+          Section `alt` bg (--surface-2 #fbeef7) matches the scallop solid. */}
+      <ScallopEdge src="/brand/divider-scallop-cream-top.webp" side="top" />
       <Section
         alt
         eyebrow="Reviews"
@@ -56,13 +52,7 @@ export const ReviewsSection = ({
       </div>
       </Section>
       {/* scalloped bottom edge — cream scallops drop into the white section below */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src="/brand/divider-scallop-cream-bottom.webp"
-        alt=""
-        aria-hidden="true"
-        className="pointer-events-none absolute top-full left-0 z-10 -mt-px block w-full select-none"
-      />
+      <ScallopEdge src="/brand/divider-scallop-cream-bottom.webp" side="bottom" />
     </div>
   )
 }

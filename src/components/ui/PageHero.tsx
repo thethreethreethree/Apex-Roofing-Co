@@ -15,7 +15,7 @@ export const PageHero = ({
   image?: string
   children?: ReactNode
 }) => (
-  <section className="relative overflow-hidden bg-brand text-white">
+  <section className="relative isolate overflow-hidden bg-brand text-white">
     {/* paw-print texture wash */}
     <div
       className="pointer-events-none absolute inset-0 opacity-[0.13]"
@@ -25,15 +25,22 @@ export const PageHero = ({
     {/* soft blob accent */}
     {/* eslint-disable-next-line @next/next/no-img-element */}
     <img src="/brand/blob-pink.webp" alt="" aria-hidden="true" className="pointer-events-none absolute -right-10 -top-10 hidden h-48 w-48 opacity-20 sm:block" />
-    {/* optional page mascot */}
+    {/* optional page mascot — anchored to the centered max-w-6xl content box
+        (matching Container), NOT the full-bleed section edge. Anchoring to the
+        section pushed it to the screen edge / clipped it on wide viewports
+        (audit F5 "too far right"). */}
     {image && (
-      // eslint-disable-next-line @next/next/no-img-element
-      <img
-        src={`/brand/${image}.webp`}
-        alt=""
+      <div
+        className="pointer-events-none absolute inset-0 z-[-1] mx-auto hidden max-w-6xl px-5 sm:px-8 md:block"
         aria-hidden="true"
-        className="animate-float-slow pointer-events-none absolute -right-3 bottom-0 hidden h-40 drop-shadow-2xl md:block lg:h-48"
-      />
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={`/brand/${image}.webp`}
+          alt=""
+          className="animate-float-slow absolute bottom-0 right-5 h-40 drop-shadow-2xl sm:right-8 lg:h-48"
+        />
+      </div>
     )}
     <Container className="relative py-14 sm:py-16">
       {eyebrow && (

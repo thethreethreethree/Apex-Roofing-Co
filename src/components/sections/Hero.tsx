@@ -33,11 +33,18 @@ export const Hero = ({
         <div className="absolute inset-0 bg-white/25" />
       </div>
 
-      {/* Hero mascot peeking up from the bottom-left (large screens) */}
-      <div className="pointer-events-none absolute -left-6 bottom-0 z-0 hidden lg:block" aria-hidden>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/brand/hero-mascot.webp" alt="" aria-hidden="true" className="animate-float-slow h-44 drop-shadow-2xl xl:h-52" />
-      </div>
+      {/* Hero mascot in the bottom-left gutter (lg+). Three constraints, all met:
+          (1) z-[-1] keeps it BEHIND the content so it never covers the CTA buttons;
+          (2) a POSITIVE left offset keeps it fully on-screen (never clipped — the
+          original -left-6 hung it off the edge, audit F5); (3) on wide viewports the
+          offset lands it in the empty left gutter, left of the centered content. */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/brand/hero-mascot.webp"
+        alt=""
+        aria-hidden="true"
+        className="animate-float-slow pointer-events-none absolute bottom-0 left-2 z-[-1] hidden h-44 drop-shadow-2xl lg:block xl:h-52 2xl:left-10"
+      />
 
       <Container className="grid items-center gap-10 py-14 lg:grid-cols-2 lg:py-20">
         <div>
