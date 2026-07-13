@@ -53,7 +53,10 @@ function coerceFields(fields: FieldDef[], form: FormData): { data: Record<string
 
 const friendlyError = (e: unknown): string => {
   const msg = e instanceof Error ? e.message : 'Save failed.'
-  return /unique/i.test(msg) ? 'That value must be unique (e.g. the slug is already taken).' : msg
+  if (/unique/i.test(msg)) return 'That value must be unique (e.g. the slug is already taken).'
+  // Don't leak raw DB/driver error text to the UI — log it server-side instead.
+  console.error('[admin save] failed:', e)
+  return 'Save failed. Please check your input and try again.'
 }
 
 export async function saveRow(slug: CollectionSlug, id: number | null, form: FormData): Promise<SaveResult> {
