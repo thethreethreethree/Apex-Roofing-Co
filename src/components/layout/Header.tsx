@@ -54,7 +54,7 @@ export const Header = ({
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3 sm:px-8">
         <Link href="/" className="flex items-center" aria-label={company}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/brand/logo-wordmark.webp" alt={company} className="h-12 w-auto sm:h-14" />
+          <img src="/brand/logo-wordmark.webp" alt={company} width={640} height={242} className="h-12 w-auto sm:h-14" />
         </Link>
 
         <nav className="hidden items-center gap-6 lg:flex">

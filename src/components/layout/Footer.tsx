@@ -25,7 +25,7 @@ export const Footer = async () => {
         {/* Brand */}
         <div className="col-span-2 md:col-span-1">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/brand/logo-wordmark.webp" alt={company} className="mb-4 h-14 w-auto" />
+          <img src="/brand/logo-wordmark.webp" alt={company} width={640} height={242} className="mb-4 h-14 w-auto" />
           <p className="text-sm leading-relaxed">
             {settings.tagline ?? 'Grooming That Comes to You'}.
             {settings.insuranceStatement ? ` ${settings.insuranceStatement}.` : ''}

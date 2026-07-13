@@ -28,7 +28,17 @@ export const Hero = ({
       {/* Background — the provided brand background graphic */}
       <div className="absolute inset-0 -z-10">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/brand/bg-graphic.webp" alt="" aria-hidden="true" className="h-full w-full object-cover" />
+        {/* Above-the-fold LCP element: prioritize the fetch and give intrinsic
+            dimensions to reserve space (reduce CLS). */}
+        <img
+          src="/brand/bg-graphic.webp"
+          alt=""
+          aria-hidden="true"
+          width={1600}
+          height={1000}
+          fetchPriority="high"
+          className="h-full w-full object-cover"
+        />
         {/* soft light scrim so the dark text stays readable over busier areas */}
         <div className="absolute inset-0 bg-white/35" />
       </div>

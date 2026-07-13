@@ -27,9 +27,9 @@ export default async function ReviewsPage() {
         }
       />
       <Section>
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="flex flex-wrap justify-center gap-6">
           {reviews.map((r) => (
-            <figure key={r.id} className="flex flex-col rounded-2xl border border-line bg-surface p-6">
+            <figure key={r.id} className="flex w-full flex-col rounded-2xl border border-line bg-surface p-6 sm:w-[340px]">
               <Stars rating={r.rating} className="mb-3" />
               <blockquote className="flex-1 text-sm leading-relaxed text-ink/90">
                 “{r.text}”

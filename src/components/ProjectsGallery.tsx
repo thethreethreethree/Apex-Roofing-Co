@@ -27,25 +27,27 @@ export const ProjectsGallery = ({
         <FilterButton active={filter === 'all'} onClick={() => setFilter('all')}>
           All Projects
         </FilterButton>
-        {services.map((s) => (
-          <FilterButton
-            key={s.id}
-            active={filter === String(s.id)}
-            onClick={() => setFilter(String(s.id))}
-          >
-            {s.title}
-          </FilterButton>
-        ))}
+        {services
+          .filter((s) => projects.some((p) => serviceId(p) === String(s.id)))
+          .map((s) => (
+            <FilterButton
+              key={s.id}
+              active={filter === String(s.id)}
+              onClick={() => setFilter(String(s.id))}
+            >
+              {s.title}
+            </FilterButton>
+          ))}
       </div>
 
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="flex flex-wrap justify-center gap-6">
         {filtered.map((p) => {
           const review =
             typeof p.linkedReview === 'object' && p.linkedReview ? p.linkedReview : null
           return (
             <article
               key={p.id}
-              className="group overflow-hidden rounded-2xl border border-line bg-surface shadow-sm"
+              className="group w-full overflow-hidden rounded-2xl border border-line bg-surface shadow-sm sm:w-[340px]"
             >
               <div className="relative aspect-[4/3]">
                 <MediaImage media={p.afterImage} fill className="object-cover" sizes="(max-width:768px) 100vw, 33vw" />

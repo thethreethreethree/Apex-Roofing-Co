@@ -36,9 +36,9 @@ export const ReviewsSection = ({
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/brand/reviews-dog.webp" alt="" aria-hidden="true" className="relative h-40 w-auto drop-shadow-xl" />
       </div>
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <div className="flex flex-wrap justify-center gap-6">
         {list.map((r) => (
-          <figure key={r.id} className="relative flex flex-col rounded-3xl border border-line bg-surface p-6 shadow-soft">
+          <figure key={r.id} className="relative flex w-full flex-col rounded-3xl border border-line bg-surface p-6 shadow-soft sm:w-[340px]">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/brand/five-star-badge.webp" alt="" aria-hidden="true" className="absolute -right-3 -top-3 h-12 w-12 drop-shadow" />
             <Stars rating={r.rating} className="mb-3" />

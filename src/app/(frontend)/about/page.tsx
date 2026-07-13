@@ -72,10 +72,15 @@ export default async function AboutPage() {
           ))}
         </div>
 
-        {/* Trust badges */}
+        {/* Trust badges — meaningful claims, so give each a real alt */}
         <div className="mx-auto mt-12 flex max-w-3xl flex-wrap items-center justify-center gap-8">
-          {['badge-cage-free', 'badge-gentle-handling', 'badge-certified-groomer', 'badge-pet-first-aid'].map((b) => (
-            <img key={b} src={`/brand/${b}.webp`} alt="" aria-hidden="true" className="h-24 w-24" />
+          {[
+            { f: 'badge-cage-free', a: 'Cage-free grooming' },
+            { f: 'badge-gentle-handling', a: 'Gentle handling' },
+            { f: 'badge-certified-groomer', a: 'Certified groomer' },
+            { f: 'badge-pet-first-aid', a: 'Pet first-aid trained' },
+          ].map((b) => (
+            <img key={b.f} src={`/brand/${b.f}.webp`} alt={b.a} className="h-24 w-24" />
           ))}
         </div>
       </Section>
