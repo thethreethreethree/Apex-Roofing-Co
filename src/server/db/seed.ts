@@ -65,7 +65,7 @@ const logoSvg = (textColor: string) =>
   `<svg xmlns="http://www.w3.org/2000/svg" width="520" height="120" viewBox="0 0 520 120"><g fill="#f2994a"><ellipse cx="52" cy="70" rx="17" ry="15"/><circle cx="33" cy="52" r="7"/><circle cx="45" cy="42" r="7"/><circle cx="59" cy="42" r="7"/><circle cx="71" cy="52" r="7"/></g><text x="98" y="58" font-family="Arial, sans-serif" font-size="36" font-weight="800" fill="${textColor}">SHAGGY DOG SPA</text><text x="100" y="90" font-family="Arial, sans-serif" font-size="19" letter-spacing="6" fill="${textColor}" opacity="0.85">MOBILE GROOMING</text></svg>`
 
 const badgeSvg = (initials: string) =>
-  `<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 240 240"><circle cx="120" cy="120" r="110" fill="#0e4653"/><circle cx="120" cy="120" r="110" fill="none" stroke="#f2994a" stroke-width="6"/><text x="50%" y="56%" text-anchor="middle" font-family="Arial, sans-serif" font-size="58" font-weight="800" fill="#ffffff">${esc(initials)}</text></svg>`
+  `<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 240 240"><circle cx="120" cy="120" r="110" fill="#e84c9a"/><circle cx="120" cy="120" r="110" fill="none" stroke="#4a2360" stroke-width="6"/><text x="50%" y="56%" text-anchor="middle" font-family="Arial, sans-serif" font-size="58" font-weight="800" fill="#ffffff">${esc(initials)}</text></svg>`
 
 /** Render an SVG to a PNG on disk + insert a media row; returns the media id. */
 const createImage = async (name: string, alt: string, svg: string): Promise<number> => {
