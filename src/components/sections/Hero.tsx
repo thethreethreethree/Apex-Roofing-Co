@@ -30,7 +30,7 @@ export const Hero = ({
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/brand/bg-graphic.webp" alt="" aria-hidden="true" className="h-full w-full object-cover" />
         {/* soft light scrim so the dark text stays readable over busier areas */}
-        <div className="absolute inset-0 bg-white/25" />
+        <div className="absolute inset-0 bg-white/35" />
       </div>
 
       {/* Hero mascot in the bottom-left gutter (lg+). Three constraints, all met:
@@ -62,7 +62,7 @@ export const Hero = ({
             {hero?.heading}
           </h1>
           {hero?.subheading && (
-            <p className="mt-5 max-w-xl text-lg text-ink/75">{hero.subheading}</p>
+            <p className="mt-5 max-w-xl text-lg font-medium text-ink/90">{hero.subheading}</p>
           )}
 
           {badges.length > 0 && (

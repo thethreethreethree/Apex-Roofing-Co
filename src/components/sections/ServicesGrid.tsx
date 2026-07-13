@@ -17,9 +17,9 @@ export const ServicesGrid = ({ services }: { services: Service[] }) => (
   >
     <div className="relative mx-auto mb-10 w-fit">
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src="/brand/suds-cluster.webp" alt="" aria-hidden="true" className="absolute -left-20 -top-2 hidden h-20 w-auto opacity-90 sm:block" />
+      <img src="/brand/suds-cluster.webp" alt="" aria-hidden="true" className="absolute -left-20 -top-2 z-0 hidden h-20 w-auto opacity-90 sm:block" />
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src="/brand/groomer-dog.webp" alt="" aria-hidden="true" className="h-44 w-auto drop-shadow-xl" />
+      <img src="/brand/groomer-dog.webp" alt="" aria-hidden="true" className="relative z-10 h-44 w-auto drop-shadow-xl" />
     </div>
     <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {services.map((s, i) => (
