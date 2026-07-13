@@ -61,9 +61,9 @@ export default async function AboutPage() {
           />
         </div>
 
-        <div className="mx-auto mt-12 grid max-w-4xl grid-cols-2 gap-6 md:grid-cols-4">
+        <div className="mx-auto mt-12 flex max-w-4xl flex-wrap justify-center gap-6">
           {stats.map((s, i) => (
-            <div key={i} className="rounded-2xl border border-line bg-surface-2 p-6 text-center">
+            <div key={i} className="w-[calc(50%-0.75rem)] rounded-2xl border border-line bg-surface-2 p-6 text-center sm:w-44">
               <div className="text-2xl font-extrabold text-brand sm:text-3xl">{s.big}</div>
               <div className="mt-1 text-xs font-medium uppercase tracking-wide text-muted">
                 {s.label}
@@ -91,9 +91,9 @@ export default async function AboutPage() {
 
       {certs.length > 0 && (
         <Section alt eyebrow="Why Us" title="What Makes Us Different">
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="flex flex-wrap justify-center gap-6">
             {certs.map((c) => (
-              <div key={c.id} className="rounded-2xl border border-line bg-surface p-6 text-center">
+              <div key={c.id} className="w-full rounded-2xl border border-line bg-surface p-6 text-center sm:w-64">
                 <div className="mx-auto mb-4 h-16 w-16">
                   <MediaImage media={c.logo} alt={c.name} className="h-16 w-16 rounded-full" />
                 </div>

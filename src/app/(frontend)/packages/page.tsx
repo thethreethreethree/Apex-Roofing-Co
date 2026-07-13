@@ -35,11 +35,11 @@ export default async function PackagesPage() {
         subtitle={info.intro ?? undefined}
       />
       <Section>
-        <div className="grid gap-6 md:grid-cols-3">
+        <div className="flex flex-wrap justify-center gap-6">
           {options.map((o) => (
             <div
               key={o.id}
-              className="rounded-2xl border-2 border-line bg-surface p-7 text-center transition hover:border-accent/50"
+              className="w-full rounded-2xl border-2 border-line bg-surface p-7 text-center transition hover:border-accent/50 sm:w-72"
             >
               <h2 className="text-lg font-bold text-brand">{o.name}</h2>
               {o.terms && <p className="mt-1 text-sm font-semibold text-accent">{o.terms}</p>}
