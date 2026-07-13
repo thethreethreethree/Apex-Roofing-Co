@@ -5,13 +5,22 @@ import { telHref } from '@/lib/format'
 
 /** "We come to you" band featuring the Shaggy Doggy Spa grooming van. */
 export const VanBand = ({ settings }: { settings: SiteSetting }) => (
-  <section className="relative overflow-hidden bg-lav">
-    {/* provided dusty-pink dot pattern (seamless, transparent tile) */}
-    <div
-      className="pointer-events-none absolute inset-0"
-      style={{ backgroundImage: "url('/brand/dot-pattern.webp')", backgroundSize: '190px 190px' }}
+  <div className="relative">
+    {/* scalloped top edge — lavender scallops rise into the cream section above */}
+    {/* eslint-disable-next-line @next/next/no-img-element */}
+    <img
+      src="/brand/divider-scallop-lavender-top.webp"
+      alt=""
       aria-hidden="true"
+      className="pointer-events-none absolute bottom-full left-0 z-10 -mb-px block w-full select-none"
     />
+    <section className="relative overflow-hidden bg-[#e7cde1]">
+      {/* provided dusty-pink dot pattern (seamless, transparent tile) */}
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{ backgroundImage: "url('/brand/dot-pattern.webp')", backgroundSize: '190px 190px' }}
+        aria-hidden="true"
+      />
     <Container className="relative grid items-center gap-8 py-14 sm:py-16 lg:grid-cols-2">
       <div>
         <p className="mb-3 inline-flex items-center gap-1.5 rounded-full bg-accent/10 px-3.5 py-1.5 text-xs font-extrabold uppercase tracking-wide text-accent">
@@ -39,5 +48,14 @@ export const VanBand = ({ settings }: { settings: SiteSetting }) => (
         className="animate-float mx-auto h-auto w-full max-w-lg drop-shadow-2xl"
       />
     </Container>
-  </section>
+    </section>
+    {/* scalloped bottom edge — lavender scallops drop into the white section below */}
+    {/* eslint-disable-next-line @next/next/no-img-element */}
+    <img
+      src="/brand/divider-scallop-lavender-bottom.webp"
+      alt=""
+      aria-hidden="true"
+      className="pointer-events-none absolute top-full left-0 z-10 -mt-px block w-full select-none"
+    />
+  </div>
 )

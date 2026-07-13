@@ -14,16 +14,25 @@ export const ReviewsSection = ({
   if (list.length === 0) return null
 
   return (
-    <Section
-      alt
-      eyebrow="Reviews"
-      title="Pawrent Approved!"
-      subtitle={
-        settings.googleRating
-          ? `${settings.googleRating}★ average across ${settings.googleReviewCount}+ verified reviews`
-          : undefined
-      }
-    >
+    <div className="relative">
+      {/* scalloped top edge — cream scallops rise into the white section above */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/brand/divider-scallop-cream-top.webp"
+        alt=""
+        aria-hidden="true"
+        className="pointer-events-none absolute bottom-full left-0 z-10 -mb-px block w-full select-none"
+      />
+      <Section
+        alt
+        eyebrow="Reviews"
+        title="Pawrent Approved!"
+        subtitle={
+          settings.googleRating
+            ? `${settings.googleRating}★ average across ${settings.googleReviewCount}+ verified reviews`
+            : undefined
+        }
+      >
       {/* Reviews mascot on a soft blob */}
       <div className="relative mx-auto mb-8 w-fit">
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -45,6 +54,15 @@ export const ReviewsSection = ({
           </figure>
         ))}
       </div>
-    </Section>
+      </Section>
+      {/* scalloped bottom edge — cream scallops drop into the white section below */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/brand/divider-scallop-cream-bottom.webp"
+        alt=""
+        aria-hidden="true"
+        className="pointer-events-none absolute top-full left-0 z-10 -mt-px block w-full select-none"
+      />
+    </div>
   )
 }

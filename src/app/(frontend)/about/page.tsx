@@ -38,19 +38,27 @@ export default async function AboutPage() {
       />
 
       <Section>
-        <div className="mx-auto max-w-3xl space-y-5 text-lg text-ink/90">
-          <p>
-            We're a local, family-run mobile grooming business serving Phelan, Piñon Hills, Oak
-            Hills, Wrightwood, Hesperia, Victorville, Apple Valley, and the wider High Desert. We
-            bring a fully equipped grooming van right to your driveway, so your pet never has to
-            leave home.
-          </p>
-          <p>
-            Our approach is simple: one pet at a time, no cages, no cage dryers, and no stressful
-            car ride or crowded salon — just calm, patient, one-on-one grooming that's gentle enough
-            for anxious pets, seniors, and puppies.{settings.insuranceStatement ? ` ${settings.insuranceStatement}.` : ''}
-            {settings.license ? ` License ${settings.license}.` : ''}
-          </p>
+        <div className="mx-auto grid max-w-5xl items-center gap-10 lg:grid-cols-2">
+          <div className="space-y-5 text-lg text-ink/90">
+            <p>
+              We're a local, family-run mobile grooming business serving Phelan, Piñon Hills, Oak
+              Hills, Wrightwood, Hesperia, Victorville, Apple Valley, and the wider High Desert. We
+              bring a fully equipped grooming van right to your driveway, so your pet never has to
+              leave home.
+            </p>
+            <p>
+              Our approach is simple: one pet at a time, no cages, no cage dryers, and no stressful
+              car ride or crowded salon — just calm, patient, one-on-one grooming that's gentle enough
+              for anxious pets, seniors, and puppies.{settings.insuranceStatement ? ` ${settings.insuranceStatement}.` : ''}
+              {settings.license ? ` License ${settings.license}.` : ''}
+            </p>
+          </div>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/brand/meet-the-groomer.webp"
+            alt="A Shaggy Doggy Spa groomer brushing a happy doodle on the grooming table"
+            className="mx-auto w-full max-w-md drop-shadow-xl"
+          />
         </div>
 
         <div className="mx-auto mt-12 grid max-w-4xl grid-cols-2 gap-6 md:grid-cols-4">
