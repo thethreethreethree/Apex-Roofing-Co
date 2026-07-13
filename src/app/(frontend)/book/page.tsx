@@ -36,6 +36,8 @@ export default async function BookPage() {
       />
       <Container className="grid gap-12 py-16 lg:grid-cols-2">
         <div>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/brand/booking-mascot.webp" alt="" aria-hidden="true" className="mb-6 h-40 w-auto drop-shadow-xl" />
           <ol className="space-y-5">
             {STEPS.map((s, i) => (
               <li key={i} className="flex items-start gap-4">

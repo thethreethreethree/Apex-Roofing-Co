@@ -14,6 +14,8 @@ export default async function NotFound() {
   const settings = await getSiteSettings()
   return (
     <Container className="flex flex-col items-center gap-6 py-24 text-center sm:py-32">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="/brand/lost-pup.webp" alt="A confused puppy holding a map" className="h-56 w-auto drop-shadow-xl sm:h-64" />
       <p className="text-6xl font-extrabold text-brand sm:text-7xl">404</p>
       <h1 className="text-2xl font-bold text-ink sm:text-3xl">
         This page ran off like a dog at bath time

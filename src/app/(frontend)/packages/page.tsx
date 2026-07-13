@@ -7,6 +7,17 @@ import { BookCtaBand } from '@/components/sections/BookCtaBand'
 
 export const dynamic = 'force-dynamic'
 
+// Static grooming menu — illustrated tiers (asset kit round 2).
+// Independent of DB financing-options; every pet gets these core services.
+const TIERS = [
+  { img: 'tier-full-groom', name: 'Full Groom', desc: 'Bath, haircut, nails, ears & finish — the works.' },
+  { img: 'tier-bath-brush', name: 'Bath & Brush', desc: 'Deep clean, blow-dry, and a thorough brush-out.' },
+  { img: 'tier-deshedding', name: 'Deshedding', desc: 'Loosen and remove the undercoat that sheds.' },
+  { img: 'tier-nail-trim', name: 'Nail Trim & Grind', desc: 'Quick, calm nail care — smooth, not sharp.' },
+  { img: 'tier-flea-tick', name: 'Flea & Tick Treatment', desc: 'A soothing bath that sends the pests packing.' },
+  { img: 'tier-cat-grooming', name: 'Cat Grooming', desc: 'Gentle, patient grooming for feline friends too.' },
+]
+
 export const metadata: Metadata = {
   title: 'Packages & Pricing',
   description:
@@ -33,6 +44,28 @@ export default async function PackagesPage() {
               <h2 className="text-lg font-bold text-brand">{o.name}</h2>
               {o.terms && <p className="mt-1 text-sm font-semibold text-accent">{o.terms}</p>}
               {o.description && <p className="mt-3 text-sm text-muted">{o.description}</p>}
+            </div>
+          ))}
+        </div>
+      </Section>
+
+      <Section alt eyebrow="Our Menu" title="What We Groom">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {TIERS.map((t) => (
+            <div
+              key={t.img}
+              className="rounded-3xl bg-surface p-6 text-center shadow-soft transition hover:-translate-y-1"
+            >
+              <div className="mb-3 flex h-40 items-center justify-center">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={`/brand/${t.img}.webp`}
+                  alt={t.name}
+                  className="h-40 w-auto object-contain drop-shadow"
+                />
+              </div>
+              <h3 className="text-lg font-bold text-brand">{t.name}</h3>
+              <p className="mt-2 text-sm text-muted">{t.desc}</p>
             </div>
           ))}
         </div>

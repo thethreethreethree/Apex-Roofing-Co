@@ -1,12 +1,11 @@
 import { Section } from '@/components/ui/Section'
 
-// Dedicated process-step icons weren't in the asset kit, so each step reuses a
-// fitting graphic the founder DID generate (phone → van → bath → happy dog).
+// Dedicated process-step icons (asset kit round 2).
 const STEPS = [
-  { t: 'Book Online', d: 'Pick an appointment time that works for you — in under a minute.', img: 'phone-pill', h: 'h-10' },
-  { t: 'We Come to You', d: 'Our mobile grooming van pulls up to your driveway at the scheduled time.', img: 'grooming-van', h: 'h-16' },
-  { t: 'Low-Stress Groom', d: 'One-on-one bath, haircut, and nails — calm, cage-free, and unhurried.', img: 'icon-bath', h: 'h-16' },
-  { t: 'Happy, Fresh Pet', d: 'Your pet comes back clean, tidy, and smelling great — no car ride required.', img: 'hero-mascot', h: 'h-20' },
+  { t: 'Book Online', d: 'Pick an appointment time that works for you — in under a minute.', img: 'process-book-online', h: 'h-16' },
+  { t: 'We Come to You', d: 'Our mobile grooming van pulls up to your driveway at the scheduled time.', img: 'process-we-come-to-you', h: 'h-16' },
+  { t: 'Low-Stress Groom', d: 'One-on-one bath, haircut, and nails — calm, cage-free, and unhurried.', img: 'process-low-stress-groom', h: 'h-16' },
+  { t: 'Happy, Fresh Pet', d: 'Your pet comes back clean, tidy, and smelling great — no car ride required.', img: 'process-happy-fresh', h: 'h-16' },
 ]
 
 export const ProcessSection = () => (

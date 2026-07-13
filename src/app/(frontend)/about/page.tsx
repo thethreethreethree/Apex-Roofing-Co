@@ -63,6 +63,22 @@ export default async function AboutPage() {
             </div>
           ))}
         </div>
+
+        {/* Trust badges */}
+        <div className="mx-auto mt-12 flex max-w-3xl flex-wrap items-center justify-center gap-8">
+          {['badge-cage-free', 'badge-gentle-handling', 'badge-certified-groomer', 'badge-pet-first-aid'].map((b) => (
+            <img key={b} src={`/brand/${b}.webp`} alt="" aria-hidden="true" className="h-24 w-24" />
+          ))}
+        </div>
+      </Section>
+
+      {/* Areas we serve */}
+      <Section alt eyebrow="Where We Go" title="Serving the High Desert">
+        <img
+          src="/brand/service-area-map.webp"
+          alt="Map of the High Desert areas Shaggy Doggy Spa serves"
+          className="mx-auto w-full max-w-3xl"
+        />
       </Section>
 
       {certs.length > 0 && (
