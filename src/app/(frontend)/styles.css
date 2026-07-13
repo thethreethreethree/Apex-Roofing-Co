@@ -101,7 +101,7 @@
  * fun visual language. Motion respects prefers-reduced-motion.
  * ------------------------------------------------------------------------- */
 .shadow-soft {
-  box-shadow: 0 18px 40px -18px rgb(23 114 127 / 0.28);
+  box-shadow: 0 18px 40px -18px rgb(74 35 96 / 0.28);
 }
 .shadow-pop {
   box-shadow: 0 10px 0 -2px var(--brand-dark);

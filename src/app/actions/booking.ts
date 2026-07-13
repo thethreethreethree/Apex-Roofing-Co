@@ -4,7 +4,9 @@ import { headers } from 'next/headers'
 import { sql } from 'drizzle-orm'
 import { db, schema } from '@/server/db'
 import { computeOpenDays, slotKeyToLabel, type Day, type AvailabilityConfig } from '@/lib/booking'
-import { rateLimit } from '@/lib/ratelimit'
+import { rateLimit, clientIp } from '@/lib/ratelimit'
+
+const cap = (s: string | undefined | null, n: number) => (s ? s.slice(0, n) : s)
 
 async function loadState() {
   const [settings] = await db.select().from(schema.availabilitySettings).limit(1)
@@ -30,6 +32,10 @@ async function loadState() {
 }
 
 export async function getOpenSlots(): Promise<Day[]> {
+  // Throttle this public, full-table-scan action so it can't be hammered to
+  // amplify DB load. 30/min/IP is far above any legitimate calendar use.
+  const ip = clientIp(await headers())
+  if (!rateLimit(`slots:${ip}`, 30, 60_000)) return []
   const { cfg, taken, blackouts } = await loadState()
   return computeOpenDays(cfg, taken, blackouts, new Date())
 }
@@ -51,14 +57,14 @@ export type BookingResult = { ok: true; label: string } | { ok: false; error: st
 export async function createBooking(input: BookingInput): Promise<BookingResult> {
   if (input.website && input.website.trim()) return { ok: true, label: 'your appointment' }
 
-  const ip = ((await headers()).get('x-forwarded-for') || '').split(',')[0].trim() || 'local'
+  const ip = clientIp(await headers())
   if (!rateLimit(`book:${ip}`, 5, 60_000)) {
     return { ok: false, error: 'Too many requests — please wait a minute and try again.' }
   }
 
-  const name = input.name?.trim()
-  const phone = input.phone?.trim()
-  const slot = input.slot?.trim()
+  const name = cap(input.name?.trim(), 120)
+  const phone = cap(input.phone?.trim(), 40)
+  const slot = cap(input.slot?.trim(), 40)
   if (!name || !phone || !slot) {
     return { ok: false, error: 'Please add your name, phone, and pick a time.' }
   }
@@ -83,8 +89,8 @@ export async function createBooking(input: BookingInput): Promise<BookingResult>
     const res = await db.run(sql`
       INSERT INTO bookings (status, slot, slot_label, name, phone, email, address, service, notes, created_at, updated_at)
       SELECT 'confirmed', ${slot}, ${label}, ${name}, ${phone},
-             ${input.email?.trim() || null}, ${input.address?.trim() || null},
-             ${input.service?.trim() || null}, ${input.notes?.trim() || null},
+             ${cap(input.email?.trim(), 160) || null}, ${cap(input.address?.trim(), 200) || null},
+             ${cap(input.service?.trim(), 80) || null}, ${cap(input.notes?.trim(), 2000) || null},
              unixepoch(), unixepoch()
       WHERE (SELECT count(*) FROM bookings WHERE slot = ${slot} AND status != 'cancelled') < ${capacity}
     `)

@@ -35,7 +35,7 @@ export const FinalCta = ({ home, settings }: { home: HomePage; settings: SiteSet
       aria-hidden="true"
       className="animate-float pointer-events-none absolute bottom-8 left-6 hidden h-20 w-auto -rotate-12 drop-shadow-lg lg:block"
     />
-    <Container className="flex flex-col items-center gap-6 py-16 text-center text-white sm:py-20">
+    <Container className="relative z-10 flex flex-col items-center gap-6 py-16 text-center text-white sm:py-20">
       <h2 className="max-w-2xl text-3xl sm:text-4xl">
         {home.finalCta?.heading ?? 'Ready for a Happier Grooming Day?'}
       </h2>

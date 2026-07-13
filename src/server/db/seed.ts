@@ -57,12 +57,12 @@ const pawMotif = (w: number, h: number) => {
 }
 
 const photoSvg = (label: string, sub: string, opts: { w?: number; h?: number; c1?: string; c2?: string } = {}) => {
-  const { w = 1200, h = 800, c1 = '#0e4653', c2 = '#1c5f6b' } = opts
+  const { w = 1200, h = 800, c1 = '#4a2360', c2 = '#e84c9a' } = opts
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}"><defs><linearGradient id="g" x1="0" y1="0" x2="0.3" y2="1"><stop offset="0" stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/></linearGradient></defs><rect width="${w}" height="${h}" fill="url(#g)"/>${pawMotif(w, h)}<text x="50%" y="49%" text-anchor="middle" font-family="Arial, sans-serif" font-size="${Math.round(w * 0.05)}" font-weight="700" fill="#ffffff">${esc(label)}</text><text x="50%" y="57%" text-anchor="middle" font-family="Arial, sans-serif" font-size="${Math.round(w * 0.022)}" fill="#ffffff" opacity="0.72">${esc(sub)}</text></svg>`
 }
 
 const logoSvg = (textColor: string) =>
-  `<svg xmlns="http://www.w3.org/2000/svg" width="520" height="120" viewBox="0 0 520 120"><g fill="#f2994a"><ellipse cx="52" cy="70" rx="17" ry="15"/><circle cx="33" cy="52" r="7"/><circle cx="45" cy="42" r="7"/><circle cx="59" cy="42" r="7"/><circle cx="71" cy="52" r="7"/></g><text x="98" y="58" font-family="Arial, sans-serif" font-size="36" font-weight="800" fill="${textColor}">SHAGGY DOG SPA</text><text x="100" y="90" font-family="Arial, sans-serif" font-size="19" letter-spacing="6" fill="${textColor}" opacity="0.85">MOBILE GROOMING</text></svg>`
+  `<svg xmlns="http://www.w3.org/2000/svg" width="520" height="120" viewBox="0 0 520 120"><g fill="#e84c9a"><ellipse cx="52" cy="70" rx="17" ry="15"/><circle cx="33" cy="52" r="7"/><circle cx="45" cy="42" r="7"/><circle cx="59" cy="42" r="7"/><circle cx="71" cy="52" r="7"/></g><text x="98" y="58" font-family="Arial, sans-serif" font-size="36" font-weight="800" fill="${textColor}">SHAGGY DOG SPA</text><text x="100" y="90" font-family="Arial, sans-serif" font-size="19" letter-spacing="6" fill="${textColor}" opacity="0.85">MOBILE GROOMING</text></svg>`
 
 const badgeSvg = (initials: string) =>
   `<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 240 240"><circle cx="120" cy="120" r="110" fill="#e84c9a"/><circle cx="120" cy="120" r="110" fill="none" stroke="#4a2360" stroke-width="6"/><text x="50%" y="56%" text-anchor="middle" font-family="Arial, sans-serif" font-size="58" font-weight="800" fill="#ffffff">${esc(initials)}</text></svg>`
@@ -134,7 +134,7 @@ const seed = async () => {
   ]
   const serviceIds: Record<string, number> = {}
   for (const s of serviceDefs) {
-    const img = await createImage(`service-${s.icon}`, s.title, photoSvg(s.title, 'Shaggy Doggy Spa', { c1: '#0e4653', c2: '#20707e' }))
+    const img = await createImage(`service-${s.icon}`, s.title, photoSvg(s.title, 'Shaggy Doggy Spa', { c1: '#4a2360', c2: '#e84c9a' }))
     const [row] = await db
       .insert(schema.services)
       .values({
@@ -198,7 +198,7 @@ const seed = async () => {
   for (let i = 0; i < projectDefs.length; i++) {
     const p = projectDefs[i]
     const before = await createImage(`before-${i}`, `${p.title} — before`, photoSvg('BEFORE', p.title, { c1: '#3a3f47', c2: '#5b6470' }))
-    const after = await createImage(`after-${i}`, `${p.title} — after`, photoSvg('AFTER', p.title, { c1: '#0e4653', c2: '#20707e' }))
+    const after = await createImage(`after-${i}`, `${p.title} — after`, photoSvg('AFTER', p.title, { c1: '#4a2360', c2: '#e84c9a' }))
     await db.insert(schema.projects).values({
       title: p.title,
       slug: p.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, ''),
@@ -242,7 +242,7 @@ const seed = async () => {
 
   // Globals (single row each; wipe + insert)
   await db.delete(schema.branding)
-  await db.insert(schema.branding).values({ logoId: logo, logoLightId: logoLight, faviconId: logo, primaryColor: '#1c5f6b', accentColor: '#f2994a' })
+  await db.insert(schema.branding).values({ logoId: logo, logoLightId: logoLight, faviconId: logo, primaryColor: '#4a2360', accentColor: '#e84c9a' })
 
   await db.delete(schema.siteSettings)
   await db.insert(schema.siteSettings).values({

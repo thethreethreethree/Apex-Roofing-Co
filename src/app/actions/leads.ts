@@ -2,7 +2,11 @@
 
 import { headers } from 'next/headers'
 import { db, schema } from '@/server/db'
-import { rateLimit } from '@/lib/ratelimit'
+import { rateLimit, clientIp } from '@/lib/ratelimit'
+
+// Length caps: bound stored-data abuse (a bot past the rate limit can't write
+// megabyte rows). Generous enough that no real submission is affected.
+const cap = (s: string | undefined | null, n: number) => (s ? s.slice(0, n) : s)
 
 export type LeadInput = {
   name: string
@@ -21,13 +25,13 @@ export async function submitLead(input: LeadInput): Promise<LeadResult> {
   // Honeypot: real users never see the "website" field.
   if (input.website && input.website.trim()) return { ok: true }
 
-  const ip = ((await headers()).get('x-forwarded-for') || '').split(',')[0].trim() || 'local'
+  const ip = clientIp(await headers())
   if (!rateLimit(`lead:${ip}`, 5, 60_000)) {
     return { ok: false, error: 'Too many requests — please wait a minute and try again.' }
   }
 
-  const name = input.name?.trim()
-  const phone = input.phone?.trim()
+  const name = cap(input.name?.trim(), 120)
+  const phone = cap(input.phone?.trim(), 40)
   if (!name || !phone) {
     return { ok: false, error: 'Please enter your name and phone number.' }
   }
@@ -36,10 +40,10 @@ export async function submitLead(input: LeadInput): Promise<LeadResult> {
     await db.insert(schema.leads).values({
       name,
       phone,
-      email: input.email?.trim() || null,
-      service: input.service?.trim() || null,
-      message: input.message?.trim() || null,
-      sourcePage: input.sourcePage || null,
+      email: cap(input.email?.trim(), 160) || null,
+      service: cap(input.service?.trim(), 80) || null,
+      message: cap(input.message?.trim(), 2000) || null,
+      sourcePage: cap(input.sourcePage, 120) || null,
       status: 'new',
       createdAt: new Date(),
       updatedAt: new Date(),
