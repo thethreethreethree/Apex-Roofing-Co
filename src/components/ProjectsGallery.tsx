@@ -4,8 +4,16 @@ import { useState } from 'react'
 import type { Project, Service } from '@/server/types'
 import { MediaImage } from '@/components/ui/MediaImage'
 
-const serviceId = (p: Project): string =>
-  typeof p.service === 'object' && p.service ? String(p.service.id) : String(p.service ?? '')
+// Read the project's service FK. getProjects() returns the raw row (which has
+// `serviceId`) and does NOT populate a `service` object — reading `p.service`
+// always yielded '' so category filtering silently never matched. Prefer the
+// real `serviceId` column, fall back to a populated `service` if present.
+const serviceId = (p: Project): string => {
+  const raw = p as { serviceId?: number | null; service?: { id: number } | number | null }
+  if (raw.serviceId != null) return String(raw.serviceId)
+  if (raw.service && typeof raw.service === 'object') return String(raw.service.id)
+  return String(raw.service ?? '')
+}
 
 const fmtDate = (d?: string | null) =>
   d ? new Date(d).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : ''
