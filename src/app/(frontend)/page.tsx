@@ -4,7 +4,6 @@ import {
   getHomePage,
   getSiteSettings,
   getServices,
-  getProjects,
   getReviews,
   getCertifications,
 } from '@/lib/content'
@@ -21,12 +20,11 @@ import { ProcessSection } from '@/components/sections/ProcessSection'
 import { FinalCta } from '@/components/sections/FinalCta'
 
 export default async function HomePage() {
-  const [home, settings, services, projects, reviews, certs] =
+  const [home, settings, services, reviews, certs] =
     await Promise.all([
       getHomePage(),
       getSiteSettings(),
       getServices(),
-      getProjects(),
       getReviews(),
       getCertifications(),
     ])
@@ -42,7 +40,7 @@ export default async function HomePage() {
       <WhyUs items={home.whyUs} />
       <BreedStrip />
       <CertsStrip certs={certs} />
-      {show.showProjects !== false && <GalleryPreview projects={projects} />}
+      {show.showProjects !== false && <GalleryPreview />}
       {show.showReviews !== false && <ReviewsSection reviews={reviews} settings={settings} />}
       <ProcessSection />
       <FinalCta home={home} settings={settings} />
